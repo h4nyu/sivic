@@ -1,0 +1,22 @@
+{
+  "name": "@sivic/api",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "prebuild": "yarn clean",
+    "watch": "tsc -w",
+    "clean": "tsc --build --clean",
+    "test": "yarn clean && jest"
+  },
+  "devDependencies": {
+    "jest": "^26.5.2",
+    "ts-jest": "^26.4.1",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}
