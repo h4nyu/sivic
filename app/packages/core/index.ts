@@ -1,13 +1,14 @@
-// export { ErrorKind } from "./error";
+export { ErrorKind } from "./error";
 import { Workspace } from "./workspace";
 
 export type WorkspaceStore = {
+  find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
   filter: (payload: {
-    workspaceId?: string;
+    ids?: string[];
   }) => Promise<Workspace[] | Error>;
   insert: (payload: Workspace) => Promise<void | Error>;
   delete: (payload: {
-    workspaceId?: string;
+    id: string;
   }) => Promise<void | Error>;
   clear: () => Promise<void | Error>;
 };

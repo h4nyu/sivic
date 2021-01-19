@@ -1,4 +1,6 @@
 import { Row, Sql } from "postgres";
+import { first } from "lodash";
+
 import { Workspace } from "@sivic/core/workspace";
 import { WorkspaceStore } from "@sivic/core";
 
@@ -19,23 +21,48 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
     };
   };
 
-  const filter = async (payload: {
-    workspaceId?: string;
-  }) => {
+  const find = async (payload: {
+    id?: string;
+  }): Promise<Workspace | undefined | Error> => {
     try {
-      const { workspaceId } = payload;
-      let rows: Row[] = [];
-      if (workspaceId !== undefined) {
-        rows = await sql`SELECT * FROM workspaces WHERE id =${workspaceId}`;
+      const { id } = payload;
+      let rows = [];
+      if (id !== undefined) {
+        rows = await sql`SELECT * FROM workspaces WHERE id=${id}`;
+      }
+      const row = first(rows.map(to));
+      if (row === undefined) {
+        return;
+      }
+      return row;
+    } catch (err) {
+      return err;
+    }
+  };
+
+  const filter = async (payload: {
+    ids?: string[];
+  }): Promise<Workspace[] | Error> => {
+    try {
+      const { ids } = payload;
+      let rows = [];
+      const columns = [
+        "id",
+        "name",
+        "created_at",
+      ];
+      if (ids !== undefined && ids.length > 0) {
+        rows = await sql`SELECT ${sql(
+          columns
+        )} FROM workspaces WHERE id IN (${ids})`;
       } else {
-        rows = await sql`SELECT * FROM workspaces`;
+        rows = await sql`SELECT ${sql(columns)} FROM workspaces`;
       }
       return rows.map(to);
     } catch (err) {
       return err;
     }
   };
-
   const insert = async (payload: Workspace): Promise<void | Error> => {
     try {
       await sql`
@@ -51,12 +78,12 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
   };
 
   const delete_ = async (payload: {
-    workspaceId?: string;
+    id?: string;
   }) => {
     try {
-      const { workspaceId } = payload;
-      if (workspaceId !== undefined) {
-        await sql`DELETE FROM workspaces WHERE id=${workspaceId}`;
+      const { id } = payload;
+      if (id !== undefined) {
+        await sql`DELETE FROM workspaces WHERE id=${id}`;
       }
     } catch (err) {
       return err;
@@ -73,6 +100,7 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
 
   return {
     filter,
+    find,
     insert,
     clear,
     delete: delete_,

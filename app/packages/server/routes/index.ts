@@ -1,7 +1,7 @@
 import fastify, { FastifyPlugin } from "fastify";
 import { Lock, Store } from "@sivic/core";
 import path from "path";
-// import { ImageRoutes } from "./image";
+import { WorkspaceRoutes } from "./workspace";
 import fastifyStatic from "fastify-static";
 
 export const App = (args: { store: Store; lock: Lock }) => {
@@ -17,9 +17,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   app.register(fastifyStatic, {
     root: "/srv/packages/web/dist",
   });
-  // app.register(BoxRoutes({ store, lock }), {
-  //   prefix: `${prefix}/box`,
-  // });
+  app.register(WorkspaceRoutes({ store, lock }), {
+    prefix: `${prefix}/box`,
+  });
   app.ready(async () => {
     console.log(app.printRoutes());
   });

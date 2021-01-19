@@ -4,6 +4,7 @@ import {
   FilterPayload,
   CreatePayload,
   DeletePayload,
+  FindPayload,
   Service,
   Workspace,
 } from "@sivic/core/workspace";
@@ -23,19 +24,27 @@ export const WorkspaceApi = (arg: {
     };
   };
 
-  const create = async (payload: CreatePayload): Promise<string | Error> => {
+  const filter = async (payload: FilterPayload) => {
     try {
-      const res = await http.post(`${prefix}/create`, payload);
-      return res.data;
+      const res = await http.post(`${prefix}/filter`, payload);
+      return res.data.map(to);
     } catch (err) {
       return toError(err);
     }
   };
 
-  const filter = async (payload: FilterPayload) => {
+  const find = async (payload: FindPayload) => {
     try {
-      const res = await http.post(`${prefix}/filter`, payload);
-      return res.data.map(to);
+      const res = await http.post(`${prefix}/find`, payload);
+      return to(res.data);
+    } catch (err) {
+      return toError(err);
+    }
+  };
+  const create = async (payload: CreatePayload) => {
+    try {
+      const res = await http.post(`${prefix}/create`, payload);
+      return res.data;
     } catch (err) {
       return toError(err);
     }
@@ -52,6 +61,7 @@ export const WorkspaceApi = (arg: {
 
   return {
     create,
+    find,
     filter,
     delete: delete_,
   };
