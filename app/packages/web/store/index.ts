@@ -27,6 +27,7 @@ export type History = {
 };
 
 export type RootStore = {
+  data: DataStore;
   loading: LoadingStore;
   toast: ToastStore;
   history: History;
@@ -37,6 +38,7 @@ export const RootStore = (): RootStore => {
   // const api = RootApi();
   const loading = LoadingStore();
   const toast = ToastStore();
+  const data = DataStore({ loading, toast });
   const history = createHashHistory();
 
   const init = async () => {
@@ -50,6 +52,7 @@ export const RootStore = (): RootStore => {
   };
   return {
     // api,
+    data,
     toast,
     loading,
     init,

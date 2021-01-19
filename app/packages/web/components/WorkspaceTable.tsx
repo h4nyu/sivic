@@ -18,14 +18,12 @@ const filterColumns = [
 
 export const WorkspaceTable = (props: {
   workspaces: Workspace[];
-  keyword: string;
-  setKeyword: (value: string) => void;
-  onClick?: (imageId: string) => void;
+  onClick?: (id: string) => void;
 }) => {
-  const { workspaces, onClick, keyword, setKeyword } = props;
+  const { workspaces, onClick } = props;
   const [sort, setSort] = React.useState<[string, boolean]>(["Id", true]);
   const [sortColumn, asc] = sort;
-  const lowerKeyowerd = keyword.toLowerCase();
+  // const lowerKeyowerd = keyword.toLowerCase();
 
   let rows = List(workspaces).map(x => {
     return {
@@ -36,12 +34,12 @@ export const WorkspaceTable = (props: {
       onClick: () => onClick && onClick(x.id),
     }
   })
-  .filter(x =>  filterColumns
-      .map((c) => x[c])
-      .join(" ")
-      .toLowerCase()
-      .includes(lowerKeyowerd)
-   )
+  // .filter(x =>  filterColumns
+  //     .map((c) => x[c])
+  //     .join(" ")
+  //     .toLowerCase()
+  //     .includes(lowerKeyowerd)
+  //  )
    .sortBy((x) => x[sortColumn]);
    if (asc) {
      rows = rows.reverse();
@@ -52,7 +50,7 @@ export const WorkspaceTable = (props: {
       <input
         className="input"
         type="text"
-        onChange={(e) => setKeyword(e.target.value)}
+        onChange={(e) => console.log(e.target.value)}
       />
       <table className="table is-fullwidth">
         <TableHeader
@@ -69,7 +67,8 @@ export const WorkspaceTable = (props: {
                   key={i}
                   style={{ cursor: onClick ? "pointer" : "" }}
                 >
-                  <td> <a onClick={x.onClick}> {x.name} </a> </td>
+                  <td> <a onClick={x.onClick}> {x.id} </a> </td>
+                  <td> {x.name} </td>
                   <td> <DateView value={x.createdAt} /> </td>
                 </tr>
               );
