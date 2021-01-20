@@ -3,6 +3,7 @@ import { Map, List } from "immutable";
 import { Workspaces } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
+import { RootApi } from "@sivic/api";
 import {
   Workspace,
 } from "@sivic/core/workspace";
@@ -27,15 +28,25 @@ const State = ():State => {
 };
 
 export const DataStore = (args: {
-  loading: LoadingStore;
+  api: RootApi;
+  loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
 }): DataStore => {
-  const { loading, toast } = args;
+  const { api, loading, toast } = args;
   const state = observable(State());
 
-  const init = async () => {
-    await loading.auto(async () => {
+  const fetchWorkspaces = async (): Promise<void> => {
+    await loading(async () => {
+      const rows = await api.workspace.filter({});
+      if (rows instanceof Error) {
+        return;
+      }
+    })
+  };
 
+  const init = async () => {
+    await loading(async () => {
+      await fetchWorkspaces();
     });
   };
   return {
