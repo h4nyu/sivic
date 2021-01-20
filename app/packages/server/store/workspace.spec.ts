@@ -1,6 +1,4 @@
-import { Store } from ".";
-import fs from "fs";
-import { Workspace } from "@sivic/core/workspace";
+import { Store } from "."; import fs from "fs"; import { Workspace } from "@sivic/core/workspace";
 
 const rootStore = Store({ url: process.env.DATABASE_URL || "" });
 

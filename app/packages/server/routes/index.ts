@@ -11,14 +11,11 @@ export const App = (args: { store: Store; lock: Lock }) => {
     logger: true,
   });
   const prefix = path.join("/", process.env.PREFIX || "", "/api/v1");
-  app.get(`${prefix}/detection-api`, {}, async (req, rep) => {
-    rep.send(process.env.DETECTION_API);
-  });
   app.register(fastifyStatic, {
     root: "/srv/packages/web/dist",
   });
   app.register(WorkspaceRoutes({ store, lock }), {
-    prefix: `${prefix}/box`,
+    prefix: `${prefix}/workspace`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());
