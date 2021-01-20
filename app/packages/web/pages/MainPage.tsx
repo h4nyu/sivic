@@ -13,7 +13,7 @@ import PageLayout from "../components/PageLayout";
 import store from "../store";
 
 const Content = observer(() => {
-  // const { updateFilter, fetchImages, next } = store.data;
+  const { addWorkspace } = store.data;
   const { workspaces } = store.data.state;
   const { init } = store.data;
   return (
@@ -28,16 +28,6 @@ const Content = observer(() => {
     >
       <div
         style={{
-          gridRow: "1",
-          gridColumn: "2",
-        }}
-      >
-        <button className={"button is-light"} onClick={() => console.log()}>
-          Add 
-        </button>
-      </div>
-      <div
-        style={{
           display: "flex",
           flexFlow: "row wrap",
           alignContent: "flex-start",
@@ -49,6 +39,7 @@ const Content = observer(() => {
         <WorkspaceTable
           workspaces={workspaces.toList().toJS()} 
           onClick={init} 
+          onAdd={addWorkspace} 
         />
       </div>
     </div>

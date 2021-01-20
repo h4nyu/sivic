@@ -12,7 +12,7 @@ configure({
   enforceActions: "never",
 });
 
-export type Workspaces = Map<string, Workspace>;
+export type Workspaces = List<Workspace>;
 
 export enum Level {
   Info,
@@ -53,7 +53,6 @@ export const RootStore = (): RootStore => {
     loading,
     init,
     history,
-
   };
 };
 

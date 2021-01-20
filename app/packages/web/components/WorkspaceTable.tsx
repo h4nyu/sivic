@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { List } from "immutable";
 
 import { Workspace } from "@sivic/core/workspace";
@@ -19,11 +19,13 @@ const filterColumns = [
 export const WorkspaceTable = (props: {
   workspaces: Workspace[];
   onClick?: (id: string) => void;
+  onAdd?: (keyword: string) => void;
 }) => {
-  const { workspaces, onClick } = props;
+  const { workspaces, onClick , onAdd} = props;
   const [sort, setSort] = React.useState<[string, boolean]>(["Id", true]);
   const [sortColumn, asc] = sort;
-  // const lowerKeyowerd = keyword.toLowerCase();
+  const [keyword, setKeyword] = useState("");
+  const lowerKeyowerd = keyword.toLowerCase();
 
   let rows = List(workspaces).map(x => {
     return {
@@ -34,12 +36,12 @@ export const WorkspaceTable = (props: {
       onClick: () => onClick && onClick(x.id),
     }
   })
-  // .filter(x =>  filterColumns
-  //     .map((c) => x[c])
-  //     .join(" ")
-  //     .toLowerCase()
-  //     .includes(lowerKeyowerd)
-  //  )
+  .filter(x =>  filterColumns
+      .map((c) => x[c])
+      .join(" ")
+      .toLowerCase()
+      .includes(lowerKeyowerd)
+   )
    .sortBy((x) => x[sortColumn]);
    if (asc) {
      rows = rows.reverse();
@@ -47,11 +49,20 @@ export const WorkspaceTable = (props: {
 
   return (
     <div style={{width:"100%"}}>
-      <input
-        className="input"
-        type="text"
-        onChange={(e) => console.log(e.target.value)}
-      />
+      <div style={{
+        display: "flex",
+        flexDirection: 'row'
+        }}
+      >
+        <input
+          className="input"
+          type="text"
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <button className={"button is-light"} onClick={() => onAdd && onAdd(keyword)}>
+          Add 
+        </button>
+      </div>
       <table className="table is-fullwidth">
         <TableHeader
           columns={columns}
