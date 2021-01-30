@@ -6,13 +6,11 @@ import DateView from "@sivic/web/components/DateView";
 import TableHeader from "@sivic/web/components/TableHeader";
 
 const columns = [
-  "Id",
   "Name",
   "Create",
 ];
 
 const filterColumns = [
-  "Id",
   "Name",
 ];
 
@@ -22,7 +20,7 @@ export const WorkspaceTable = (props: {
   onAdd?: (keyword: string) => void;
 }) => {
   const { workspaces, onClick , onAdd} = props;
-  const [sort, setSort] = React.useState<[string, boolean]>(["Id", true]);
+  const [sort, setSort] = React.useState<[string, boolean]>(["Name", true]);
   const [sortColumn, asc] = sort;
   const [keyword, setKeyword] = useState("");
   const lowerKeyowerd = keyword.toLowerCase();
@@ -30,7 +28,6 @@ export const WorkspaceTable = (props: {
   let rows = List(workspaces).map(x => {
     return {
       ...x,
-      Id: x.id,
       Name: x.name,
       Create:x.createdAt,
       onClick: () => onClick && onClick(x.id),
@@ -78,8 +75,7 @@ export const WorkspaceTable = (props: {
                   key={i}
                   style={{ cursor: onClick ? "pointer" : "" }}
                 >
-                  <td> <a onClick={x.onClick}> {x.id} </a> </td>
-                  <td> {x.name} </td>
+                  <td> <a onClick={x.onClick}> {x.name} </a> </td>
                   <td> <DateView value={x.createdAt} /> </td>
                 </tr>
               );
