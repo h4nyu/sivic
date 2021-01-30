@@ -6,7 +6,7 @@ import { configure } from "mobx";
 import { Map, List } from "immutable";
 import { createHashHistory } from "history";
 import { Workspace } from "@sivic/core/workspace";
-export { Workspace } from "@sivic/core/workspace";
+import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
 
 configure({
   enforceActions: "never",
@@ -20,6 +20,7 @@ export enum Level {
   Warning,
   Error,
 }
+export type LoadingFn =  <T>(fn: () => Promise<T>) => Promise<T>;
 
 export type History = {
   push: (name: string) => void;
@@ -32,6 +33,7 @@ export type RootStore = {
   toast: ToastStore;
   history: History;
   api: RootApi;
+  workspaceForm: WorkspaceForm;
   init: () => Promise<void>;
 };
 export const RootStore = (): RootStore => {
@@ -45,6 +47,14 @@ export const RootStore = (): RootStore => {
     await data.init();
     toast.show("Success", Level.Success);
   };
+  const workspaceForm = WorkspaceForm({
+    api,
+    loading:loading.loading,
+    toast,
+    onInit: () => {
+      history.push("/workspace")
+    }
+  })
 
   return {
     api,
@@ -53,6 +63,7 @@ export const RootStore = (): RootStore => {
     loading,
     init,
     history,
+    workspaceForm,
   };
 };
 

@@ -53,7 +53,6 @@ export const DataStore = (args: {
       if (err instanceof Error) {
         return;
       }
-      console.log("add-workspace")
       fetchWorkspaces()
     })
   }
