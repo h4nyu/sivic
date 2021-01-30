@@ -38,7 +38,7 @@ export const Workspace = (args?: Workspace):Workspace => {
 }
 
 export type Service = {
-  create: (payload: CreatePayload) => Promise<string | Error>;
+  create: (payload: CreatePayload) => Promise<Workspace | Error>;
   find: (payload: FindPayload) => Promise<Workspace | Error>;
   filter: (payload: FilterPayload) => Promise<Workspace[] | Error>;
   delete: (payload: DeletePayload) => Promise<string| Error>;
@@ -77,7 +77,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       if (err instanceof Error) {
         return err;
       }
-      return row.id;
+      return row;
     });
   };
   const delete_ = async (payload: DeletePayload) => {

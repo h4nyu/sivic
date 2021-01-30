@@ -20,7 +20,7 @@ export const WorkspaceApi = (arg: {
   const to = (res: any) => {
     return {
       ...res,
-      createdAt: parseISO(res.createdAt),
+      createdAt: new Date(res.createdAt),
     };
   };
 
@@ -44,7 +44,7 @@ export const WorkspaceApi = (arg: {
   const create = async (payload: CreatePayload) => {
     try {
       const res = await http.post(`${prefix}/create`, payload);
-      return res.data;
+      return to(res.data);
     } catch (err) {
       return toError(err);
     }
