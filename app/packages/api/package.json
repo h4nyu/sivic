@@ -1,9 +1,8 @@
 {
   "name": "@sivic/api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "tsc",
     "prebuild": "yarn clean",
