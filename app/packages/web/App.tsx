@@ -11,11 +11,12 @@ import Sidebar from "@sivic/web/components/Sidebar";
 const history = createHashHistory();
 const MainPage = lazy(() => import("@sivic/web/pages/MainPage"));
 const WorkspacePage = lazy(() => import("@sivic/web/pages/WorkspacePage"));
+const WorkspaceCreatePage = lazy(() => import("@sivic/web/pages/WorkspaceCreatePage"));
 
 export default function App() {
   React.useEffect(() => {
     rootStore.init();
-    history.push("/workspaces");
+    history.push("/workspace");
   });
   return (
     <>
@@ -27,8 +28,9 @@ export default function App() {
           sidebar={<Sidebar/>}
           content={
             <Suspense fallback={<div>Loading...</div>}>
-              <Route exact path={"/workspaces"} component={MainPage} />
-              <Route exact path={"/workspace"} component={WorkspacePage} />
+              <Route exact path={"/workspace"} component={MainPage} />
+              <Route exact path={"/workspace/id/:id"} component={WorkspacePage} />
+              <Route exact path={"/workspace/create"} component={WorkspaceCreatePage} />
             </Suspense>
           }
         />

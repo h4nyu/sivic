@@ -9,13 +9,13 @@ export const Sidebar = () => {
     <aside className="menu">
       <ul className="menu-list">
         <li>
-          <NavLink to="/workspaces" activeClassName="is-active">
+          <NavLink to="/workspace" activeClassName="is-active">
             Workspaces
           </NavLink>
           <ul>
             <li>
-              <NavLink to="/workspace" activeClassName="is-active">
-                Edit
+              <NavLink to="/workspace/create" activeClassName="is-active">
+                Create
               </NavLink>
             </li>
           </ul>

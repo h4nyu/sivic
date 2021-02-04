@@ -3,13 +3,8 @@ import { observer } from "mobx-react-lite";
 import { Map } from "immutable";
 import FileUpload from "@charpoints/web/components/FileUpload";
 import store from "@sivic/web/store";
-import {
-  useParams
-} from "react-router-dom";
-
 
 const Content = observer(() => {
-  let { id } = useParams<{id:string}>();
   const { addWorkspace } = store.data;
   const { workspaces } = store.data.state;
   const { init } = store.data;
@@ -44,7 +39,7 @@ const Content = observer(() => {
           gridRow: "2"
         }}
       >
-        <FileUpload/>
+        <div className="button is-info"> Save </div>
       </div>
     </div>
   );

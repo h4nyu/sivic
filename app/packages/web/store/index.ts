@@ -51,8 +51,8 @@ export const RootStore = (): RootStore => {
     api,
     loading:loading.loading,
     toast,
-    onInit: () => {
-      history.push("/workspace")
+    onInit: (workspace) => {
+      history.push(`/workspace/id/${workspace.id}`)
     }
   })
 
