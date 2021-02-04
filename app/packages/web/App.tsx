@@ -6,6 +6,7 @@ import Toast from "./connectors/Toast";
 import { createHashHistory } from "history";
 import PageLayout from "@sivic/web/components/PageLayout";
 import Header from "@sivic/web/components/Header";
+import Sidebar from "@sivic/web/components/Sidebar";
 
 const history = createHashHistory();
 const MainPage = lazy(() => import("@sivic/web/pages/MainPage"));
@@ -14,7 +15,7 @@ const WorkspacePage = lazy(() => import("@sivic/web/pages/WorkspacePage"));
 export default function App() {
   React.useEffect(() => {
     rootStore.init();
-    history.push("/");
+    history.push("/workspaces");
   });
   return (
     <>
@@ -23,9 +24,10 @@ export default function App() {
         <Toast />
         <PageLayout
           header={<Header/>}
+          sidebar={<Sidebar/>}
           content={
             <Suspense fallback={<div>Loading...</div>}>
-              <Route exact path={"/"} component={MainPage} />
+              <Route exact path={"/workspaces"} component={MainPage} />
               <Route exact path={"/workspace"} component={WorkspacePage} />
             </Suspense>
           }

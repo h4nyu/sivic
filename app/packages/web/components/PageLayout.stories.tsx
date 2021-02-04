@@ -11,5 +11,6 @@ export default {
 export const Primary = (args) => <PageLayout 
   header={<Mock name="header" />}  
   content={<Mock name="content" style={{height: 2000 }}/>}  
+  sidebar={<Mock name="sidebar" style={{height: 2000 }}/>}  
 />;
 

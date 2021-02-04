@@ -7,6 +7,7 @@ import store from "@sivic/web/store"
 export default {
   title: "WorkspacePage",
   component: WorkspacePage,
+  decorators: [(Story) => <div style={{height: 500}}><Story/></div>]
 };
 
 const form = store.workspaceForm

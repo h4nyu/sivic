@@ -10,30 +10,17 @@ const Content = observer(() => {
   const { init } = store.data;
   return (
     <div
+      className="box"
       style={{
-        display: "grid",
-        gridTemplateRows: "50px 1fr 110px",
-        gridTemplateColumns: "1fr auto",
-        width: "100%",
-        height: "100%",
+        height:"100%"
+        overflow: "scroll",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          flexFlow: "row wrap",
-          alignContent: "flex-start",
-          gridRow: "2",
-          gridColumn: "1 / span 2",
-          overflow: "scroll",
-        }}
-      >
-        <WorkspaceTable
-          workspaces={workspaces.toList().toJS()} 
-          onClick={store.workspaceForm.init} 
-          onAdd={addWorkspace} 
-        />
-      </div>
+      <WorkspaceTable
+        workspaces={workspaces.toList().toJS()} 
+        onClick={store.workspaceForm.init} 
+        onAdd={addWorkspace} 
+      />
     </div>
   );
 });
