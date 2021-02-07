@@ -7,6 +7,7 @@ export type WorkspaceStore = {
     ids?: string[];
   }) => Promise<Workspace[] | Error>;
   insert: (payload: Workspace) => Promise<void | Error>;
+  update: (payload: Workspace) => Promise<void | Error>;
   delete: (payload: {
     id: string;
   }) => Promise<void | Error>;

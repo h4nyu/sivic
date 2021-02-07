@@ -10,6 +10,7 @@ describe("workspace", () => {
   const store = rootStore.workspace;
   const row = {
     ...Workspace(),
+    imageIds: ['a', 'b']
   };
 
   beforeAll(async () => {

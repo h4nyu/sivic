@@ -1,15 +1,12 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, ErrorKind, Store } from ".";
+import { uniq } from "lodash"
 
 export type Workspace = {
   id: string
   name: string
+  imageIds: string[]
   createdAt: Date
-}
-
-export type WorkspaceImage = {
-  workspaceId: string
-  imageId: string
 }
 
 export type FilterPayload = {
@@ -29,10 +26,21 @@ export type DeletePayload = {
   id: string;
 };
 
+export type AddImagePayload = {
+  workspaceId: string;
+  imageId: string;
+};
+
+export type DeleteImagePayload = {
+  workspaceId: string;
+  imageId: string;
+};
+
 export const Workspace = (args?: Workspace):Workspace => {
   return args || {
     id: uuid(),
     name: "",
+    imageIds:[],
     createdAt: new Date(),
   }
 }
@@ -42,6 +50,8 @@ export type Service = {
   find: (payload: FindPayload) => Promise<Workspace | Error>;
   filter: (payload: FilterPayload) => Promise<Workspace[] | Error>;
   delete: (payload: DeletePayload) => Promise<string| Error>;
+  addImage: (payload: AddImagePayload) => Promise<void| Error>;
+  deleteImage: (payload: DeleteImagePayload) => Promise<void| Error>;
 };
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
@@ -49,15 +59,21 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
   const filter = async (payload: FilterPayload) => {
     return await store.workspace.filter(payload);
   };
+  const getCtx = async (workspaceId:string):Promise<{workspace:Workspace} | Error> => {
+      const workspace = await store.workspace.find({id:workspaceId})
+      if(workspace instanceof Error) {
+        return workspace
+      }
+      if(workspace === undefined) {return new Error(ErrorKind.WorkspaceNotFound)}
+      return {
+        workspace
+      }
+  }
+
   const find = async (payload: FindPayload) => {
-    const workspace = await store.workspace.find(payload);
-    if (workspace instanceof Error) {
-      return workspace;
-    }
-    if (workspace === undefined) {
-      return new Error(ErrorKind.WorkspaceNotFound);
-    }
-    return workspace;
+    const ctx = await getCtx(payload.id)
+    if(ctx instanceof Error) { return ctx }
+    return ctx.workspace
   };
 
   const create = async (payload: CreatePayload) => {
@@ -96,11 +112,34 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       }
       return id;
     });
+  }
+  const addImage = async (payload: AddImagePayload) => {
+    return await lock.auto(async () => {
+      const ctx = await getCtx(payload.workspaceId)
+      if(ctx instanceof Error) { return ctx }
+      const { workspace } = ctx
+      workspace.imageIds = uniq([...workspace.imageIds, payload.imageId])
+      let err = await store.workspace.update(workspace)
+      return err
+    });
+  }
+
+  const deleteImage = async (payload: DeleteImagePayload) => {
+    return await lock.auto(async () => {
+      const ctx = await getCtx(payload.workspaceId)
+      if(ctx instanceof Error) { return ctx }
+      const { workspace } = ctx
+      workspace.imageIds = workspace.imageIds.filter(x => x !== payload.imageId)
+      let err = await store.workspace.update(workspace)
+      return err
+    });
   };
   return {
     filter,
     find,
     create,
     delete: delete_,
+    addImage,
+    deleteImage
   }
 }

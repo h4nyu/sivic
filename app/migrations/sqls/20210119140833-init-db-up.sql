@@ -5,3 +5,9 @@ CREATE TABLE workspaces (
     name text NOT NULL,
     created_at timestamp NOT NULL
 );
+
+CREATE TABLE workspace_images ( 
+    workspace_id text NOT NULL,
+    image_id text NOT NULL,
+    UNIQUE(workspace_id, image_id)
+);
