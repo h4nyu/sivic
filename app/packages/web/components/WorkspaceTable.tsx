@@ -4,10 +4,12 @@ import { List } from "immutable";
 import { Workspace } from "@sivic/core/workspace";
 import DateView from "@sivic/web/components/DateView";
 import TableHeader from "@sivic/web/components/TableHeader";
+import DeleteBtn from "@sivic/web/components/DeleteBtn";
 
 const columns = [
   "Name",
   "Create",
+  "Action",
 ];
 
 const filterColumns = [
@@ -17,9 +19,9 @@ const filterColumns = [
 export const WorkspaceTable = (props: {
   workspaces: Workspace[];
   onClick?: (id: string) => void;
-  onAdd?: (keyword: string) => void;
+  onDelete?: (id: string) => void;
 }) => {
-  const { workspaces, onClick , onAdd} = props;
+  const { workspaces, onClick, onDelete } = props;
   const [sort, setSort] = React.useState<[string, boolean]>(["Name", true]);
   const [sortColumn, asc] = sort;
   const [keyword, setKeyword] = useState("");
@@ -31,6 +33,7 @@ export const WorkspaceTable = (props: {
       Name: x.name,
       Create:x.createdAt,
       onClick: () => onClick && onClick(x.id),
+      onDelete: () => onDelete && onDelete(x.id),
     }
   })
   .filter(x =>  filterColumns
@@ -56,9 +59,6 @@ export const WorkspaceTable = (props: {
           type="text"
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <button className={"button is-light"} onClick={() => onAdd && onAdd(keyword)}>
-          Add 
-        </button>
       </div>
       <table className="table is-fullwidth">
         <TableHeader
@@ -77,6 +77,7 @@ export const WorkspaceTable = (props: {
                 >
                   <td> <a onClick={x.onClick}> {x.name} </a> </td>
                   <td> <DateView value={x.createdAt} /> </td>
+                  <td> <DeleteBtn onClick={x.onDelete} /> </td>
                 </tr>
               );
             })}

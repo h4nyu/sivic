@@ -2,11 +2,13 @@ import { DataStore } from "./data";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { RootApi } from "@sivic/api";
+import { RootApi as ImageApi} from "@charpoints/api";
 import { configure } from "mobx";
 import { Map, List } from "immutable";
 import { createHashHistory } from "history";
 import { Workspace } from "@sivic/core/workspace";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
+import ImageForm from "@sivic/web/store/ImageForm"
 
 configure({
   enforceActions: "never",
@@ -33,11 +35,15 @@ export type RootStore = {
   toast: ToastStore;
   history: History;
   api: RootApi;
+  imageApi: ImageApi;
   workspaceForm: WorkspaceForm;
+  imageForm: ImageForm;
   init: () => Promise<void>;
 };
 export const RootStore = (): RootStore => {
   const api = RootApi();
+  const imageApi = ImageApi();
+  imageApi.setUrl("http://oniku.mydns.jp:3030")
   const loading = LoadingStore();
   const toast = ToastStore();
   const data = DataStore({ api, loading:loading.loading, toast });
@@ -53,17 +59,32 @@ export const RootStore = (): RootStore => {
     toast,
     onInit: (workspace) => {
       history.push(`/workspace/id/${workspace.id}`)
+    },
+    onSave: (workspace) => {
+      data.fetchWorkspace(workspace.id)
+    },
+    onDelete: (id:string) => {
+      data.init()
     }
+  })
+
+  const imageForm = ImageForm({
+    api,
+    imageApi,
+    loading:loading.loading,
+    toast,
   })
 
   return {
     api,
+    imageApi,
     data,
     toast,
     loading,
     init,
     history,
     workspaceForm,
+    imageForm
   };
 };
 

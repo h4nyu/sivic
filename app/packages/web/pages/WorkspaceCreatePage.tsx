@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Map } from "immutable";
 import FileUpload from "@charpoints/web/components/FileUpload";
 import store from "@sivic/web/store";
 
 const Content = observer(() => {
-  const { addWorkspace } = store.data;
+  const { save } = store.workspaceForm;
   const { workspaces } = store.data.state;
   const { init } = store.data;
   return (
@@ -39,7 +39,7 @@ const Content = observer(() => {
           gridRow: "2"
         }}
       >
-        <div className="button is-info"> Save </div>
+        <div className="button is-info" onClick={() => save()}> Save </div>
       </div>
     </div>
   );

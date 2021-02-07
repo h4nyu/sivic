@@ -19,7 +19,7 @@ export type State = {
 export type DataStore = {
   state: State;
   init: () => Promise<void>;
-  addWorkspace: (value: string) => Promise<void>
+  fetchWorkspace:(id: string) => Promise<void>
 };
 
 const State = ():State => {
@@ -45,26 +45,29 @@ export const DataStore = (args: {
       state.workspaces = List(rows)
     })
   };
-  const addWorkspace = async (value: string):Promise<void> => {
+
+  const fetchWorkspace = async (id:string): Promise<void> => {
     await loading(async () => {
-      const err = await api.workspace.create({
-        name: value
-      });
-      if (err instanceof Error) {
+      const row = await api.workspace.find({id});
+      if (row instanceof Error) {
         return;
       }
-      fetchWorkspaces()
+      state.workspaces = state.workspaces.filter(x => x.id !== id)
+      state.workspaces = state.workspaces.push(row)
     })
-  }
+  };
+
 
   const init = async () => {
     await loading(async () => {
       await fetchWorkspaces();
     });
   };
+
+
   return {
     state,
     init,
-    addWorkspace,
+    fetchWorkspace
   };
 };

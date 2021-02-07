@@ -10,7 +10,7 @@ import {
 
 const Content = observer(() => {
   let { id } = useParams<{id:string}>();
-  const { addWorkspace } = store.data;
+  const { save } = store.workspaceForm;
   const { workspaces } = store.data.state;
   const { init } = store.data;
   return (
@@ -44,7 +44,10 @@ const Content = observer(() => {
           gridRow: "2"
         }}
       >
-        <FileUpload/>
+        <FileUpload
+          accept={"application/json, image/*"}
+          onChange={store.imageForm.uploadFiles}
+        />
       </div>
     </div>
   );

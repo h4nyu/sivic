@@ -1,5 +1,6 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
+import store from "@sivic/web/store";
 
 export const Sidebar = () => {
   return <div 
@@ -14,7 +15,7 @@ export const Sidebar = () => {
           </NavLink>
           <ul>
             <li>
-              <NavLink to="/workspace/create" activeClassName="is-active">
+              <NavLink to="/workspace/create" activeClassName="is-active" onClick={() => store.workspaceForm.init()}>
                 Create
               </NavLink>
             </li>
