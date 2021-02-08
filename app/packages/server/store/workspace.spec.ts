@@ -8,7 +8,7 @@ afterAll(async () => {
 
 describe("workspace", () => {
   const store = rootStore.workspace;
-  const row = {
+  let row = {
     ...Workspace(),
     imageIds: ['a', 'b']
   };
@@ -17,12 +17,24 @@ describe("workspace", () => {
     await store.clear();
   });
 
-  test("insert", async () => {
+  test("insert, find and update", async () => {
     const err = await store.insert(row);
     if (err instanceof Error) {
       throw err;
     }
-    const res = await store.find({ id: row.id });
+    let res = await store.find({ id: row.id });
+    if (res instanceof Error) {
+      throw res;
+    }
+    row = {
+      ...row,
+      name: "update"
+    }
+    const update = await store.update(row);
+    if (update instanceof Error) {
+      throw update;
+    }
+    res = await store.find({ id: row.id });
     if (res instanceof Error) {
       throw res;
     }

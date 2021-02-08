@@ -7,6 +7,9 @@ import {
   FindPayload,
   DeletePayload,
   CreatePayload,
+  UpdatePayload,
+  AddImagePayload,
+  DeleteImagePayload,
 } from "@sivic/core/workspace";
 
 export const WorkspaceRoutes = (args: {
@@ -20,6 +23,10 @@ export const WorkspaceRoutes = (args: {
       const res = await srv.create(req.body);
       reply.send(res);
     });
+    app.post<{ Body: UpdatePayload }>("/update", {}, async (req, reply) => {
+      const res = await srv.update(req.body);
+      reply.send(res);
+    });
     app.post<{ Body: FilterPayload }>("/filter", {}, async (req, reply) => {
       const res = await srv.filter(req.body);
       reply.send(res);
@@ -30,6 +37,14 @@ export const WorkspaceRoutes = (args: {
     });
     app.post<{ Body: DeletePayload }>("/delete", {}, async (req, reply) => {
       const res = await srv.delete(req.body);
+      reply.send(res);
+    });
+    app.post<{ Body: AddImagePayload }>("/add-image", {}, async (req, reply) => {
+      const res = await srv.addImage(req.body);
+      reply.send(res);
+    });
+    app.post<{ Body: DeleteImagePayload }>("/delete-image", {}, async (req, reply) => {
+      const res = await srv.deleteImage(req.body);
       reply.send(res);
     });
     done();

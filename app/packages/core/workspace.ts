@@ -18,6 +18,11 @@ export type CreatePayload = {
   name: string;
 };
 
+export type UpdatePayload = {
+  id: string;
+  name: string;
+};
+
 export type FindPayload = {
   id: string;
 };
@@ -50,6 +55,7 @@ export type Service = {
   find: (payload: FindPayload) => Promise<Workspace | Error>;
   filter: (payload: FilterPayload) => Promise<Workspace[] | Error>;
   delete: (payload: DeletePayload) => Promise<string| Error>;
+  update: (payload: UpdatePayload) => Promise<Workspace | Error>;
   addImage: (payload: AddImagePayload) => Promise<void| Error>;
   deleteImage: (payload: DeleteImagePayload) => Promise<void| Error>;
 };
@@ -96,6 +102,28 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       return row;
     });
   };
+
+  const update = async (payload: UpdatePayload) => {
+    return await lock.auto(async () => {
+      const { name, id } = payload;
+      const row = Workspace()
+      row.id = id
+      row.name = name
+      const prev = await store.workspace.find({id: row.id});
+
+      if(prev instanceof Error) {return prev}
+      if(prev == undefined) {
+        return new Error(ErrorKind.WorkspaceNotFound)
+      }
+
+      let err = await store.workspace.update(row);
+      if (err instanceof Error) {
+        return err;
+      }
+      return row;
+    });
+  };
+
   const delete_ = async (payload: DeletePayload) => {
     return await lock.auto(async () => {
       const { id } = payload;
@@ -113,6 +141,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       return id;
     });
   }
+
   const addImage = async (payload: AddImagePayload) => {
     return await lock.auto(async () => {
       const ctx = await getCtx(payload.workspaceId)
@@ -120,7 +149,9 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       const { workspace } = ctx
       workspace.imageIds = uniq([...workspace.imageIds, payload.imageId])
       let err = await store.workspace.update(workspace)
-      return err
+      if(err instanceof Error) {
+        return err;
+      }
     });
   }
 
@@ -131,7 +162,9 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       const { workspace } = ctx
       workspace.imageIds = workspace.imageIds.filter(x => x !== payload.imageId)
       let err = await store.workspace.update(workspace)
-      return err
+      if(err instanceof Error) {
+        return err;
+      }
     });
   };
   return {
@@ -139,6 +172,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     find,
     create,
     delete: delete_,
+    update,
     addImage,
     deleteImage
   }

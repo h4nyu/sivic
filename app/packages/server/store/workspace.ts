@@ -100,12 +100,15 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
   const update = async (payload: Workspace): Promise<void | Error> => {
     try {
       await sql`
-      INSERT INTO workspaces ${sql(
+      UPDATE workspaces 
+      SET ${sql(
         from(payload),
         "id",
         "name",
         "created_at",
-      )}`;
+      )}
+      WHERE id = ${payload.id}
+      `;
       await replaceImageIds(payload.id, payload.imageIds)
     }catch (err) {
       return err;
