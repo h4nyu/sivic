@@ -14,6 +14,7 @@ services:
       - DATABASE_URL=postgres://app:app@db/app
       - NODE_ENV=development  
       - DETECTION_API  
+      - YARN_REGISTRY
       - STORYBOOK_PORT
     depends_on:
       - migrate
