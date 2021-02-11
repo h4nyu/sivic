@@ -64,6 +64,9 @@ export const RootStore = (): RootStore => {
     imageApi,
     loading:loading.loading,
     toast,
+    onSave: async (workspaceId:string) => {
+      workspaceForm.init(workspaceId)
+    }
   })
 
   const workspaceForm = WorkspaceForm({

@@ -24,6 +24,7 @@ export type ImageForm = {
   state: State;
   init: (workspace:Workspace) => Promise<void>;
   uploadFiles: (files:File[]) => Promise<void>;
+  deleteImage: (imageId:string) => Promise<void|Error>;
 };
 
 const State = ():State => {
@@ -37,8 +38,9 @@ export const ImageForm = (args: {
   imageApi: ImageApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
+  onSave?: (workspaceId:string) => void
 }): ImageForm => {
-  const { api, imageApi, loading, toast } = args;
+  const { api, imageApi, loading, toast, onSave } = args;
   const state = observable(State());
 
   const reset = () => {
@@ -46,9 +48,11 @@ export const ImageForm = (args: {
     // state.id = id
     // state.name = name
   }
-
-  const init = async (workspace:Workspace) => {
-    state.workspace = workspace
+  const fetch = async () => {
+    const { workspace } = state
+    if(workspace === undefined){
+      return
+    }
     const { imageIds } = workspace
     const images = await imageApi.image.filter({ids:imageIds})
     if(images instanceof Error) {
@@ -58,13 +62,36 @@ export const ImageForm = (args: {
     state.images = images
   }
 
+  const init = async (workspace:Workspace) => {
+    state.workspace = workspace
+    await fetch()
+  }
+
+  const deleteImage = async (imageId:string) => {
+    const workspaceId = state.workspace?.id
+    if(workspaceId === undefined) { return}
+    let err = await api.workspace.deleteImage({
+      workspaceId,
+      imageId,
+    })
+    if(err instanceof Error) {
+      toast.error(err)
+      return err
+    }
+    const imErr = await imageApi.image.delete({id:imageId})
+    if(imErr instanceof Error) { 
+      toast.error(imErr)
+      return err 
+    }
+    onSave && onSave(workspaceId)
+  }
+
   const uploadFiles = async (files: File[]) => {
     const ids: string[] = [];
     const workspaceId = state.workspace?.id
     if(workspaceId === undefined){
       return
     }
-
     await loading(async () => {
       for (const f of files) {
         if (!f.type.includes("image")) {
@@ -81,18 +108,20 @@ export const ImageForm = (args: {
           toast.error(imageId);
           continue;
         }
-        let addErr = api.workspace.addImage({workspaceId, imageId})
+        let addErr = await api.workspace.addImage({workspaceId, imageId})
         if(addErr instanceof Error){ 
           toast.error(addErr)
           continue 
         }
       }
     });
+    onSave && onSave(workspaceId)
   };
 
   return {
     state,
     init,
+    deleteImage,
     uploadFiles,
   }
 };
