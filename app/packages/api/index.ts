@@ -12,6 +12,7 @@ export function toError(err: any): Error {
 
 export type RootApi = {
   setUrl: (url: string) => void;
+  getImageStoreUrl: () => Promise<string|Error>;
   workspace: WorkspaceApi;
 };
 
@@ -23,8 +24,18 @@ export const RootApi = (): RootApi => {
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
   };
+
+  const getImageStoreUrl = async () => {
+    try {
+      const res = await http.get(`${prefix}/image-store-url`);
+      return res.data;
+    } catch (err) {
+      return toError(err);
+    }
+  };
   return {
     setUrl,
+    getImageStoreUrl,
     workspace,
   };
 };

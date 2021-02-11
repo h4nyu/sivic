@@ -13,6 +13,8 @@ import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
+import { ImageForm } from "@sivic/web/store/ImageForm"
+
 
 export type State = {
   id: string
@@ -21,6 +23,7 @@ export type State = {
 
 export type WorkspaceFrom = {
   state: State;
+  imageForm: ImageForm,
   init: (id?:string) => Promise<void>;
   setName: (value:string) => void;
   save: () => Promise<void>;
@@ -38,11 +41,12 @@ export const WorkspaceFrom = (args: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
+  imageForm: ImageForm;
   onInit?: (workspace:Workspace) => void;
   onSave?: (workspace:Workspace) => void;
   onDelete?: (id:string) => void;
 }): WorkspaceFrom => {
-  const { api, loading, toast, onInit, onSave, onDelete } = args;
+  const { api, loading, toast, onInit, onSave, onDelete, imageForm } = args;
   const state = observable(State());
   const reset = () => {
     const {id, name } = State()
@@ -62,6 +66,7 @@ export const WorkspaceFrom = (args: {
       }
       state.id = row.id
       state.name = row.name
+      await imageForm.init(row)
       onInit && onInit(row)
     })
   }
@@ -73,6 +78,7 @@ export const WorkspaceFrom = (args: {
     await loading(async () => {
       const row = await api.workspace.create({name:state.name});
       if (row instanceof Error) {
+        toast.error(row)
         return;
       }
       onSave && onSave(row)
@@ -93,6 +99,7 @@ export const WorkspaceFrom = (args: {
 
   return {
     state,
+    imageForm,
     init,
     setName,
     save,

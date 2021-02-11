@@ -15,7 +15,6 @@ configure({
 });
 
 export type Workspaces = List<Workspace>;
-
 export enum Level {
   Info,
   Success,
@@ -51,12 +50,27 @@ export const RootStore = (): RootStore => {
 
   const init = async () => {
     await data.init();
+    const imageUrl = await api.getImageStoreUrl()
+    if(imageUrl instanceof Error) {
+      toast.error(imageUrl);
+      return;
+    }
+    imageApi.setUrl(imageUrl)
     toast.show("Success", Level.Success);
   };
+
+  const imageForm = ImageForm({
+    api,
+    imageApi,
+    loading:loading.loading,
+    toast,
+  })
+
   const workspaceForm = WorkspaceForm({
     api,
     loading:loading.loading,
     toast,
+    imageForm,
     onInit: (workspace) => {
       history.push(`/workspace/id/${workspace.id}`)
     },
@@ -66,13 +80,6 @@ export const RootStore = (): RootStore => {
     onDelete: (id:string) => {
       data.init()
     }
-  })
-
-  const imageForm = ImageForm({
-    api,
-    imageApi,
-    loading:loading.loading,
-    toast,
   })
 
   return {

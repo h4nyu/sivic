@@ -13,6 +13,7 @@ services:
     environment:
       - DATABASE_URL=postgres://app:app@db/app
       - NODE_ENV=development  
+      - IMAGE_STORE_URL
       - DETECTION_API  
       - YARN_REGISTRY
       - STORYBOOK_PORT
@@ -27,6 +28,7 @@ services:
     environment:
       - DATABASE_URL=postgres://app:app@db/app
       - DETECTION_API
+      - IMAGE_STORE_URL
       - NODE_ENV=development
     depends_on:
       - migrate

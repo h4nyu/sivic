@@ -5,9 +5,8 @@ import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
 import { RootApi as ImageApi } from "@charpoints/api";
-import {
-  Workspace,
-} from "@sivic/core/workspace";
+import { Workspace } from "@sivic/core/workspace";
+import { Image } from "@charpoints/core/image"
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
@@ -17,18 +16,19 @@ import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Images } from "@charpoints/web/store";
 
 export type State = {
-  images: Images;
+  workspace?:Workspace
+  images: Image[];
 };
 
 export type ImageForm = {
   state: State;
-  init: (id?:string) => Promise<void>;
+  init: (workspace:Workspace) => Promise<void>;
   uploadFiles: (files:File[]) => Promise<void>;
 };
 
 const State = ():State => {
   return {
-    images: List()
+    images: [],
   };
 };
 
@@ -47,12 +47,24 @@ export const ImageForm = (args: {
     // state.name = name
   }
 
-  const init = async (id?:string) => {
-
+  const init = async (workspace:Workspace) => {
+    state.workspace = workspace
+    const { imageIds } = workspace
+    const images = await imageApi.image.filter({ids:imageIds})
+    if(images instanceof Error) {
+      toast.error(images)
+      return
+    }
+    state.images = images
   }
 
   const uploadFiles = async (files: File[]) => {
     const ids: string[] = [];
+    const workspaceId = state.workspace?.id
+    if(workspaceId === undefined){
+      return
+    }
+
     await loading(async () => {
       for (const f of files) {
         if (!f.type.includes("image")) {
@@ -64,12 +76,16 @@ export const ImageForm = (args: {
           toast.error(data);
           continue;
         }
-        const id = await imageApi.image.create({ data, name:f.name });
-        if (id instanceof Error) {
-          toast.error(id);
+        const imageId = await imageApi.image.create({ data, name:f.name });
+        if (imageId instanceof Error) {
+          toast.error(imageId);
           continue;
         }
-        // await fetchImage(id);
+        let addErr = api.workspace.addImage({workspaceId, imageId})
+        if(addErr instanceof Error){ 
+          toast.error(addErr)
+          continue 
+        }
       }
     });
   };
