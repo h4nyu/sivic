@@ -12,6 +12,7 @@ const history = createHashHistory();
 const MainPage = lazy(() => import("@sivic/web/pages/MainPage"));
 const WorkspacePage = lazy(() => import("@sivic/web/pages/WorkspacePage"));
 const WorkspaceCreatePage = lazy(() => import("@sivic/web/pages/WorkspaceCreatePage"));
+const ImagePage = lazy(() => import("@sivic/web/pages/ImagePage"));
 
 export default function App() {
   React.useEffect(() => {
@@ -31,6 +32,7 @@ export default function App() {
               <Route exact path={"/workspace"} component={MainPage} />
               <Route exact path={"/workspace/id/:id"} component={WorkspacePage} />
               <Route exact path={"/workspace/create"} component={WorkspaceCreatePage} />
+              <Route exact path={"/workspace/id/:id/image-id/:imageId"} component={ImagePage} />
             </Suspense>
           }
         />

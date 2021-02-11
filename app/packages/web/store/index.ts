@@ -9,6 +9,7 @@ import { createHashHistory } from "history";
 import { Workspace } from "@sivic/core/workspace";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
 import ImageForm from "@sivic/web/store/ImageForm"
+import ImageProcess from "@sivic/web/store/ImageProcess"
 
 configure({
   enforceActions: "never",
@@ -37,6 +38,7 @@ export type RootStore = {
   imageApi: ImageApi;
   workspaceForm: WorkspaceForm;
   imageForm: ImageForm;
+  imageProcess: ImageProcess;
   init: () => Promise<void>;
 };
 export const RootStore = (): RootStore => {
@@ -68,7 +70,15 @@ export const RootStore = (): RootStore => {
       workspaceForm.init(workspaceId)
     }
   })
-
+  const imageProcess = ImageProcess({
+    api,
+    imageApi,
+    loading:loading.loading,
+    toast,
+    onInit: (workspaceId, imageId) => {
+      history.push(`/workspace/id/${workspaceId}/image-id/${imageId}`)
+    }
+  })
   const workspaceForm = WorkspaceForm({
     api,
     loading:loading.loading,
@@ -94,7 +104,8 @@ export const RootStore = (): RootStore => {
     init,
     history,
     workspaceForm,
-    imageForm
+    imageForm,
+    imageProcess,
   };
 };
 

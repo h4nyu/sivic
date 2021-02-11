@@ -11,7 +11,7 @@ import ImageTable from "@sivic/web/components/ImageTable"
 
 const Content = observer(() => {
   let { id } = useParams<{id:string}>();
-  const { workspaceForm } = store
+  const { workspaceForm, imageProcess } = store
   const { save } = store.workspaceForm;
   const { workspaces } = store.data.state;
   const { init } = store.data;
@@ -49,6 +49,7 @@ const Content = observer(() => {
       >
         <ImageTable
           images={workspaceForm.imageForm.state.images}
+          onClick={(id) => imageProcess.init(workspaceForm.state.id, id)}
           onDelete={workspaceForm.imageForm.deleteImage}
         />
       </div>
