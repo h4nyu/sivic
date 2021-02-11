@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Map } from "immutable";
-import FileUpload from "@charpoints/web/components/FileUpload";
+import ImageView from "@sivic/web/components/ImageView";
 import store from "@sivic/web/store";
 
 const Content = observer(() => {
   const { imageProcess } = store;
+  const { image } = imageProcess.state
   const { init } = store.data;
   return (
     <div
@@ -17,10 +18,11 @@ const Content = observer(() => {
         height: "100%",
       }}
     >
-      Image Process Page!
+      {
+        image && image.data && <ImageView imageData={image.data} size={512}/>
+      }
     </div>
   );
 });
 
 export default Content;
-

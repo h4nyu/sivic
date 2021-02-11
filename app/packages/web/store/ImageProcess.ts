@@ -21,7 +21,7 @@ export type State = {
 
 export type ImageProcess = {
   state: State;
-  init: (workspaceId:string, imageId:string) => Promise<void>;
+  init: (workspaceId:string, imageId:string) => Promise<void|Error>;
 };
 
 const State = ():State => {
@@ -40,7 +40,12 @@ export const ImageProcess = (args: {
   const state = observable(State());
 
   const init = async (workspaceId:string, imageId:string) => {
-    onInit && onInit(workspaceId, imageId)
+    await loading(async () => {
+      const image = await imageApi.image.find({id:imageId})
+      if(image instanceof Error) { return image }
+      state.image = image
+      onInit && onInit(workspaceId, imageId)
+    })
   }
 
   return {

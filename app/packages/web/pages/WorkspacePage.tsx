@@ -45,8 +45,8 @@ const Content = observer(() => {
         style={{
           gridRow: "2"
         }}
-        className="box"
       >
+        <label className="label">Image List</label>
         <ImageTable
           images={workspaceForm.imageForm.state.images}
           onClick={(id) => imageProcess.init(workspaceForm.state.id, id)}
