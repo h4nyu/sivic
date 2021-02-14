@@ -17,7 +17,7 @@ export const Store = (args: {
     await sql.end({ timeout: 5 });
   };
   const workspace = WorkspaceStore(sql);
-  const image = ImageStore(imageApi)
+  const image = ImageStore(imageApi, sql)
   return {
     workspace,
     image,

@@ -2,10 +2,23 @@ import { Lock, Store, DetectedBoxesFn, ErrorKind } from "@sivic/core"
 import { Image as CharImage } from "@charpoints/core/image"
 import { Box as CharBox } from "@charpoints/core/box"
 
-export type ImageTag = "Source" | "Target"
+export const ImageTag = {
+  Source: "Source",
+  Target: "Target"
+} as const
+
+export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
 export type Image = CharImage & {
-  tag: ImageTag
+  workspaceId: string,
+  tag?: ImageTag,
+}
+export const Image = ():Image => {
+  return {
+    ...CharImage(),
+    tag: undefined,
+    workspaceId: "",
+  }
 }
 
 export type CreatePayload = {

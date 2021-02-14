@@ -9,6 +9,6 @@ CREATE TABLE workspaces (
 CREATE TABLE workspace_images ( 
     workspace_id text NOT NULL,
     image_id text NOT NULL,
-    tag text NOT NULL,
+    tag text,
     UNIQUE(workspace_id, image_id)
 );
