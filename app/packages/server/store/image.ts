@@ -3,8 +3,11 @@ import { first } from "lodash";
 
 import { Image } from "@sivic/core/image";
 import { ImageStore } from "@sivic/core";
+import { RootApi as ImageApi } from "@charpoints/api"
 
-export const Store = (): ImageStore => {
+export const Store = (
+  imageApi: ImageApi
+): ImageStore => {
   // const to = (r: Row): Image => {
   //   return {
   //   };

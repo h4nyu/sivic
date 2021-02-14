@@ -13,7 +13,7 @@ services:
     environment:
       - DATABASE_URL=postgres://app:app@db/app
       - NODE_ENV=development  
-      - IMAGE_STORE_URL
+      - IMAGE_URL
       - DETECTION_API  
       - YARN_REGISTRY
       - STORYBOOK_PORT
