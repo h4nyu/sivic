@@ -2,6 +2,7 @@ import fastify, { FastifyPlugin } from "fastify";
 import { Lock, Store } from "@sivic/core";
 import path from "path";
 import { WorkspaceRoutes } from "./workspace";
+import { ImageRoutes } from "./image";
 import fastifyStatic from "fastify-static";
 
 const urlRoutes: FastifyPlugin<{ prefix: string }> = function (
@@ -29,6 +30,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(WorkspaceRoutes({ store, lock }), {
     prefix: `${prefix}/workspace`,
+  });
+  app.register(ImageRoutes({ store, lock }), {
+    prefix: `${prefix}/image`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());

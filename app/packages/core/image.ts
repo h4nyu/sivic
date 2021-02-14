@@ -37,8 +37,8 @@ const DetectCharBox = (args:{
     if(detectRes instanceof Error) { return detectRes }
     const [boxes, data] = detectRes
     image.data = data
-    let updateErr = await store.image.update(image)
-    if(updateErr instanceof Error) { return updateErr }
+    // let updateErr = await store.image.update(image)
+    // if(updateErr instanceof Error) { return updateErr }
     return boxes.map( x => {
       return {...x, imageId: image.id}
     })

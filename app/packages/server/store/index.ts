@@ -1,5 +1,6 @@
 import postgres from "postgres";
 import { Store as WorkspaceStore } from "./workspace";
+import { Store as ImageStore } from "./image"
 
 export const Store = (args: { url: string; max?: number }) => {
   const sql = postgres(args.url, {
@@ -9,8 +10,10 @@ export const Store = (args: { url: string; max?: number }) => {
     await sql.end({ timeout: 5 });
   };
   const workspace = WorkspaceStore(sql);
+  const image = ImageStore()
   return {
     workspace,
+    image,
     close,
   };
 };
