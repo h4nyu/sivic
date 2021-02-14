@@ -1,5 +1,6 @@
 export { ErrorKind } from "./error";
 import { Workspace } from "./workspace";
+import { Image } from "@sivic/core/image"
 
 export type WorkspaceStore = {
   find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
@@ -14,10 +15,27 @@ export type WorkspaceStore = {
   clear: () => Promise<void | Error>;
 };
 
+export type ImageStore = {
+  find: (payload: {id :string}) => Promise<Image | Error>;
+  insert: (payload: Image ) => Promise<void | Error>
+  update: (payload: Image ) => Promise<void | Error>
+  delete: (payload: { id: string} ) => Promise<void | Error>
+};
+
+type DetectedBoxes = {
+  x0:number,
+  y0:number,
+  x1:number,
+  y1:number,
+  confidence: number,
+}[]
+export type DetectedBoxesFn = (payload: {data :string}) => Promise<[DetectedBoxes, string] | Error>;
+
 export type Lock = {
   auto: <T>(fn: () => Promise<T>) => Promise<T>;
 };
 
 export type Store = {
   workspace: WorkspaceStore;
+  image: ImageStore,
 };
