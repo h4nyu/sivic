@@ -7,6 +7,7 @@ import { configure } from "mobx";
 import { Map, List } from "immutable";
 import { createHashHistory } from "history";
 import { Workspace } from "@sivic/core/workspace";
+import { Image } from "@sivic/core/image";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
 import ImageForm from "@sivic/web/store/ImageForm"
 import ImageProcess from "@sivic/web/store/ImageProcess"
@@ -16,6 +17,7 @@ configure({
 });
 
 export type Workspaces = List<Workspace>;
+export type Images = List<Image>;
 export enum Level {
   Info,
   Success,

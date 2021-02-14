@@ -6,14 +6,13 @@ import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
 import { RootApi as ImageApi } from "@charpoints/api";
 import { Workspace } from "@sivic/core/workspace";
-import { Image } from "@charpoints/core/image"
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
-import { Images } from "@charpoints/web/store";
+import { Image } from "@sivic/core/image";
 
 export type State = {
   workspace?:Workspace
@@ -54,12 +53,13 @@ export const ImageForm = (args: {
       return
     }
     const { imageIds } = workspace
-    const images = await imageApi.image.filter({ids:imageIds})
-    if(images instanceof Error) {
-      toast.error(images)
-      return
-    }
-    state.images = images
+    // TODO
+    // const images = await imageApi.image.filter({ids:imageIds})
+    // if(images instanceof Error) {
+    //   toast.error(images)
+    //   return
+    // }
+    // state.images = images
   }
 
   const init = async (workspace:Workspace) => {
