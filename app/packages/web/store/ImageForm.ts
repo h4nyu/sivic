@@ -4,7 +4,6 @@ import { Workspaces } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
-import { RootApi as ImageApi } from "@charpoints/api";
 import { Workspace } from "@sivic/core/workspace";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
@@ -34,12 +33,11 @@ const State = ():State => {
 
 export const ImageForm = (args: {
   api: RootApi;
-  imageApi: ImageApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onSave?: (workspaceId:string) => void
 }): ImageForm => {
-  const { api, imageApi, loading, toast, onSave } = args;
+  const { api, loading, toast, onSave } = args;
   const state = observable(State());
 
   const reset = () => {
@@ -69,19 +67,13 @@ export const ImageForm = (args: {
 
   const deleteImage = async (imageId:string) => {
     const workspaceId = state.workspace?.id
-    if(workspaceId === undefined) { return}
-    let err = await api.workspace.deleteImage({
-      workspaceId,
-      imageId,
+    if(workspaceId === undefined) {return}
+    let err = await api.image.delete({
+      id:imageId,
     })
     if(err instanceof Error) {
       toast.error(err)
       return err
-    }
-    const imErr = await imageApi.image.delete({id:imageId})
-    if(imErr instanceof Error) { 
-      toast.error(imErr)
-      return err 
     }
     onSave && onSave(workspaceId)
   }
@@ -103,15 +95,10 @@ export const ImageForm = (args: {
           toast.error(data);
           continue;
         }
-        const imageId = await imageApi.image.create({ data, name:f.name });
+        const imageId = await api.image.create({ data, name:f.name, workspaceId});
         if (imageId instanceof Error) {
           toast.error(imageId);
           continue;
-        }
-        let addErr = await api.workspace.addImage({workspaceId, imageId})
-        if(addErr instanceof Error){ 
-          toast.error(addErr)
-          continue 
         }
       }
     });

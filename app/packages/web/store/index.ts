@@ -2,7 +2,6 @@ import { DataStore } from "./data";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { RootApi } from "@sivic/api";
-import { RootApi as ImageApi} from "@charpoints/api";
 import { configure } from "mobx";
 import { Map, List } from "immutable";
 import { createHashHistory } from "history";
@@ -37,7 +36,6 @@ export type RootStore = {
   toast: ToastStore;
   history: History;
   api: RootApi;
-  imageApi: ImageApi;
   workspaceForm: WorkspaceForm;
   imageForm: ImageForm;
   imageProcess: ImageProcess;
@@ -45,8 +43,6 @@ export type RootStore = {
 };
 export const RootStore = (): RootStore => {
   const api = RootApi();
-  const imageApi = ImageApi();
-  imageApi.setUrl("http://oniku.mydns.jp:3030")
   const loading = LoadingStore();
   const toast = ToastStore();
   const data = DataStore({ api, loading:loading.loading, toast });
@@ -54,18 +50,11 @@ export const RootStore = (): RootStore => {
 
   const init = async () => {
     await data.init();
-    const imageUrl = await api.getImageStoreUrl()
-    if(imageUrl instanceof Error) {
-      toast.error(imageUrl);
-      return;
-    }
-    imageApi.setUrl(imageUrl)
     toast.show("Success", Level.Success);
   };
 
   const imageForm = ImageForm({
     api,
-    imageApi,
     loading:loading.loading,
     toast,
     onSave: async (workspaceId:string) => {
@@ -74,7 +63,6 @@ export const RootStore = (): RootStore => {
   })
   const imageProcess = ImageProcess({
     api,
-    imageApi,
     loading:loading.loading,
     toast,
     onInit: (workspaceId, imageId) => {
@@ -99,7 +87,6 @@ export const RootStore = (): RootStore => {
 
   return {
     api,
-    imageApi,
     data,
     toast,
     loading,

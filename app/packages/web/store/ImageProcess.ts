@@ -31,17 +31,16 @@ const State = ():State => {
 
 export const ImageProcess = (args: {
   api: RootApi;
-  imageApi: ImageApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (workspaceId:string, imageId:string) => void
 }): ImageProcess => {
-  const { api, imageApi, loading, toast, onInit } = args;
+  const { api, loading, toast, onInit } = args;
   const state = observable(State());
 
   const init = async (workspaceId:string, imageId:string) => {
     await loading(async () => {
-      const image = await imageApi.image.find({id:imageId})
+      const image = await api.image.find({id:imageId})
       if(image instanceof Error) { return image }
       state.image = image
       onInit && onInit(workspaceId, imageId)
