@@ -1,6 +1,9 @@
+import { v4 as uuid } from 'uuid';
 import { Lock, Store, DetectedBoxesFn, ErrorKind } from "@sivic/core"
 import { Image as CharImage } from "@charpoints/core/image"
+import { Workspace } from "@sivic/core/workspace"
 import { Box as CharBox } from "@charpoints/core/box"
+import { Service as WorkspaceService } from "@sivic/core/workspace"
 
 export const ImageTag = {
   Source: "Source",
@@ -22,9 +25,17 @@ export const Image = ():Image => {
 }
 
 export type CreatePayload = {
-  id?: string;
   name: string;
+  workspaceId: string;
   data: string; //base64
+};
+
+export type UpdatePayload = {
+  id: string;
+  name: string;
+  workspaceId: string;
+  data: string; //base64
+  tag: ImageTag;
 };
 
 export type DeletePayload = {
@@ -66,6 +77,9 @@ export type Service = {
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
   const { store, lock } = args;
+  const services = {
+    workspace: WorkspaceService(args)
+  }
   const find = async (payload: FindPayload) => {
     const image = await store.image.find(payload);
     if (image instanceof Error) {
@@ -79,48 +93,43 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
 
   const create = async (payload: CreatePayload) => {
     return await lock.auto(async () => {
-      // const { data, id, name } = payload;
-      // const row = Image()
-      // row.data = data
-      // row.id = id || row.id || uuid()
-      // row.name = name
-      // const prev = await store.image.find({id: row.id});
-      // if(prev instanceof Error) {return prev}
-      // if(prev !== undefined) {
-      //   return new Error(ErrorKind.ImageAlreadyExist)
-      // }
-      // let err = await store.image.insert(row);
-      // if (err instanceof Error) {
-      //   return err;
-      // }
-      // return row.id;
-      return "TODO"
+      const workspace = await services.workspace.find({id: payload.workspaceId})
+      if(workspace instanceof Error) { return workspace }
+      const row = Image()
+      row.data = payload.data
+      row.name = payload.name
+      row.workspaceId = payload.workspaceId
+      let err = await store.image.insert(row);
+      if (err instanceof Error) { return err; }
+      return row.id
+    });
+  };
+
+  const update = async (payload: UpdatePayload) => {
+    return await lock.auto(async () => {
+      const workspace = await services.workspace.find({id: payload.workspaceId})
+      if(workspace instanceof Error) { return workspace }
+      const row = await find({ id:payload.id });
+      if(row instanceof Error) { return row }
+      const newRow = {
+        ...row,
+        ...payload,
+        updatedAt: new Date(),
+      }
+      let err = await store.image.update(newRow);
+      if (err instanceof Error) { return err; }
+      return row.id
     });
   };
 
   const delete_ = async (payload: DeletePayload) => {
     return await lock.auto(async () => {
-      // const { id } = payload;
-      // const row = await store.image.find({ id });
-      // if (row instanceof Error) {
-      //   return row;
-      // }
-      // if (row === undefined) {
-      //   return new Error(ErrorKind.ImageNotFound);
-      // }
-      // let err = await store.image.delete({ id });
-      // if (err instanceof Error) {
-      //   return err;
-      // }
-      // err = await store.point.delete({ imageId: id });
-      // if (err instanceof Error) {
-      //   return err;
-      // }
-      // err = await store.box.delete({ imageId: id });
-      // if (err instanceof Error) {
-      //   return err;
-      // }
-      return "TODO"
+      const { id } = payload;
+      const row = await find({ id });
+      if (row instanceof Error) { return row; }
+      let err = await store.image.delete({ id });
+      if (err instanceof Error) { return err; }
+      return row.id
     });
   };
 
