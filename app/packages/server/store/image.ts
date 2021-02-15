@@ -6,35 +6,44 @@ import { Image } from "@sivic/core/image";
 import { ImageStore } from "@sivic/core";
 import { RootApi as ImageApi } from "@charpoints/api"
 
+const COLUMNS = [
+  "workspace_id", "image_id", "tag", "updated_at", "created_at"
+] as const
 export const Store = (
   imageApi: ImageApi,
   sql: Sql<any>,
 ): ImageStore => {
-  // const to = (r: Row): Image => {
-  //   return {
-  //   };
-  // };
+  const to = (r: Row) => {
+    return {
+      id: r.image_id,
+      workspaceId: r.workspace_id,
+      tag: r.tag || undefined,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+    };
+  };
 
-  // const from = (r: Image): Row => {
-  //   return {
-  //     id: r.id,
-  //     name: r.name,
-  //     created_at: r.createdAt,
-  //   };
-  // };
+  const from = (r: Image): Row => {
+    return {
+      workspace_id: r.workspaceId,
+      image_id: r.id,
+      tag: r.tag || null,
+      created_at: r.createdAt,
+      updated_at: r.updatedAt,
+    };
+  };
 
   const find = async (payload: {
     id: string;
   }): Promise<Image | Error> => {
     let image = await imageApi.image.find(payload)
     if(image instanceof Error) { return image }
-    const rows = await sql`SELECT tag, workspace_id FROM workspace_images WHERE image_id = ${image.id} LIMIT 1`
-    const row = first(rows)
+    const rows = await sql`SELECT * FROM workspace_images WHERE image_id = ${image.id} LIMIT 1`
+    const row = first(rows.map(to))
     if(row === undefined) { return new Error(ErrorKind.ImageNotFound)}
     return {
       ...image,
-      tag: row.tag || undefined,
-      workspaceId: row.workspace_id,
+      ...row,
     }
   };
 
@@ -45,24 +54,18 @@ export const Store = (
       name: payload.name,
     })
     if(err instanceof Error) {return err}
-    const row =  {
-      workspace_id: payload.workspaceId,
-      image_id: payload.id,
-      tag: payload.tag || null,
-    }
     try {
-      await sql`INSERT INTO workspace_images ${sql(row, "workspace_id", "image_id", "tag")}`
+      await sql`INSERT INTO workspace_images ${sql(from(payload), ...COLUMNS)}`
     }catch(e) {
       return e
     }
-
   };
 
   const update = async (payload:Image): Promise<void | Error> => {
     let err = await imageApi.image.update(payload)
     if(err instanceof Error) {return err}
     try {
-      await sql`UPDATE workspace_images SET tag = ${payload.tag || null} WHERE image_id = ${payload.id}`
+      await sql`UPDATE workspace_images SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
     }catch(e) {
       return e
     }

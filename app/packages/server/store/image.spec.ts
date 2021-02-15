@@ -35,7 +35,7 @@ describe("image", () => {
     if (res instanceof Error) {
       throw res;
     }
-    console.log(res)
+    expect(res).toEqual(row)
   });
 });
 
