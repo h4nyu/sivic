@@ -22,15 +22,6 @@ export type ImageStore = {
   delete: (payload: { id: string} ) => Promise<void | Error>
 };
 
-type DetectedBoxes = {
-  x0:number,
-  y0:number,
-  x1:number,
-  y1:number,
-  confidence: number,
-}[]
-export type DetectedBoxesFn = (payload: {data :string}) => Promise<[DetectedBoxes, string] | Error>;
-
 export type Lock = {
   auto: <T>(fn: () => Promise<T>) => Promise<T>;
 };

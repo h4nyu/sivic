@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { Lock, Store, DetectedBoxesFn, ErrorKind } from "@sivic/core"
+import { Lock, Store, ErrorKind } from "@sivic/core"
 import { Image as CharImage } from "@charpoints/core/image"
 import { Workspace } from "@sivic/core/workspace"
 import { Box as CharBox } from "@charpoints/core/box"
@@ -9,6 +9,7 @@ export const ImageTag = {
   Source: "Source",
   Target: "Target"
 } as const
+
 
 export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
@@ -46,23 +47,35 @@ export type FindPayload = {
   id: string;
 };
 
-export type DetectCharBoxFn = (payload: {imageId: string}) => Promise<CharBox[]|Error>
+export type DetectBoxPayload = {imageId: string}
 
-const DetectCharBox = (args:{
+type DetectedBoxes = {
+  x0:number,
+  y0:number,
+  x1:number,
+  y1:number,
+  confidence: number,
+}[]
+export type DetectBoxes = (payload: {data :string}) => Promise<[DetectedBoxes, string] | Error>;
+
+const DetectBoxFn = (args:{
   store: Store,
-  detectBoxes: DetectedBoxesFn
-}):DetectCharBoxFn => {
+  detectBoxes: DetectBoxes,
+  lock: Lock
+}) => {
   const { store, detectBoxes } = args
+  const services = {
+    image: Service(args)
+  }
   return async (payload: {imageId:string}) => {
-    const image = await store.image.find({id: payload.imageId })
+    const image = await services.image.find({id: payload.imageId })
     if(image instanceof Error) { return image }
-    if(image.data === undefined) { return new Error(ErrorKind.ImageNotFound) }
-    const detectRes = await detectBoxes({data: image.data})
+    const detectRes = await detectBoxes({data: image.data || ""})
     if(detectRes instanceof Error) { return detectRes }
     const [boxes, data] = detectRes
     image.data = data
-    // let updateErr = await store.image.update(image)
-    // if(updateErr instanceof Error) { return updateErr }
+    let updateErr = await store.image.update(image)
+    if(updateErr instanceof Error) { return updateErr }
     return boxes.map( x => {
       return {...x, imageId: image.id}
     })
