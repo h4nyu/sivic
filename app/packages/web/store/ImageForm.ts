@@ -40,24 +40,19 @@ export const ImageForm = (args: {
   const { api, loading, toast, onSave } = args;
   const state = observable(State());
 
-  const reset = () => {
-    // const {id, name } = State()
-    // state.id = id
-    // state.name = name
-  }
   const fetch = async () => {
     const { workspace } = state
     if(workspace === undefined){
       return
     }
     const { imageIds } = workspace
-    // TODO
-    // const images = await imageApi.image.filter({ids:imageIds})
-    // if(images instanceof Error) {
-    //   toast.error(images)
-    //   return
-    // }
-    // state.images = images
+    const images:Image[] = []
+    for(const id of imageIds){
+      const image = await api.image.find({id})
+      if(image instanceof Error){ continue }
+      images.push(image)
+    }
+    state.images = images
   }
 
   const init = async (workspace:Workspace) => {
