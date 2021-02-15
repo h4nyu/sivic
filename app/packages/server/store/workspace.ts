@@ -4,6 +4,11 @@ import { first } from "lodash";
 import { Workspace } from "@sivic/core/workspace";
 import { WorkspaceStore } from "@sivic/core";
 
+const COLUMNS = [
+  "id",
+  "name",
+  "created_at",
+] as const
 export const Store = (sql: Sql<any>): WorkspaceStore => {
   const to = (r: Row): Workspace => {
     return {
@@ -75,41 +80,19 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
       return err;
     }
   };
-  const replaceImageIds = async (workspaceId:string, imageIds:string[]) => {
-    if(imageIds.length === 0){
-      return
-    }
-    const rows = imageIds.map(x => ({workspace_id:workspaceId, image_id:x}))
-    await sql`DELETE FROM workspace_images WHERE workspace_id = ${workspaceId}` 
-    await sql`INSERT INTO workspace_images ${sql(rows, "workspace_id", "image_id")}` 
-  }
   const insert = async (payload: Workspace): Promise<void | Error> => {
     try {
       await sql`
       INSERT INTO workspaces ${sql(
-        from(payload),
-        "id",
-        "name",
-        "created_at",
+        from(payload),...COLUMNS
       )}`;
-      await replaceImageIds(payload.id, payload.imageIds)
     } catch (err) {
       return err;
     }
   };
   const update = async (payload: Workspace): Promise<void | Error> => {
     try {
-      await sql`
-      UPDATE workspaces 
-      SET ${sql(
-        from(payload),
-        "id",
-        "name",
-        "created_at",
-      )}
-      WHERE id = ${payload.id}
-      `;
-      await replaceImageIds(payload.id, payload.imageIds)
+      await sql`UPDATE workspaces SET ${sql(from(payload),...COLUMNS)} WHERE id = ${payload.id}`;
     }catch (err) {
       return err;
     }

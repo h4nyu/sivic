@@ -39,14 +39,6 @@ export const WorkspaceRoutes = (args: {
       const res = await srv.delete(req.body);
       reply.send(res);
     });
-    app.post<{ Body: AddImagePayload }>("/add-image", {}, async (req, reply) => {
-      const res = await srv.addImage(req.body);
-      reply.send(res);
-    });
-    app.post<{ Body: DeleteImagePayload }>("/delete-image", {}, async (req, reply) => {
-      const res = await srv.deleteImage(req.body);
-      reply.send(res);
-    });
     done();
   };
 };

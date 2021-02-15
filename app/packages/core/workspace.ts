@@ -56,8 +56,6 @@ export type Service = {
   filter: (payload: FilterPayload) => Promise<Workspace[] | Error>;
   delete: (payload: DeletePayload) => Promise<string| Error>;
   update: (payload: UpdatePayload) => Promise<Workspace | Error>;
-  addImage: (payload: AddImagePayload) => Promise<void| Error>;
-  deleteImage: (payload: DeleteImagePayload) => Promise<void| Error>;
 };
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
@@ -142,38 +140,11 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     });
   }
 
-  const addImage = async (payload: AddImagePayload) => {
-    return await lock.auto(async () => {
-      const ctx = await getCtx(payload.workspaceId)
-      if(ctx instanceof Error) { return ctx }
-      const { workspace } = ctx
-      workspace.imageIds = uniq([...workspace.imageIds, payload.imageId])
-      let err = await store.workspace.update(workspace)
-      if(err instanceof Error) {
-        return err;
-      }
-    });
-  }
-
-  const deleteImage = async (payload: DeleteImagePayload) => {
-    return await lock.auto(async () => {
-      const ctx = await getCtx(payload.workspaceId)
-      if(ctx instanceof Error) { return ctx }
-      const { workspace } = ctx
-      workspace.imageIds = workspace.imageIds.filter(x => x !== payload.imageId)
-      let err = await store.workspace.update(workspace)
-      if(err instanceof Error) {
-        return err;
-      }
-    });
-  };
   return {
     filter,
     find,
     create,
     delete: delete_,
     update,
-    addImage,
-    deleteImage
   }
 }
