@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios";
 import { toError } from ".";
 import {
   CreatePayload,
+  UpdatePayload,
   DeletePayload,
   FindPayload,
   Service,
@@ -20,10 +21,9 @@ export const ImageApi = (arg: {
     return {
       ...res,
       createdAt: new Date(res.createdAt),
+      updateAt: new Date(res.updatedAt),
     };
   };
-
-
   const find = async (payload: FindPayload) => {
     try {
       const res = await http.post(`${prefix}/find`, payload);
@@ -41,6 +41,14 @@ export const ImageApi = (arg: {
     }
   };
 
+  const update = async (payload: UpdatePayload) => {
+    try {
+      const res = await http.post(`${prefix}/update`, payload);
+      return to(res.data);
+    } catch (err) {
+      return toError(err);
+    }
+  };
   const delete_ = async (payload: DeletePayload) => {
     try {
       const res = await http.post(`${prefix}/delete`, payload);
@@ -52,6 +60,7 @@ export const ImageApi = (arg: {
 
   return {
     create,
+    update,
     find,
     delete: delete_,
   };

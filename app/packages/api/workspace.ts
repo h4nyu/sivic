@@ -70,28 +70,9 @@ export const WorkspaceApi = (arg: {
       return toError(err);
     }
   };
-  const addImage = async (payload: AddImagePayload) => {
-    try {
-      const res = await http.post(`${prefix}/add-image`, payload);
-      return res.data;
-    } catch (err) {
-      return toError(err);
-    }
-  };
-  const deleteImage = async (payload: DeleteImagePayload) => {
-    try {
-      const res = await http.post(`${prefix}/delete-image`, payload);
-      return res.data;
-    } catch (err) {
-      return toError(err);
-    }
-  };
-
   return {
     create,
     update,
-    addImage,
-    deleteImage,
     find,
     filter,
     delete: delete_,
