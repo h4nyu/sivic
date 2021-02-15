@@ -71,6 +71,7 @@ const DetectCharBox = (args:{
 
 export type Service = {
   create: (payload: CreatePayload) => Promise<string | Error>;
+  update: (payload: UpdatePayload) => Promise<string | Error>;
   delete: (payload: DeletePayload) => Promise<string | Error>;
   find: (payload: FindPayload) => Promise<Image | Error>;
 };
@@ -135,6 +136,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
 
   return {
     create,
+    update,
     find,
     delete: delete_,
   };
