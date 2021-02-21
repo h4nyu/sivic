@@ -22,9 +22,9 @@ export const WorkspaceTable = (props: {
   images: Image[];
   onClick?: (id: string) => void;
   onDelete?: (id: string) => void;
-  onTagClick?: (id: string) => void;
+  TagComponent?: React.ComponentType<{image:Image}>;
 }) => {
-  const { images, onClick, onDelete, onTagClick } = props;
+  const { images, onClick, onDelete, TagComponent } = props;
   const [sort, setSort] = React.useState<[string, boolean]>(["Name", true]);
   const [sortColumn, asc] = sort;
   let rows = List(images).map(x => {
@@ -34,7 +34,6 @@ export const WorkspaceTable = (props: {
       Create:x.createdAt,
       onClick: () => onClick && onClick(x.id),
       onDelete: () => onDelete && onDelete(x.id),
-      onTagClick: () => onTagClick && onTagClick(x.id),
     }
   }).sortBy((x) => x[sortColumn]);
    if (asc) {
@@ -59,7 +58,7 @@ export const WorkspaceTable = (props: {
                   style={{ cursor: onClick ? "pointer" : "" }}
                 >
                   <td> <a onClick={x.onClick}> {x.name} </a> </td>
-                  <td> <ImageTags image={x} onClick={x.onTagClick} /> </td>
+                  <td> {TagComponent &&<TagComponent image={x}/>} </td>
                   <td> <DateView value={x.createdAt} /> </td>
                   <td> <DeleteBtn onClick={x.onDelete} /> </td>
                 </tr>

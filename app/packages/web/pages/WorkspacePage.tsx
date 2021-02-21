@@ -6,7 +6,10 @@ import store from "@sivic/web/store";
 import {
   useParams
 } from "react-router-dom";
+
+import { Image } from "@sivic/core/image";
 import ImageTable from "@sivic/web/components/ImageTable"
+import ImageTags from "@sivic/web/components/ImageTags";
 
 
 const Content = observer(() => {
@@ -51,6 +54,7 @@ const Content = observer(() => {
           images={workspaceForm.imageForm.state.images}
           onClick={(id) => imageProcess.init(workspaceForm.state.id, id)}
           onDelete={workspaceForm.imageForm.deleteImage}
+          TagComponent={(props:{image:Image}) => <ImageTags image={props.image} onClick={workspaceForm.imageForm.updateTag}/>}
         />
       </div>
       <div 

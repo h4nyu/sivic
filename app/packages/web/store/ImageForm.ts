@@ -11,7 +11,8 @@ import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
-import { Image } from "@sivic/core/image";
+import { Image, ImageTag } from "@sivic/core/image";
+import { ErrorKind } from "@sivic/core";
 
 export type State = {
   workspace?:Workspace
@@ -23,6 +24,7 @@ export type ImageForm = {
   init: (workspace:Workspace) => Promise<void>;
   uploadFiles: (files:File[]) => Promise<void>;
   deleteImage: (imageId:string) => Promise<void|Error>;
+  updateTag:({id:string, tag:ImageTag}) => Promise<void>;
 };
 
 const State = ():State => {
@@ -58,6 +60,28 @@ export const ImageForm = (args: {
   const init = async (workspace:Workspace) => {
     state.workspace = workspace
     await fetch()
+  }
+
+  const updateTag = async (payload:{
+    id:string,
+    tag:ImageTag
+  }) => {
+    const workspaceId = state.workspace?.id
+    if(workspaceId === undefined) {return}
+    const image = await api.image.find({id:payload.id})
+    if(image instanceof Error) {
+      return toast.error(image)
+    }
+
+    if(image.data === undefined) {
+      return toast.error(Error("ImageNotFound"))
+    }
+    const err = await api.image.update({
+      ...image,
+      data: image.data ? image.data : "",
+      tag:payload.tag
+    })
+    onSave && onSave(workspaceId)
   }
 
   const deleteImage = async (imageId:string) => {
@@ -105,6 +129,7 @@ export const ImageForm = (args: {
     init,
     deleteImage,
     uploadFiles,
+    updateTag
   }
 };
 export default ImageForm 
