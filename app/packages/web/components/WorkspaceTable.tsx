@@ -5,6 +5,7 @@ import { Workspace } from "@sivic/core/workspace";
 import DateView from "@sivic/web/components/DateView";
 import TableHeader from "@sivic/web/components/TableHeader";
 import DeleteBtn from "@sivic/web/components/DeleteBtn";
+import CreateBtn from "@sivic/web/components/CreateBtn";
 
 const columns = [
   "Name",
@@ -20,8 +21,9 @@ export const WorkspaceTable = (props: {
   workspaces: Workspace[];
   onClick?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onCreate?:() => void;
 }) => {
-  const { workspaces, onClick, onDelete } = props;
+  const { workspaces, onClick, onDelete, onCreate } = props;
   const [sort, setSort] = React.useState<[string, boolean]>(["Name", true]);
   const [sortColumn, asc] = sort;
   const [keyword, setKeyword] = useState("");
@@ -59,6 +61,9 @@ export const WorkspaceTable = (props: {
           type="text"
           onChange={(e) => setKeyword(e.target.value)}
         />
+        {
+          onCreate && <CreateBtn onClick={onCreate} />
+        }
       </div>
       <table className="table is-fullwidth">
         <TableHeader

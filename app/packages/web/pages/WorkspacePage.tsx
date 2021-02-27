@@ -14,10 +14,8 @@ import ImageTags from "@sivic/web/components/ImageTags";
 
 const Content = observer(() => {
   let { id } = useParams<{id:string}>();
-  const { workspaceForm, imageProcess } = store
+  const { workspaceForm, imageProcess, workspaceStore } = store
   const { save } = store.workspaceForm;
-  const { workspaces } = store.data.state;
-  const { init } = store.data;
   return (
     <div
       className="box"

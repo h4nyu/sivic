@@ -13,13 +13,6 @@ export const Sidebar = () => {
           <NavLink to="/workspace" activeClassName="is-active">
             Workspaces
           </NavLink>
-          <ul>
-            <li>
-              <NavLink to="/workspace/create" activeClassName="is-active" onClick={() => store.workspaceForm.init()}>
-                Create
-              </NavLink>
-            </li>
-          </ul>
         </li>
       </ul>
     </aside>

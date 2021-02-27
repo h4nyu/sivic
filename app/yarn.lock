@@ -1063,9 +1063,9 @@
     uuid "^8.3.1"
 
 "@charpoints/web@^0.1.0":
-  version "0.1.4"
-  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.4.tgz#4cbf70999bb3f11367386812f2985e110441bbe4"
-  integrity sha512-EGzSdTc1SyiIhJ6zudGqnAC+ZUDNeeJn/g7kqJi+jRacnzKa9TjU0XZcrX9+bM1i0fPlN/ymG7pl7JQFK7YL3w==
+  version "0.1.6"
+  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.6.tgz#0d6e58fcbf96f2d7d6882d33783d0e19cfe9edfe"
+  integrity sha512-EHIRHXoYrpRV2xT6n7HENdG7bcnMx+aGS3QvGcCSWP7cP/wSU2GGMGKojaJZn07lyySaIIdnHESEHwWLd/Du3g==
   dependencies:
     "@charpoints/api" "^0.1.0"
     "@charpoints/core" "^0.1.0"

@@ -4,8 +4,8 @@ import { Observer } from "mobx-react-lite";
 import store from "../store";
 
 export default function Loading() {
-  const { loading } = store;
+  const { loadingStore } = store;
   return (
-    <Observer>{() => <Progress isActive={loading.state.isActive} />}</Observer>
+    <Observer>{() => <Progress isActive={loadingStore.state.isActive} />}</Observer>
   );
 }

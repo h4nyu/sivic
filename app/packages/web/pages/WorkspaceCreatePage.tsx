@@ -6,8 +6,6 @@ import store from "@sivic/web/store";
 
 const Content = observer(() => {
   const { save } = store.workspaceForm;
-  const { workspaces } = store.data.state;
-  const { init } = store.data;
   return (
     <div
       className="box"

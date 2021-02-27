@@ -5,8 +5,7 @@ import WorkspaceTable from "@sivic/web/components/WorkspaceTable";
 import store from "@sivic/web/store";
 
 const Content = observer(() => {
-  const { workspaces } = store.data.state;
-  const { init } = store.data;
+  const { workspaceStore } = store;
   return (
     <div
       className="box"
@@ -16,9 +15,10 @@ const Content = observer(() => {
       }}
     >
       <WorkspaceTable
-        workspaces={workspaces.toList().toJS()} 
-        onClick={store.workspaceForm.init} 
+        workspaces={workspaceStore.workspaces.toList().toJS()} 
+        onClick={store.workspaceForm.update} 
         onDelete={store.workspaceForm.delete} 
+        onCreate={store.workspaceForm.create}
       />
     </div>
   );

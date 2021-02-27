@@ -1,4 +1,3 @@
-import { DataStore } from "./data";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { RootApi } from "@sivic/api";
@@ -8,6 +7,7 @@ import { createHashHistory } from "history";
 import { Workspace } from "@sivic/core/workspace";
 import { Image } from "@sivic/core/image";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
+import { WorkspaceStore } from "@sivic/web/store/WorkspaceStore"
 import ImageForm from "@sivic/web/store/ImageForm"
 import ImageProcess from "@sivic/web/store/ImageProcess"
 
@@ -31,8 +31,8 @@ export type History = {
 };
 
 export type RootStore = {
-  data: DataStore;
-  loading: LoadingStore;
+  workspaceStore: WorkspaceStore;
+  loadingStore: LoadingStore;
   toast: ToastStore;
   history: History;
   api: RootApi;
@@ -43,27 +43,28 @@ export type RootStore = {
 };
 export const RootStore = (): RootStore => {
   const api = RootApi();
-  const loading = LoadingStore();
+  const loadingStore = LoadingStore();
+  const loading = loadingStore.loading;
   const toast = ToastStore();
-  const data = DataStore({ api, loading:loading.loading, toast });
+  const workspaceStore = WorkspaceStore({ api, loading, toast });
   const history = createHashHistory();
 
   const init = async () => {
-    await data.init();
+    await workspaceStore.fetch();
     toast.show("Success", Level.Success);
   };
 
   const imageForm = ImageForm({
     api,
-    loading:loading.loading,
+    loading,
     toast,
     onSave: async (workspaceId:string) => {
-      workspaceForm.init(workspaceId)
+      workspaceForm.update(workspaceId)
     }
   })
   const imageProcess = ImageProcess({
     api,
-    loading:loading.loading,
+    loading,
     toast,
     onInit: (workspaceId, imageId) => {
       history.push(`/workspace/id/${workspaceId}/image-id/${imageId}`)
@@ -71,25 +72,28 @@ export const RootStore = (): RootStore => {
   })
   const workspaceForm = WorkspaceForm({
     api,
-    loading:loading.loading,
+    loading,
     toast,
     imageForm,
     onInit: (workspace) => {
       history.push(`/workspace/id/${workspace.id}`)
     },
+    onCreate: () => {
+      history.push(`/workspace/create`)
+    },
     onSave: (workspace) => {
-      data.fetchWorkspace(workspace.id)
+      workspaceStore.fetch()
     },
     onDelete: (id:string) => {
-      data.init()
+      workspaceStore.fetch()
     }
   })
 
   return {
     api,
-    data,
+    workspaceStore,
     toast,
-    loading,
+    loadingStore,
     init,
     history,
     workspaceForm,

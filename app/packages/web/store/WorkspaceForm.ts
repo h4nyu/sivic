@@ -24,7 +24,8 @@ export type State = {
 export type WorkspaceFrom = {
   state: State;
   imageForm: ImageForm,
-  init: (id?:string) => Promise<void>;
+  create: () => void;
+  update: (id:string) => void;
   setName: (value:string) => void;
   save: () => Promise<void>;
   delete: (id:string) => Promise<void>;
@@ -43,10 +44,11 @@ export const WorkspaceFrom = (args: {
   toast: ToastStore;
   imageForm: ImageForm;
   onInit?: (workspace:Workspace) => void;
+  onCreate?:() => void;
   onSave?: (workspace:Workspace) => void;
   onDelete?: (id:string) => void;
 }): WorkspaceFrom => {
-  const { api, loading, toast, onInit, onSave, onDelete, imageForm } = args;
+  const { api, loading, toast, onInit, onSave, onDelete, imageForm, onCreate } = args;
   const state = observable(State());
   const reset = () => {
     const {id, name } = State()
@@ -54,11 +56,13 @@ export const WorkspaceFrom = (args: {
     state.name = name
   }
 
-  const init = async (id?:string) => {
-    if(!id){
-      reset()
-      return 
-    }
+  const create = async () => {
+    reset()
+    onCreate && onCreate()
+  }
+
+
+  const update = async (id:string) => {
     await loading(async () => {
       const row = await api.workspace.find({id})
       if(row instanceof Error) {
@@ -70,6 +74,7 @@ export const WorkspaceFrom = (args: {
       onInit && onInit(row)
     })
   }
+
   const setName = (value:string) => {
     state.name = value
   }
@@ -100,7 +105,8 @@ export const WorkspaceFrom = (args: {
   return {
     state,
     imageForm,
-    init,
+    create,
+    update,
     setName,
     save,
     delete: _delete
