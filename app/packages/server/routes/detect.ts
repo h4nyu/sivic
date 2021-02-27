@@ -1,7 +1,7 @@
 import { Sql } from "postgres";
 import { Store, Lock } from "@sivic/core";
 import { FastifyPlugin } from "fastify";
-
+import { DetectPayload } from "@sivic/core/detect";
 
 export const DetectRoutes = (args: {
   store: Store;

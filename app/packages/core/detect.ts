@@ -8,7 +8,7 @@ export type DetectPayload = {
 };
 
 export type Service = {
-  box: (payload: DetectPayload) => Promise<Box | Error>;
+  box: (payload: DetectPayload) => Promise<Box[] | Error>;
 };
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {

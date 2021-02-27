@@ -1,6 +1,5 @@
 import axios from "axios";
 import { zip } from "lodash"
-
 export const DetectBoxes = (url:string) => {
   const http = axios.create();
   http.defaults.baseURL = url;
@@ -22,3 +21,19 @@ export const DetectBoxes = (url:string) => {
     }
   }
 }
+
+
+import { Box } from "@charpoints/core/box";
+import { DetectStore } from "@sivic/core";
+import { Row, Sql } from "postgres";
+
+export const Store = (sql: Sql<any>): DetectStore => {
+  const box = async (payload: {
+    data: string;
+  }): Promise<Box[] | Error> => {
+    return []
+  }
+  return {
+    box,
+  };
+};
