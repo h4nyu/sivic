@@ -1,6 +1,7 @@
 export { ErrorKind } from "./error";
 import { Workspace } from "./workspace";
 import { Image } from "@sivic/core/image"
+import { Box } from "@charpoints/core/box"
 
 export type WorkspaceStore = {
   find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
@@ -22,6 +23,10 @@ export type ImageStore = {
   delete: (payload: { id: string} ) => Promise<void | Error>
 };
 
+export type DetectStore = {
+  box: (payload: {data :string}) => Promise<Box | Error>;
+};
+
 export type Lock = {
   auto: <T>(fn: () => Promise<T>) => Promise<T>;
 };
@@ -29,4 +34,5 @@ export type Lock = {
 export type Store = {
   workspace: WorkspaceStore;
   image: ImageStore,
+  detect: DetectStore,
 };

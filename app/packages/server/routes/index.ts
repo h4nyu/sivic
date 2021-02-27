@@ -3,6 +3,8 @@ import { Lock, Store } from "@sivic/core";
 import path from "path";
 import { WorkspaceRoutes } from "./workspace";
 import { ImageRoutes } from "./image";
+import { DetectRoutes } from "./detect";
+
 import { DetectBoxes } from "@sivic/server/store/detect"
 import fastifyStatic from "fastify-static";
 
@@ -16,7 +18,6 @@ const urlRoutes: FastifyPlugin<{ prefix: string }> = function (
   });
   done();
 };
-
 
 export const App = (args: { store: Store; lock: Lock }) => {
   const { store, lock } = args;
@@ -35,6 +36,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(ImageRoutes({ store, lock }), {
     prefix: `${prefix}/image`,
+  });
+  app.register(DetectRoutes({ store, lock }), {
+    prefix: `${prefix}/detect`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());
