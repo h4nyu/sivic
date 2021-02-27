@@ -1,5 +1,6 @@
 import { WorkspaceApi } from "./workspace";
 import { ImageApi } from "./image";
+import { DetectApi } from "./detect";
 import axios from "axios";
 
 export function toError(err: any): Error {
@@ -16,6 +17,7 @@ export type RootApi = {
   getImageStoreUrl: () => Promise<string|Error>;
   workspace: WorkspaceApi;
   image: ImageApi;
+  detect: DetectApi;
 };
 
 export const RootApi = (): RootApi => {
@@ -23,6 +25,7 @@ export const RootApi = (): RootApi => {
   const prefix = "api/v1";
   const workspace = WorkspaceApi({ http, prefix: `${prefix}/workspace` });
   const image = ImageApi({ http, prefix: `${prefix}/image` });
+  const detect = DetectApi({ http, prefix: `${prefix}/detect` });
 
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
@@ -41,5 +44,6 @@ export const RootApi = (): RootApi => {
     getImageStoreUrl,
     workspace,
     image,
+    detect,
   };
 };

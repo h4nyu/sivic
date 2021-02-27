@@ -1047,25 +1047,25 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@charpoints/api@^0.1.0":
-  version "0.1.3"
-  resolved "http://192.168.10.12:4080/@charpoints%2fapi/-/api-0.1.3.tgz#f74c7c1525c69c8003dc997d53ec5d6c654e3ea4"
-  integrity sha512-QPTHACHMeg56DRHPiGIt+1Rq2Gm/7tpZgAaUWNgAbSeL4VzjT8OrlB8jILDXLO9/qm5wEKgk0pH32R2hf1q/sg==
+  version "0.1.5"
+  resolved "http://192.168.10.12:4080/@charpoints%2fapi/-/api-0.1.5.tgz#173bd9727625b78ec8c1f694656558cf04431def"
+  integrity sha512-RltSDmlepbyvuTNMAJoZVjxVDPJb2DA4a4ZPEPiNeI7DThivm8c5HNQeff8HSlF129FxIm0Xrjz+9U2mfmApOA==
   dependencies:
     "@charpoints/core" "^0.1.0"
     axios "^0.21.0"
 
 "@charpoints/core@^0.1.0":
-  version "0.1.2"
-  resolved "http://192.168.10.12:4080/@charpoints%2fcore/-/core-0.1.2.tgz#f0801a0b64c86d380f4276864bbdd91859e8a402"
-  integrity sha512-OochOwQicc9p+zKty+fAoHpNF8/mNd4P7q9z96wzVlHPHiXlU44KZ4pThUIjY64ug2l+gQnrBrdynxbBwm07jg==
+  version "0.1.4"
+  resolved "http://192.168.10.12:4080/@charpoints%2fcore/-/core-0.1.4.tgz#c8c10cfcf6f9031ea347ac308daef15b9bbdd94b"
+  integrity sha512-quaYCyQzEcegwuzqazj28TNB1Gd8jcDz754d7QzAgZrBkRoVBRI8DGH8CnDi88eO7QKcQEEiG7v869cbyX9ORQ==
   dependencies:
     lodash "^4.17.20"
     uuid "^8.3.1"
 
 "@charpoints/web@^0.1.0":
-  version "0.1.3"
-  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.3.tgz#0e23e9ac8bb34058045b2d7784187fa95d331aa9"
-  integrity sha512-3Cv75VSXKhTVwDQj9bNvwhPDIcUXOd2KAly3Ag0C8H803TbLYJwSRJ1NoMZzNB0KU5raMQuzcXZTEY8NAoZWYg==
+  version "0.1.4"
+  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.4.tgz#4cbf70999bb3f11367386812f2985e110441bbe4"
+  integrity sha512-EGzSdTc1SyiIhJ6zudGqnAC+ZUDNeeJn/g7kqJi+jRacnzKa9TjU0XZcrX9+bM1i0fPlN/ymG7pl7JQFK7YL3w==
   dependencies:
     "@charpoints/api" "^0.1.0"
     "@charpoints/core" "^0.1.0"
