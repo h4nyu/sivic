@@ -14,7 +14,7 @@ import ImageTags from "@sivic/web/components/ImageTags";
 
 const Content = observer(() => {
   let { id } = useParams<{id:string}>();
-  const { workspaceForm, imageProcess, workspaceStore } = store
+  const { workspaceForm, imageProcess, workspaceStore, imageStore } = store
   const { save } = store.workspaceForm;
   return (
     <div
@@ -49,7 +49,7 @@ const Content = observer(() => {
       >
         <label className="label">Image List</label>
         <ImageTable
-          images={workspaceForm.imageForm.images}
+          images={imageStore.images.toList().toJS()}
           onClick={(id) => imageProcess.init(workspaceForm.id, id)}
           onDelete={workspaceForm.imageForm.deleteImage}
           TagComponent={(props:{image:Image}) => <ImageTags image={props.image} onClick={workspaceForm.imageForm.updateTag}/>}

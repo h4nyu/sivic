@@ -8,6 +8,7 @@ import { Workspace } from "@sivic/core/workspace";
 import { Image } from "@sivic/core/image";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
 import { WorkspaceStore } from "@sivic/web/store/WorkspaceStore"
+import { ImageStore } from "@sivic/web/store/ImageStore"
 import ImageForm from "@sivic/web/store/ImageForm"
 import ImageProcess from "@sivic/web/store/ImageProcess"
 
@@ -32,6 +33,7 @@ export type History = {
 
 export type RootStore = {
   workspaceStore: WorkspaceStore;
+  imageStore: ImageStore;
   loadingStore: LoadingStore;
   toast: ToastStore;
   history: History;
@@ -47,6 +49,7 @@ export const RootStore = (): RootStore => {
   const loading = loadingStore.loading;
   const toast = ToastStore();
   const workspaceStore = WorkspaceStore({ api, loading, toast });
+  const imageStore = ImageStore({ api, loading, toast})
   const history = createHashHistory();
 
   const init = async () => {
@@ -77,11 +80,13 @@ export const RootStore = (): RootStore => {
     imageForm,
     onInit: (workspace) => {
       history.push(`/workspace/id/${workspace.id}`)
+      imageStore.fetch(workspace.id)
     },
     onCreate: () => {
       history.push(`/workspace/create`)
     },
     onSave: (workspace) => {
+      history.goBack()
       workspaceStore.fetch()
     },
     onDelete: (id:string) => {
@@ -97,6 +102,7 @@ export const RootStore = (): RootStore => {
     init,
     history,
     workspaceForm,
+    imageStore,
     imageForm,
     imageProcess,
   };

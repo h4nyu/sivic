@@ -35,13 +35,9 @@ export const ImageForm = (args: {
     if(workspace === undefined) {return}
 
     const { imageIds } = workspace
-
-    self.images = []
-    for(const id of imageIds){
-      const image = await api.image.find({id})
-      if(image instanceof Error){ continue }
-      self.images.push(image)
-    }
+    const images = await api.image.filter({workspaceId:workspace.id})
+    if(images instanceof Error){ return }
+    self.images = images
   }
 
   const init = async (workspace:Workspace) => {

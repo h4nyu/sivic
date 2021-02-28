@@ -25,6 +25,10 @@ export const Image = ():Image => {
   }
 }
 
+export type FilterPayload = {
+  workspaceId: string;
+};
+
 export type CreatePayload = {
   name: string;
   workspaceId: string;
@@ -84,6 +88,7 @@ const DetectBoxFn = (args:{
 
 export type Service = {
   create: (payload: CreatePayload) => Promise<string | Error>;
+  filter: (payload:FilterPayload) => Promise<Image[] | Error>;
   update: (payload: UpdatePayload) => Promise<string | Error>;
   delete: (payload: DeletePayload) => Promise<string | Error>;
   find: (payload: FindPayload) => Promise<Image | Error>;
@@ -93,6 +98,9 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
   const { store, lock } = args;
   const services = {
     workspace: WorkspaceService(args)
+  }
+  const filter = async (payload:FilterPayload) => {
+    return await store.image.filter(payload);
   }
   const find = async (payload: FindPayload) => {
     const image = await store.image.find(payload);
@@ -151,6 +159,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     create,
     update,
     find,
+    filter,
     delete: delete_,
   };
 };

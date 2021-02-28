@@ -4,6 +4,7 @@ import {
   CreatePayload,
   UpdatePayload,
   DeletePayload,
+  FilterPayload,
   FindPayload,
   Service,
   Image,
@@ -23,6 +24,14 @@ export const ImageApi = (arg: {
       createdAt: new Date(res.createdAt),
       updateAt: new Date(res.updatedAt),
     };
+  };
+  const filter = async (payload: FilterPayload) => {
+    try {
+      const res = await http.post(`${prefix}/filter`, payload);
+      return res.data.map(to);
+    } catch (err) {
+      return toError(err);
+    }
   };
   const find = async (payload: FindPayload) => {
     try {
@@ -61,6 +70,7 @@ export const ImageApi = (arg: {
   return {
     create,
     update,
+    filter,
     find,
     delete: delete_,
   };

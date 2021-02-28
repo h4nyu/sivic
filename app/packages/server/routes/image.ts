@@ -5,6 +5,7 @@ import {
   Service,
   CreatePayload,
   FindPayload,
+  FilterPayload,
   DeletePayload,
   UpdatePayload,
 } from "@sivic/core/image";
@@ -26,6 +27,10 @@ export const ImageRoutes = (args: {
     });
     app.post<{ Body: FindPayload }>("/find", {}, async (req, reply) => {
       const res = await srv.find(req.body);
+      reply.send(res);
+    });
+    app.post<{ Body: FilterPayload }>("/filter", {}, async (req, reply) => {
+      const res = await srv.filter(req.body);
       reply.send(res);
     });
     app.post<{ Body: DeletePayload }>("/delete", {}, async (req, reply) => {

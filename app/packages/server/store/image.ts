@@ -1,5 +1,5 @@
 import { Row, Sql } from "postgres";
-import { first } from "lodash";
+import { first, keyBy } from "lodash";
 
 import { ErrorKind } from '@sivic/core'
 import { Image } from "@sivic/core/image";
@@ -46,6 +46,28 @@ export const Store = (
       ...row,
     }
   };
+  const filter = async (payload: {
+    workspaceId: string;
+  }): Promise<Image[] | Error> => {
+    try{
+      const rows = await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId}`
+      const workspaceImages = rows.map(to)
+      const imageIds = workspaceImages.map(x => x.id)
+      const images = await imageApi.image.filter({ids: imageIds})
+      if(images instanceof Error) { return images }
+      const rel:any = keyBy(workspaceImages, x => x.id)
+      return images.map(x => {
+        return {
+          ...x,
+          ...rel[x.id],
+        }
+      })
+    }catch(err){
+      return err
+    }
+  };
+
+
 
   const insert = async (payload: Image): Promise<void | Error> => {
     let err = await imageApi.image.create({
@@ -78,6 +100,7 @@ export const Store = (
   return {
     find,
     insert,
+    filter,
     update,
     delete: delete_,
   };
