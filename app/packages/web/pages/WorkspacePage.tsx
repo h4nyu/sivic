@@ -49,7 +49,7 @@ const Content = observer(() => {
       >
         <label className="label">Image List</label>
         <ImageTable
-          images={workspaceForm.imageForm.state.images}
+          images={workspaceForm.imageForm.images}
           onClick={(id) => imageProcess.init(workspaceForm.id, id)}
           onDelete={workspaceForm.imageForm.deleteImage}
           TagComponent={(props:{image:Image}) => <ImageTags image={props.image} onClick={workspaceForm.imageForm.updateTag}/>}

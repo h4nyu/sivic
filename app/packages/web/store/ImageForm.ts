@@ -14,23 +14,13 @@ import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Image, ImageTag } from "@sivic/core/image";
 import { ErrorKind } from "@sivic/core";
 
-export type State = {
-  workspace?:Workspace
-  images: Image[];
-};
-
 export type ImageForm = {
-  state: State;
+  workspace?:Workspace;
+  images: Image[];
   init: (workspace:Workspace) => Promise<void>;
   uploadFiles: (files:File[]) => Promise<void>;
   deleteImage: (imageId:string) => Promise<void|Error>;
   updateTag:({id:string, tag:ImageTag}) => Promise<void>;
-};
-
-const State = ():State => {
-  return {
-    images: [],
-  };
 };
 
 export const ImageForm = (args: {
@@ -40,25 +30,22 @@ export const ImageForm = (args: {
   onSave?: (workspaceId:string) => void
 }): ImageForm => {
   const { api, loading, toast, onSave } = args;
-  const state = observable(State());
-
   const fetch = async () => {
-    const { workspace } = state
-    if(workspace === undefined){
-      return
-    }
+    const { workspace } = self
+    if(workspace === undefined) {return}
+
     const { imageIds } = workspace
-    const images:Image[] = []
+
+    self.images = []
     for(const id of imageIds){
       const image = await api.image.find({id})
       if(image instanceof Error){ continue }
-      images.push(image)
+      self.images.push(image)
     }
-    state.images = images
   }
 
   const init = async (workspace:Workspace) => {
-    state.workspace = workspace
+    self.workspace = workspace
     await fetch()
   }
 
@@ -66,7 +53,7 @@ export const ImageForm = (args: {
     id:string,
     tag:ImageTag
   }) => {
-    const workspaceId = state.workspace?.id
+    const workspaceId = self.workspace?.id
     if(workspaceId === undefined) {return}
     const image = await api.image.find({id:payload.id})
     if(image instanceof Error) {
@@ -85,7 +72,7 @@ export const ImageForm = (args: {
   }
 
   const deleteImage = async (imageId:string) => {
-    const workspaceId = state.workspace?.id
+    const workspaceId = self.workspace?.id
     if(workspaceId === undefined) {return}
     let err = await api.image.delete({
       id:imageId,
@@ -99,7 +86,7 @@ export const ImageForm = (args: {
 
   const uploadFiles = async (files: File[]) => {
     const ids: string[] = [];
-    const workspaceId = state.workspace?.id
+    const workspaceId = self.workspace?.id
     if(workspaceId === undefined){
       return
     }
@@ -123,13 +110,15 @@ export const ImageForm = (args: {
     });
     onSave && onSave(workspaceId)
   };
-
-  return {
-    state,
+  const self = observable<ImageForm>({
+    workspace: undefined,
+    images:[],
     init,
     deleteImage,
     uploadFiles,
     updateTag
-  }
+  })
+  return self;
 };
+
 export default ImageForm 
