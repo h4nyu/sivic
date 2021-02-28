@@ -24,14 +24,17 @@ export const WorkspaceStore = (args: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
-}): WorkspaceStore => observable({
-  ...args,
-  workspaces: Map<string, Workspace>(),
-  fetch: async function(){
-    const workspaces = await this.api.workspace.filter({})
+}): WorkspaceStore => {
+  const { api, loading, toast } = args;
+  const fetch = async () => {
+    const workspaces = await api.workspace.filter({})
     if(workspaces instanceof Error) { return }
-    this.workspaces = Map(keyBy(workspaces, x => x.id))
+    self.workspaces = Map(keyBy(workspaces, x => x.id))
   }
-})
+  const self = observable({
+    workspaces: Map<string, Workspace>(),
+    fetch,
+  })
+  return self
+}
 export default WorkspaceStore
-

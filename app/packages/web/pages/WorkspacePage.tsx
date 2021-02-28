@@ -37,7 +37,7 @@ const Content = observer(() => {
           <input 
             className="input" 
             type="text" 
-            value={store.workspaceForm.state.name} 
+            value={store.workspaceForm.name} 
             onChange={e => store.workspaceForm.setName(e.target.value)}
           />
         </div>
@@ -50,7 +50,7 @@ const Content = observer(() => {
         <label className="label">Image List</label>
         <ImageTable
           images={workspaceForm.imageForm.state.images}
-          onClick={(id) => imageProcess.init(workspaceForm.state.id, id)}
+          onClick={(id) => imageProcess.init(workspaceForm.id, id)}
           onDelete={workspaceForm.imageForm.deleteImage}
           TagComponent={(props:{image:Image}) => <ImageTags image={props.image} onClick={workspaceForm.imageForm.updateTag}/>}
         />

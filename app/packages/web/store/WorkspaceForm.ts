@@ -16,26 +16,15 @@ import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { ImageForm } from "@sivic/web/store/ImageForm"
 
 
-export type State = {
-  id: string
-  name: string;
-};
-
 export type WorkspaceFrom = {
-  state: State;
+  id: string,
+  name: string,
   imageForm: ImageForm,
   create: () => void;
   update: (id:string) => void;
   setName: (value:string) => void;
   save: () => Promise<void>;
   delete: (id:string) => Promise<void>;
-};
-
-const State = ():State => {
-  return {
-    id: "",
-    name: "",
-  };
 };
 
 export const WorkspaceFrom = (args: {
@@ -49,39 +38,34 @@ export const WorkspaceFrom = (args: {
   onDelete?: (id:string) => void;
 }): WorkspaceFrom => {
   const { api, loading, toast, onInit, onSave, onDelete, imageForm, onCreate } = args;
-  const state = observable(State());
   const reset = () => {
-    const {id, name } = State()
-    state.id = id
-    state.name = name
+    self.id = ""
+    self.name = ""
   }
-
   const create = async () => {
     reset()
     onCreate && onCreate()
   }
-
-
   const update = async (id:string) => {
     await loading(async () => {
       const row = await api.workspace.find({id})
       if(row instanceof Error) {
         return row
       }
-      state.id = row.id
-      state.name = row.name
+      self.id = row.id
+      self.name = row.name
       await imageForm.init(row)
       onInit && onInit(row)
     })
   }
 
   const setName = (value:string) => {
-    state.name = value
+    self.name = value
   }
 
   const save = async ():Promise<void> => {
     await loading(async () => {
-      const row = await api.workspace.create({name:state.name});
+      const row = await api.workspace.create({name:self.name});
       if (row instanceof Error) {
         toast.error(row)
         return;
@@ -102,14 +86,16 @@ export const WorkspaceFrom = (args: {
     })
   }
 
-  return {
-    state,
+  const self = observable({
+    id:"", 
+    name:"",
     imageForm,
     create,
     update,
     setName,
     save,
     delete: _delete
-  }
+  })
+  return self
 };
 export default WorkspaceFrom

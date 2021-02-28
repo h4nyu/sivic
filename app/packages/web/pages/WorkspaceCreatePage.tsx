@@ -5,7 +5,7 @@ import FileUpload from "@charpoints/web/components/FileUpload";
 import store from "@sivic/web/store";
 
 const Content = observer(() => {
-  const { save } = store.workspaceForm;
+  const { workspaceForm } = store
   return (
     <div
       className="box"
@@ -27,7 +27,7 @@ const Content = observer(() => {
           <input 
             className="input" 
             type="text" 
-            value={store.workspaceForm.state.name} 
+            value={store.workspaceForm.name} 
             onChange={e => store.workspaceForm.setName(e.target.value)}
           />
         </div>
@@ -37,7 +37,7 @@ const Content = observer(() => {
           gridRow: "2"
         }}
       >
-        <div className="button is-info" onClick={() => save()}> Save </div>
+        <div className="button is-info" onClick={() => workspaceForm.save()}> Save </div>
       </div>
     </div>
   );
