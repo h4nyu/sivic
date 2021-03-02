@@ -7,7 +7,7 @@ import { RootApi } from "@sivic/api";
 import { Workspace } from "@sivic/core/workspace";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
-import { take, flow, sortBy, map } from "lodash/fp";
+import { take, flow, sortBy, map, find } from "lodash";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
@@ -49,20 +49,15 @@ export const ImageForm = (args: {
     id:string,
     tag:ImageTag
   }) => {
+    const {id, tag} = payload
     const workspaceId = self.workspace?.id
     if(workspaceId === undefined) {return}
-    const image = await api.image.find({id:payload.id})
-    if(image instanceof Error) {
-      return toast.error(image)
-    }
-
-    if(image.data === undefined) {
-      return toast.error(Error("ImageNotFound"))
-    }
+    const image = await find(self.images, x => x.id === id)
+    if(image === undefined) {return}
+    console.log(image.tag)
     const err = await api.image.update({
       ...image,
-      data: image.data ? image.data : "",
-      tag:payload.tag
+      tag:payload.tag !== image.tag ? payload.tag: undefined,
     })
     onSave && onSave(workspaceId)
   }

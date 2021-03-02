@@ -39,8 +39,8 @@ export type UpdatePayload = {
   id: string;
   name: string;
   workspaceId: string;
-  data: string; //base64
-  tag: ImageTag;
+  data?: string; //base64
+  tag?: ImageTag;
 };
 
 export type DeletePayload = {
@@ -49,6 +49,7 @@ export type DeletePayload = {
 
 export type FindPayload = {
   id: string;
+  hasData?: boolean;
 };
 
 export type DetectBoxPayload = {imageId: string}
@@ -131,7 +132,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     return await lock.auto(async () => {
       const workspace = await services.workspace.find({id: payload.workspaceId})
       if(workspace instanceof Error) { return workspace }
-      const row = await find({ id:payload.id });
+      const row = await find({ id:payload.id, hasData: false });
       if(row instanceof Error) { return row }
       const newRow = {
         ...row,

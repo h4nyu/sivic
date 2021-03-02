@@ -35,6 +35,7 @@ export const Store = (
 
   const find = async (payload: {
     id: string;
+    hasData?:boolean,
   }): Promise<Image | Error> => {
     let image = await imageApi.image.find(payload)
     if(image instanceof Error) { return image }
@@ -67,27 +68,25 @@ export const Store = (
     }
   };
 
-
-
   const insert = async (payload: Image): Promise<void | Error> => {
-    let err = await imageApi.image.create({
-      id: payload.id,
-      data: payload.data || "",
-      name: payload.name,
-    })
-    if(err instanceof Error) {return err}
     try {
       await sql`INSERT INTO workspace_images ${sql(from(payload), ...COLUMNS)}`
+      let err = await imageApi.image.create({
+        id: payload.id,
+        data: payload.data || "",
+        name: payload.name,
+      })
+      if(err instanceof Error) {return err}
     }catch(e) {
       return e
     }
   };
 
   const update = async (payload:Image): Promise<void | Error> => {
-    let err = await imageApi.image.update(payload)
-    if(err instanceof Error) {return err}
     try {
       await sql`UPDATE workspace_images SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
+      let err = await imageApi.image.update(payload)
+      if(err instanceof Error) {return err}
     }catch(e) {
       return e
     }

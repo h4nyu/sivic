@@ -17,7 +17,7 @@ export type WorkspaceStore = {
 };
 
 export type ImageStore = {
-  find: (payload: {id :string}) => Promise<Image | Error>;
+  find: (payload: {id :string, hasData?:boolean}) => Promise<Image | Error>;
   filter: (payload:{workspaceId :string}) => Promise<Image[] | Error>
   insert: (payload: Image ) => Promise<void | Error>
   update: (payload: Image ) => Promise<void | Error>

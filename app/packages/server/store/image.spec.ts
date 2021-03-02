@@ -18,7 +18,7 @@ describe("image", () => {
   test("insert, find and update", async () => {
     let err = await store.insert(row)
     if(err instanceof Error) { throw err }
-    let res = await store.find({ id: row.id });
+    let res = await store.find({ id: row.id, hasData:true });
     if (res instanceof Error) {
       throw res;
     }
@@ -31,7 +31,7 @@ describe("image", () => {
     if (update instanceof Error) {
       throw update;
     }
-    res = await store.find({ id: row.id });
+    res = await store.find({ id: row.id, hasData: true });
     if (res instanceof Error) {
       throw res;
     }
