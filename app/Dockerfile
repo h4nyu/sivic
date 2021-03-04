@@ -1,7 +1,4 @@
-FROM node:15-slim
-RUN apt-get update \
-    && apt-get install -y wait-for-it \
-    && rm -rf /var/lib/apt/lists/*
+FROM arm32v7/node:15-alpine
 WORKDIR /srv
 COPY . .
 RUN yarn install \
