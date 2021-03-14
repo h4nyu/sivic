@@ -15,6 +15,9 @@ const Content = observer(() => {
       }}
     >
       <WorkspaceTable
+        name={workspaceForm.name}
+        onNameChange={workspaceForm.setName}
+        onSave={workspaceForm.save}
         workspaces={workspaceStore.workspaces.toList().toJS()} 
         onClick={(id) => workspaceForm.update(id)} 
         onDelete={(id) => workspaceForm.delete(id)} 

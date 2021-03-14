@@ -7,5 +7,8 @@ export default {
   component: WorkspaceTable,
 };
 
-const workspaces = [{ ...Workspace() }];
+const workspaces = [{ 
+  ...Workspace(),
+  name: "workspaceName",
+}];
 export const Primary = (args) => <WorkspaceTable {...args} workspaces={workspaces} />;

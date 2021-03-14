@@ -1,4 +1,4 @@
-import '../style.scss';
+import '../style.ts';
 import { MemoryRouter as Router } from 'react-router-dom';
 
 export const parameters = {
