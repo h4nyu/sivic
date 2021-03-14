@@ -16,17 +16,11 @@ import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Images } from "@charpoints/web/store";
 
 export type State = {
-  image?: Image;
 };
 
 export type ImageProcess = {
-  state: State;
+  image?: Image;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
-};
-
-const State = ():State => {
-  return {
-  };
 };
 
 export const ImageProcess = (args: {
@@ -36,20 +30,20 @@ export const ImageProcess = (args: {
   onInit?: (workspaceId:string, imageId:string) => void
 }): ImageProcess => {
   const { api, loading, toast, onInit } = args;
-  const state = observable(State());
 
   const init = async (workspaceId:string, imageId:string) => {
     await loading(async () => {
-      const image = await api.image.find({id:imageId})
+      const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
-      state.image = image
+      self.image = image
       onInit && onInit(workspaceId, imageId)
     })
   }
 
-  return {
-    state,
+  const self = observable<ImageProcess>({
+    image: undefined,
     init,
-  }
+  })
+  return self
 };
 export default ImageProcess 

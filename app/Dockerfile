@@ -1,8 +1,8 @@
-FROM arm32v7/node:15-slim
+FROM node:15-slim
 WORKDIR /srv
 COPY . .
-RUN apt update \
-    && apt install wait-for-it \
+RUN apt-get update \
+    && apt-get install wait-for-it \
     && rm -rf /var/lib/apt/lists/* \
     && yarn install \
     && yarn build \

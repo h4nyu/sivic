@@ -6,7 +6,7 @@ import store from "@sivic/web/store";
 
 const Content = observer(() => {
   const { imageProcess } = store;
-  const { image } = imageProcess.state
+  const { image } = imageProcess
   return (
     <div
       className="box"

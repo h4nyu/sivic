@@ -38,4 +38,3 @@ export const ImageStore = (args: {
   return self
 }
 export default ImageStore
-

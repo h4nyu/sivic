@@ -1,7 +1,7 @@
 version: '3.7'
 
 x-app: &app
-  image: "sivic-app"
+  image: "${DOCKER_REGISTRY}/sivic-app"
   volumes:
     - ./app:/srv
   environment:
@@ -15,11 +15,6 @@ x-app: &app
 services:
   app:
     <<: *app
-    build:
-      context: ./app
-      args:
-        - http_proxy
-        - https_proxy
 
   srv:
     <<: *app
