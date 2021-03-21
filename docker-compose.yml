@@ -8,7 +8,7 @@ x-app: &app
     - DATABASE_URL=postgres://app:app@db/app
     - NODE_ENV=development  
     - IMAGE_URL
-    - DETECTION_API  
+    - DETECTION_URL  
     - YARN_REGISTRY
     - STORYBOOK_PORT
 

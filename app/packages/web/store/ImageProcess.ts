@@ -13,14 +13,16 @@ import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
-import { Images } from "@charpoints/web/store";
+import { Box } from "@charpoints/web/store";
 
 export type State = {
 };
 
 export type ImageProcess = {
   image?: Image;
+  boxes?: Box[];
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
+  fetchBox: () => void;
 };
 
 export const ImageProcess = (args: {
@@ -35,14 +37,29 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
+      self.boxes = []
       self.image = image
       onInit && onInit(workspaceId, imageId)
     })
   }
 
+  const fetchBox = async () => {
+    const { image } = self
+    if(image === undefined) { return }
+    const { data } = image
+    if(data === undefined) { return}
+    await loading(async () => {
+      const boxes = await api.detect.box({data})
+      if(boxes instanceof Error) { return boxes }
+      self.boxes = boxes
+    })
+  }
+
   const self = observable<ImageProcess>({
     image: undefined,
+    boxes: undefined,
     init,
+    fetchBox,
   })
   return self
 };
