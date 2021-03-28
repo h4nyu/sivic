@@ -1,5 +1,6 @@
 import { observable, computed } from "mobx";
 import { Map, List } from "immutable";
+import { v4 as uuid } from "uuid";
 import { Workspaces } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
@@ -20,9 +21,12 @@ export type State = {
 
 export type ImageProcess = {
   image?: Image;
-  boxes?: Box[];
+  boxes: Map<string, Box>;
+  selectedId? : string;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
   fetchBox: () => void;
+  selectBox:(id:string) => void
+  deleteBox: () => void
 };
 
 export const ImageProcess = (args: {
@@ -37,7 +41,7 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
-      self.boxes = []
+      self.boxes = Map({})
       self.image = image
       onInit && onInit(workspaceId, imageId)
     })
@@ -51,15 +55,36 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const boxes = await api.detect.box({data})
       if(boxes instanceof Error) { return boxes }
-      self.boxes = boxes
+      self.boxes = Map(boxes.map(x => {
+        return [uuid(), x]
+      }))
     })
+  }
+
+  const selectBox = (id:string) => {
+    console.log("select")
+    console.log(id)
+    if(self.selectedId === id){
+      self.selectedId = undefined
+    }else {
+      self.selectedId = id
+    }
+  }
+
+  const deleteBox = () => {
+    if(self.selectedId !== undefined) {
+      self.boxes = self.boxes.delete(self.selectedId)
+    }
   }
 
   const self = observable<ImageProcess>({
     image: undefined,
-    boxes: undefined,
+    boxes: Map<string, Box>(),
+    selectedId: undefined,
     init,
     fetchBox,
+    selectBox,
+    deleteBox,
   })
   return self
 };

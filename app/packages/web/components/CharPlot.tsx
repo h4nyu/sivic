@@ -1,14 +1,19 @@
 import React, { RefObject, useRef, useEffect, useState } from "react";
 import { Points, Box, Boxes, InputMode } from "@charpoints/web/store";
+import { Map, List } from "immutable";
 
 export const SvgCharPlot = (props: {
   data?: string;
-  boxes?: Box[];
+  boxes?: Map<string, Box>;
+  selectedId?: string; 
+  onBoxClick?: (id: string) => void;
   style?:React.CSSProperties,
 }) => {
   const {
     data,
     boxes,
+    selectedId,
+    onBoxClick,
     style,
   } = props;
   if (data === undefined) {
@@ -23,7 +28,7 @@ export const SvgCharPlot = (props: {
     if(!ctx){ return }
     ctx.strokeStyle = "#FF0000"
     ctx.fillStyle = "#FF0000";
-    boxes?.forEach((b, i) => {
+    boxes?.forEach((b, id) => {
       ctx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
       const edges = [
         [b.x0, b.y0],
@@ -35,6 +40,10 @@ export const SvgCharPlot = (props: {
         ctx.arc(p[0], p[1], 3, 0, 2 * Math.PI);
         ctx.fill();
       })
+      if(selectedId === id){
+        ctx.globalAlpha = 0.2;
+        ctx.fillRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      }
     })
   }
 
@@ -53,12 +62,26 @@ export const SvgCharPlot = (props: {
       }
     }
   }, [data]);
+  const handleClick = (e) => {
+    if(!onBoxClick){return}
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    for(const [id, b] of boxes || Map()){
+      const canvas = canvasRef.current;
+      if(!canvas){return}
+      if(b.x0 <= x && x <= b.x1 && b.y0 < y && y <= b.y1){
+        onBoxClick(id)
+      }
+    }
+  }
   drawBoxes()
 
   return (
     <canvas 
       style={{width:width, height:height, ...style}}
       ref={canvasRef}
+      onClick={handleClick}
       width={width}
       height={height}
     />
