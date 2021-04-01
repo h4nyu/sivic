@@ -86,7 +86,6 @@ export const RootStore = (): RootStore => {
       history.push(`/workspace/create`)
     },
     onSave: (workspace) => {
-      history.goBack()
       workspaceStore.fetch()
     },
     onDelete: (id:string) => {

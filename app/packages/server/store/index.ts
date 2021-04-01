@@ -8,6 +8,7 @@ export const Store = (args: {
   url: string; 
   max?: number,
   imageUrl: string,
+  detectUrl: string,
 }) => {
   const sql = postgres(args.url, {
     max: args.max || 5,
@@ -19,7 +20,7 @@ export const Store = (args: {
   };
   const workspace = WorkspaceStore(sql);
   const image = ImageStore(imageApi, sql)
-  const detect = DetectStore(sql)
+  const detect = DetectStore(args.detectUrl)
   return {
     workspace,
     image,
