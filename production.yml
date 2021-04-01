@@ -1,8 +1,5 @@
 version: '3.4'
 
-volumes:
-  db-data:
-
 services:
   srv:
     image: "sivic-app"
@@ -27,7 +24,7 @@ services:
   db:
     image: "postgres:13"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: app
       POSTGRES_USER: app
