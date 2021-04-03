@@ -65,13 +65,15 @@ export const SvgCharPlot = (props: {
   const handleClick = (e) => {
     if(!onBoxClick){return}
     const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const [x, y] = [e.clientX - rect.left, e.clientY - rect.top];
     for(const [id, b] of boxes || Map()){
       const canvas = canvasRef.current;
       if(!canvas){return}
       if(b.x0 <= x && x <= b.x1 && b.y0 < y && y <= b.y1){
         onBoxClick(id)
+      }else{
+        console.log()
+
       }
     }
   }
