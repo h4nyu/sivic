@@ -1,17 +1,20 @@
 import React, { Suspense, lazy } from "react";
+import { observer } from "mobx-react-lite";
 import { Router, Switch, Route } from "react-router-dom";
 import rootStore from "./store";
-import Loading from "./connectors/Loading";
 import Toast from "./connectors/Toast";
 import { createHashHistory } from "history";
 import PageLayout from "@sivic/web/components/PageLayout";
 import Header from "@sivic/web/components/Header";
 import Sidebar from "@sivic/web/components/Sidebar";
+import Loading_ from "@sivic/web/components/Loading"
 
 const history = createHashHistory();
 const MainPage = lazy(() => import("@sivic/web/pages/MainPage"));
 const WorkspacePage = lazy(() => import("@sivic/web/pages/WorkspacePage"));
 const ImagePage = lazy(() => import("@sivic/web/pages/ImagePage"));
+
+const Loading = observer(() => <Loading_ isActive={rootStore.loadingStore.isActive}/>)
 
 export default function App() {
   React.useEffect(() => {

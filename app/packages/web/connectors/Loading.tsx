@@ -1,11 +1,10 @@
 import React from "react";
-import Progress from "../components/Progress";
-import { Observer } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import store from "../store";
+import _Loading from "@sivic/web/components/Loading"
 
-export default function Loading() {
-  const { loadingStore } = store;
-  return (
-    <Observer>{() => <Progress isActive={loadingStore.state.isActive} />}</Observer>
-  );
-}
+export const Loading = observer(() => {
+  return <_Loading />
+})
+export default Loading
+

@@ -47,6 +47,7 @@
     "react-dropzone": "^11.2.0",
     "react-router-dom": "^5.2.0",
     "react-toastify": "^7.0.2",
+    "spinners-react": "^1.0.4",
     "styled-components": "^5.2.1"
   }
 }

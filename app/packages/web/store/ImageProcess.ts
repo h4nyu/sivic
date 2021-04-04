@@ -16,14 +16,13 @@ import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Box } from "@charpoints/web/store";
 
-export type State = {
-};
-
 export type ImageProcess = {
   image?: Image;
   boxes: Map<string, Box>;
+  lineWidth: number;
   selectedId? : string;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
+  setLineWidth: (value: number) => void
   fetchBox: () => void;
   selectBox:(id:string) => void
   deleteBox: () => void
@@ -46,6 +45,9 @@ export const ImageProcess = (args: {
       onInit && onInit(workspaceId, imageId)
     })
   }
+  const setLineWidth = (value:number) => {
+    self.lineWidth = value
+  }
 
   const fetchBox = async () => {
     const { image } = self
@@ -58,12 +60,11 @@ export const ImageProcess = (args: {
       self.boxes = Map(boxes.map(x => {
         return [uuid(), x]
       }))
+      self.boxes = self.boxes.sortBy(x => x.confidence)
     })
   }
 
   const selectBox = (id:string) => {
-    console.log("select")
-    console.log(id)
     if(self.selectedId === id){
       self.selectedId = undefined
     }else {
@@ -79,11 +80,13 @@ export const ImageProcess = (args: {
 
   const self = observable<ImageProcess>({
     image: undefined,
+    lineWidth: 10,
     boxes: Map<string, Box>(),
     selectedId: undefined,
     init,
     fetchBox,
     selectBox,
+    setLineWidth,
     deleteBox,
   })
   return self
