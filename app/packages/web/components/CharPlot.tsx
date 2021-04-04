@@ -5,6 +5,7 @@ import { Map, List } from "immutable";
 export const SvgCharPlot = (props: {
   data?: string;
   boxes?: Map<string, Box>;
+  lineWidth?:number;
   selectedId?: string; 
   onBoxClick?: (id: string) => void;
   style?:React.CSSProperties,
@@ -22,6 +23,7 @@ export const SvgCharPlot = (props: {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const canvasRef:RefObject<HTMLCanvasElement> = useRef(null);
+  const lineWidth = props.lineWidth !== undefined ? props.lineWidth : 3
   const drawBoxes = () => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
@@ -29,7 +31,9 @@ export const SvgCharPlot = (props: {
     ctx.strokeStyle = "#FF0000"
     ctx.fillStyle = "#FF0000";
     boxes?.forEach((b, id) => {
+      ctx.lineWidth = lineWidth;
       ctx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
+      ctx.fillText(`${b.confidence}`, b.x0, b.y0);
       const edges = [
         [b.x0, b.y0],
         [b.x0, b.y1],

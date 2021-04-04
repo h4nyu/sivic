@@ -38,6 +38,7 @@ const Content = observer(() => {
           image &&  <CharPlot 
             data={image.data} 
             boxes={imageProcess.boxes}
+            lineWidth={imageProcess.lineWidth}
             selectedId={imageProcess.selectedId}
             onBoxClick={imageProcess.selectBox}
             style={{
@@ -48,7 +49,7 @@ const Content = observer(() => {
       </div>
       <div
         style={{
-          overflow:"scroll"
+          overflow:"scroll",
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
