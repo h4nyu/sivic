@@ -14,8 +14,7 @@ const Content = observer(() => {
       className="box"
       style={{
         display: "grid",
-        gridTemplateRows: "auto auto",
-        width: "100%",
+        gridTemplateRows: "auto 2fr 1fr",
         height: "100%",
       }}
     >
@@ -31,20 +30,49 @@ const Content = observer(() => {
             imageProcess.deleteBox()
           }
         }}
+        style={{
+          overflow:"scroll"
+        }}
       >
         {
-          image &&  <>
-            <CharPlot 
-              data={image.data} 
-              boxes={imageProcess.boxes}
-              selectedId={imageProcess.selectedId}
-              onBoxClick={imageProcess.selectBox}
+          image &&  <CharPlot 
+            data={image.data} 
+            boxes={imageProcess.boxes}
+            selectedId={imageProcess.selectedId}
+            onBoxClick={imageProcess.selectBox}
+            style={{
+              width:"100%"
+            }}
+          />
+        }
+      </div>
+      <div
+        style={{
+          overflow:"scroll"
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+        }}
+      >
+        {
+          imageProcess.boxes.toList().map(b => (
+            <div
+              className="card m-1"
               style={{
+                width: 50,
+                height: 50,
               }}
-            />
-            {
-            }
-          </>
+            >
+              <CropedBox 
+                box={b}
+                data={image?.data}
+                style={{
+                  maxWidth:"100%",
+                  maxHeight:"100%"
+                }}
+              />
+            </div>
+          ))
         }
       </div>
     </div>

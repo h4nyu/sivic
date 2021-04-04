@@ -19,11 +19,31 @@ const boxes = Map(
   ].map((x, i) => [`${i}`, x])
 );
 
-export const Large = (args) => (
+export const Primary = (args) => (
   <Component
     {...args}
     selectedId={"1"}
     data={imageData}
     boxes={boxes}
   />
+);
+
+export const FitToDiv = (args) => (
+  <div
+    style={{
+      height:30,
+      width:50,
+      overflow: "auto",
+    }}
+  >
+    <Component
+      {...args}
+      selectedId={"1"}
+      data={imageData}
+      boxes={boxes}
+      style={{
+        width: "100%",
+      }}
+    />
+  </div>
 );

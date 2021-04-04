@@ -38,7 +38,7 @@ export default function(props:{
 
   return (
     <canvas 
-      style={{width:width, height:height, ...style}}
+      style={props.style}
       ref={canvasRef}
       width={width}
       height={height}

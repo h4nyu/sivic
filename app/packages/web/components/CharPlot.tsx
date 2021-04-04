@@ -81,7 +81,7 @@ export const SvgCharPlot = (props: {
 
   return (
     <canvas 
-      style={{width:width, height:height, ...style}}
+      style={props.style}
       ref={canvasRef}
       onClick={handleClick}
       width={width}
