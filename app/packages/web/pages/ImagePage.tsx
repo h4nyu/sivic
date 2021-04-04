@@ -4,6 +4,7 @@ import { Map } from "immutable";
 import ImageView from "@sivic/web/components/ImageView";
 import store from "@sivic/web/store";
 import CharPlot from "@sivic/web/components/CharPlot";
+import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
@@ -31,19 +32,18 @@ const Content = observer(() => {
           }
         }}
         style={{
-          overflow:"scroll"
+          overflow:"scroll",
+          display: "grid",
+          alignItems: "center",
         }}
       >
         {
-          image &&  <CharPlot 
-            data={image.data} 
-            boxes={imageProcess.boxes}
-            lineWidth={imageProcess.lineWidth}
-            selectedId={imageProcess.selectedId}
-            onBoxClick={imageProcess.selectBox}
-            style={{
-              width:"100%"
-            }}
+          image &&  
+            <SvgCharPlot 
+              data={image.data} 
+              boxes={imageProcess.boxes}
+              selectedId={imageProcess.selectedId}
+              width={1024}
           />
         }
       </div>
