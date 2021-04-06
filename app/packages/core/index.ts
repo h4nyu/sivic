@@ -26,6 +26,7 @@ export type ImageStore = {
 
 export type DetectStore = {
   box: (payload: {data :string}) => Promise<Box[] | Error>;
+  annotate:(payload:{id :string, boxes:Box[]}) => Promise<void | Error>;
 };
 
 export type Lock = {
