@@ -26,7 +26,11 @@ export type ImageStore = {
 
 export type DetectStore = {
   box: (payload: {data :string}) => Promise<Box[] | Error>;
-  annotate:(payload:{id :string, boxes:Box[]}) => Promise<void | Error>;
+};
+
+export type BoxStore = {
+  filter: (payload: {imageId: string;}) => Promise<Box[] | Error>;
+  annotate: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
 };
 
 export type Lock = {
@@ -37,4 +41,5 @@ export type Store = {
   workspace: WorkspaceStore;
   image: ImageStore,
   detect: DetectStore,
+  box:BoxStore,
 };

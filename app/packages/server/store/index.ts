@@ -2,6 +2,7 @@ import postgres from "postgres";
 import { Store as WorkspaceStore } from "./workspace";
 import { Store as ImageStore } from "./image"
 import { Store as DetectStore } from "./detect"
+import { Store as BoxStore } from "./box"
 import { RootApi as ImageApi } from "@charpoints/api"
 
 export const Store = (args: { 
@@ -20,11 +21,13 @@ export const Store = (args: {
   };
   const workspace = WorkspaceStore(sql);
   const image = ImageStore(imageApi, sql)
+  const box = BoxStore(imageApi,sql)
   const detect = DetectStore(args.detectUrl)
   return {
     workspace,
     image,
     detect,
+    box,
     close,
   };
 };
