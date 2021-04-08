@@ -3,7 +3,6 @@ import { Box } from "@charpoints/core/box";
 import { BoxStore } from "@sivic/core";
 import { RootApi as ImageApi } from "@charpoints/api"
 
-
 export const Store = (
   imageApi: ImageApi,
   sql: Sql<any>
@@ -19,7 +18,7 @@ export const Store = (
     }
   };
 
-  const annotate = async (payload: {imageId: string, boxes: Box[]}) => {
+  const replace = async (payload: {imageId: string, boxes: Box[]}) => {
     try {
       await imageApi.box.annotate({imageId: payload.imageId, boxes: payload.boxes})
     } catch (err) {
@@ -29,6 +28,6 @@ export const Store = (
 
   return {
     filter,
-    annotate,
+    replace,
   };
 };

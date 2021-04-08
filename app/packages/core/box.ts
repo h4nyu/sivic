@@ -15,15 +15,14 @@ export type FilterPayload = {
   imageId:string
 };
 
-export type AnnotatePayload = {
+export type ReplacePayload = {
   imageId:string
   boxes: Box[];
 };
 
-
 export type Service = {
   filter: (payload: FilterPayload) => Promise<Box[] | Error>;
-  annotate: (payload: AnnotatePayload) => Promise<void | Error>;
+  replace: (payload: ReplacePayload) => Promise<void | Error>;
 };
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
@@ -32,11 +31,13 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
   const filter = async (payload: FilterPayload) => {
     return await store.box.filter(payload);
   };
-  const annotate = async (payload: AnnotatePayload) => {
-    return await store.box.annotate(payload);
+
+  const replace = async (payload: ReplacePayload) => {
+    return await store.box.replace(payload);
   };
+
   return {
     filter,
-    annotate
+    replace 
   }
 }

@@ -30,7 +30,7 @@ export type DetectStore = {
 
 export type BoxStore = {
   filter: (payload: {imageId: string;}) => Promise<Box[] | Error>;
-  annotate: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
+  replace: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
 };
 
 export type Lock = {
