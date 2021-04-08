@@ -8,22 +8,14 @@ export const Store = (
   sql: Sql<any>
 ): BoxStore => {
   const filter = async (payload: {
-    imageId: string;
+    imageId?: string;
   }) => {
-    try {
-      const boxes = await imageApi.box.filter({imageId:payload.imageId})
-      return boxes;
-    } catch (err) {
-      return err;
-    }
+    return await imageApi.box.filter(payload)
   };
 
   const replace = async (payload: {imageId: string, boxes: Box[]}) => {
-    try {
-      await imageApi.box.annotate({imageId: payload.imageId, boxes: payload.boxes})
-    } catch (err) {
-      return err;
-    }
+    console.log(payload)
+    return await imageApi.box.annotate({imageId: payload.imageId, boxes: payload.boxes})
   };
 
   return {

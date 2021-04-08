@@ -29,7 +29,7 @@ export type DetectStore = {
 };
 
 export type BoxStore = {
-  filter: (payload: {imageId: string;}) => Promise<Box[] | Error>;
+  filter: (payload: {imageId?: string;}) => Promise<Box[] | Error>;
   replace: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
 };
 
