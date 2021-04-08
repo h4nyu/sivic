@@ -114,6 +114,7 @@ export const Editor = (root: {
 
   const add = () => {
     const { mode, pos, boxes } = self;
+    console.log(mode, pos, boxes.toJS())
     if ((self.draggingId = undefined)) {
       self.draggingId = undefined;
       return;
@@ -152,7 +153,7 @@ export const Editor = (root: {
   const self = observable<Editor>({
     boxes: Map<string,Box>(),
     draggingId: undefined,
-    size: 0,
+    size: 10,
     pos: { x: 0, y:0 },
     mode: InputMode.Box,
     setMode,
@@ -167,3 +168,4 @@ export const Editor = (root: {
 
   return self
 };
+export default Editor

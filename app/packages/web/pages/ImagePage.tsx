@@ -8,7 +8,7 @@ import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
-  const { imageProcess } = store;
+  const { imageProcess, editor } = store;
   const { image, boxes } = imageProcess
   return (
     <div
@@ -41,8 +41,14 @@ const Content = observer(() => {
           image &&  
             <SvgCharPlot 
               data={image.data} 
-              boxes={imageProcess.boxes}
-              selectedId={imageProcess.selectedId}
+              boxes={editor.boxes}
+              mode={editor.mode}
+              selectedId={editor.draggingId}
+              onSelect={editor.toggleDrag}
+              onAdd={editor.add}
+              onMove={editor.move}
+              onLeave={editor.del}
+              size={editor.size}
               width={1024}
           />
         }

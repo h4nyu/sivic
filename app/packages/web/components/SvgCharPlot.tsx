@@ -1,11 +1,12 @@
 import React, { RefObject, useRef, useEffect, useState } from "react";
-import { Points, Box, Boxes, InputMode } from "@charpoints/web/store";
+import { Box } from "@charpoints/core/box";
+import { InputMode } from "@sivic/web/store/BoxEditor"
+import { Map } from "immutable"
 
 export const SvgCharPlot = (props: {
   data?: string;
   mode?: InputMode;
-  points?: Points;
-  boxes?: Boxes;
+  boxes?: Map<string, Box>;
   size?: number;
   selectedId?: string;
   width?:number;
@@ -20,7 +21,6 @@ export const SvgCharPlot = (props: {
     onAdd,
     onMove,
     selectedId,
-    points,
     boxes,
     onSelect,
     onLeave,
@@ -79,24 +79,6 @@ export const SvgCharPlot = (props: {
         width={width}
         height={width * aspect}
       />
-      {points
-        ?.map((p, i) => (
-          <circle
-            key={i}
-            cx={p.x}
-            cy={p.y}
-            r={pointSize}
-            stroke="none"
-            fill={
-              mode === InputMode.Point && selectedId === i ? "green" : "red"
-            }
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelect && onSelect(i, InputMode.Point);
-            }}
-          />
-        ))
-        .toList()}
 
       {boxes
         ?.map((b, i) => (
