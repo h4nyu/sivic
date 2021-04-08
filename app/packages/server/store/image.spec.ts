@@ -11,7 +11,10 @@ afterAll(async () => {
 
 describe("image", () => {
   const store = rootStore.image;
-  let row = Image()
+  let row = Image({
+    id: uuid(),
+    workspaceId: uuid(),
+  })
   beforeAll(async () => {
     const buf = await fs.promises.readFile("/srv/package.json");
     row.data = buf.toString("base64");
@@ -43,9 +46,7 @@ describe("image", () => {
     expect(res).toEqual(row)
   });
   test("update", async () => {
-    let err = await store.insert(row)
-    if(err instanceof Error) { throw err }
-    err = await store.update({
+    let err = await store.update({
       ...row,
       tag: ImageTag.Target
     })
@@ -53,4 +54,3 @@ describe("image", () => {
     // expect(res).toEqual(row)
   });
 });
-

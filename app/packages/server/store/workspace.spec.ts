@@ -10,10 +10,7 @@ afterAll(async () => {
 
 describe("workspace", () => {
   const store = rootStore.workspace;
-  let row = {
-    ...Workspace(),
-    imageIds: ['a', 'b']
-  };
+  let row = Workspace()
 
   beforeAll(async () => {
     await store.clear();
