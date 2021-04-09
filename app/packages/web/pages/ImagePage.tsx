@@ -4,11 +4,11 @@ import { Map } from "immutable";
 import ImageView from "@sivic/web/components/ImageView";
 import store from "@sivic/web/store";
 import CharPlot from "@sivic/web/components/CharPlot";
+import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
-  const { imageProcess } = store;
-  const { image, boxes } = imageProcess
+  const { imageProcess, editor } = store;
   return (
     <div
       className="box"
@@ -18,32 +18,40 @@ const Content = observer(() => {
         height: "100%",
       }}
     >
-      <div>
-        <a className="button is-info is-light" onClick={imageProcess.fetchBox}>
-          Box 
+      <div className="buttons">
+        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
+          Auto Fill
+        </a>
+        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
+          Save
         </a>
       </div>
       <div
         tabIndex={0}
         onKeyDown={e => {
           if (e.keyCode === 8) {
-            imageProcess.deleteBox()
+            editor.del()
           }
         }}
         style={{
-          overflow:"scroll"
+          overflow:"scroll",
+          display: "grid",
+          alignItems: "center",
         }}
       >
         {
-          image &&  <CharPlot 
-            data={image.data} 
-            boxes={imageProcess.boxes}
-            lineWidth={imageProcess.lineWidth}
-            selectedId={imageProcess.selectedId}
-            onBoxClick={imageProcess.selectBox}
-            style={{
-              width:"100%"
-            }}
+          imageProcess.image &&  
+            <SvgCharPlot 
+              data={imageProcess.image.data} 
+              boxes={editor.boxes}
+              mode={editor.mode}
+              selectedId={editor.draggingId}
+              onSelect={editor.toggleDrag}
+              onAdd={editor.add}
+              onMove={editor.move}
+              onLeave={editor.del}
+              size={editor.size}
+              width={1024}
           />
         }
       </div>
@@ -56,7 +64,7 @@ const Content = observer(() => {
         }}
       >
         {
-          imageProcess.boxes.toList().map(b => (
+          editor.boxes.toList().map(b => (
             <div
               className="card m-1"
               style={{
@@ -66,7 +74,7 @@ const Content = observer(() => {
             >
               <CropedBox 
                 box={b}
-                data={image?.data}
+                data={imageProcess.image?.data}
                 style={{
                   maxWidth:"100%",
                   maxHeight:"100%"

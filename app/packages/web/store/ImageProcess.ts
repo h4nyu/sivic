@@ -15,17 +15,13 @@ import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Box } from "@charpoints/web/store";
+import Editor from "@sivic/web/store/BoxEditor"
 
 export type ImageProcess = {
   image?: Image;
-  boxes: Map<string, Box>;
   lineWidth: number;
-  selectedId? : string;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
-  setLineWidth: (value: number) => void
-  fetchBox: () => void;
-  selectBox:(id:string) => void
-  deleteBox: () => void
+  fetchBoxes: () => void;
 };
 
 export const ImageProcess = (args: {
@@ -33,23 +29,21 @@ export const ImageProcess = (args: {
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (workspaceId:string, imageId:string) => void
+  editor: Editor
 }): ImageProcess => {
-  const { api, loading, toast, onInit } = args;
+  const { api, loading, toast, onInit, editor } = args;
 
   const init = async (workspaceId:string, imageId:string) => {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
-      self.boxes = Map({})
+      editor.boxes = Map()
       self.image = image
       onInit && onInit(workspaceId, imageId)
     })
   }
-  const setLineWidth = (value:number) => {
-    self.lineWidth = value
-  }
 
-  const fetchBox = async () => {
+  const fetchBoxes = async () => {
     const { image } = self
     if(image === undefined) { return }
     const { data } = image
@@ -57,37 +51,18 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const boxes = await api.detect.box({data})
       if(boxes instanceof Error) { return boxes }
-      self.boxes = Map(boxes.map(x => {
+      editor.boxes = Map(boxes.map(x => {
         return [uuid(), x]
       }))
-      self.boxes = self.boxes.sortBy(x => x.confidence)
+      editor.boxes = editor.boxes.sortBy(x => x.confidence)
     })
-  }
-
-  const selectBox = (id:string) => {
-    if(self.selectedId === id){
-      self.selectedId = undefined
-    }else {
-      self.selectedId = id
-    }
-  }
-
-  const deleteBox = () => {
-    if(self.selectedId !== undefined) {
-      self.boxes = self.boxes.delete(self.selectedId)
-    }
   }
 
   const self = observable<ImageProcess>({
     image: undefined,
     lineWidth: 10,
-    boxes: Map<string, Box>(),
-    selectedId: undefined,
     init,
-    fetchBox,
-    selectBox,
-    setLineWidth,
-    deleteBox,
+    fetchBoxes,
   })
   return self
 };
