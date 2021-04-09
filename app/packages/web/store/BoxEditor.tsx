@@ -114,7 +114,6 @@ export const Editor = (root: {
 
   const add = () => {
     const { mode, pos, boxes } = self;
-    console.log(mode, pos, boxes.toJS())
     if ((self.draggingId = undefined)) {
       self.draggingId = undefined;
       return;
