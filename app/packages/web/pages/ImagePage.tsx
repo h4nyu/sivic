@@ -9,7 +9,6 @@ import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
   const { imageProcess, editor } = store;
-  console.log(editor.boxes.toList().toJS())
   return (
     <div
       className="box"
@@ -19,9 +18,12 @@ const Content = observer(() => {
         height: "100%",
       }}
     >
-      <div>
+      <div className="buttons">
         <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
-          Box 
+          Auto Fill
+        </a>
+        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
+          Save
         </a>
       </div>
       <div
