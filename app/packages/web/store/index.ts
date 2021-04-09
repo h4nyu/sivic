@@ -74,7 +74,8 @@ export const RootStore = (): RootStore => {
     toast,
     onInit: (workspaceId, imageId) => {
       history.push(`/workspace/id/${workspaceId}/image-id/${imageId}`)
-    }
+    },
+    editor,
   })
   const workspaceForm = WorkspaceForm({
     api,

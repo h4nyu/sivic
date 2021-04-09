@@ -9,7 +9,7 @@ import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
   const { imageProcess, editor } = store;
-  const { image, boxes } = imageProcess
+  console.log(editor.boxes.toList().toJS())
   return (
     <div
       className="box"
@@ -20,7 +20,7 @@ const Content = observer(() => {
       }}
     >
       <div>
-        <a className="button is-info is-light" onClick={imageProcess.fetchBox}>
+        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
           Box 
         </a>
       </div>
@@ -28,7 +28,7 @@ const Content = observer(() => {
         tabIndex={0}
         onKeyDown={e => {
           if (e.keyCode === 8) {
-            imageProcess.deleteBox()
+            editor.del()
           }
         }}
         style={{
@@ -38,9 +38,9 @@ const Content = observer(() => {
         }}
       >
         {
-          image &&  
+          imageProcess.image &&  
             <SvgCharPlot 
-              data={image.data} 
+              data={imageProcess.image.data} 
               boxes={editor.boxes}
               mode={editor.mode}
               selectedId={editor.draggingId}
@@ -62,7 +62,7 @@ const Content = observer(() => {
         }}
       >
         {
-          imageProcess.boxes.toList().map(b => (
+          editor.boxes.toList().map(b => (
             <div
               className="card m-1"
               style={{
@@ -72,7 +72,7 @@ const Content = observer(() => {
             >
               <CropedBox 
                 box={b}
-                data={image?.data}
+                data={imageProcess.image?.data}
                 style={{
                   maxWidth:"100%",
                   maxHeight:"100%"

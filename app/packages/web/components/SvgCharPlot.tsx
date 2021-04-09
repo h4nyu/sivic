@@ -53,9 +53,9 @@ export const SvgCharPlot = (props: {
     }
     const { left, top } = svg.getBoundingClientRect();
     const { clientX, clientY } = e;
-    const x = clientX - left;
-    const y = clientY - top;
-    onMove({ x , y });
+    const x = (clientX - left) / scale;
+    const y = (clientY - top) / scale;
+    onMove({ x, y });
   };
 
   return (
@@ -80,77 +80,76 @@ export const SvgCharPlot = (props: {
         height={width * aspect}
       />
 
-      {boxes
-        ?.map((b, i) => (
-          <g key={i}>
-            <text
-              x={b.x0 }
-              y={b.y0 + pointSize * 4}
-              fontSize={pointSize * 4}
-              fill={selectedId === i ? "green" : "red"}
-            >
-              {b.label}
-            </text>
-            <rect
-              x={b.x0 * scale }
-              y={b.y0 * scale }
-              width={(b.x1 - b.x0) * scale }
-              height={(b.y1 - b.y0) * scale }
-              fill="none"
-              stroke={selectedId === i ? "green" : "red"}
-              strokeWidth={pointSize / 4}
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect && onSelect(i, InputMode.Box);
-              }}
-            />
-            <circle
-              cx={b.x0 * scale}
-              cy={b.y0 * scale}
-              r={pointSize}
-              stroke="none"
-              fill={selectedId === i ? "green" : "red"}
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect && onSelect(i, InputMode.TL);
-              }}
-            />
-            <circle
-              cx={b.x1 * scale}
-              cy={b.y0 * scale}
-              r={pointSize}
-              fill={selectedId === i ? "green" : "red"}
-              stroke="none"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect && onSelect(i, InputMode.TR);
-              }}
-            />
-            <circle
-              cx={b.x0 * scale}
-              cy={b.y1 * scale}
-              r={pointSize}
-              fill={selectedId === i ? "green" : "red"}
-              stroke="none"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect && onSelect(i, InputMode.BL);
-              }}
-            />
-            <circle
-              cx={b.x1 * scale}
-              cy={b.y1 * scale}
-              r={pointSize}
-              stroke="none"
-              fill={selectedId === i ? "green" : "red"}
-              onClick={(e) => {
-                onSelect && onSelect(i, InputMode.BR);
-                e.stopPropagation();
-              }}
-            />
-          </g>
-        ))
-        .toList()}
+      {boxes?.map((b, i) => (
+        <g key={i}>
+          <text
+            x={b.x0 * scale}
+            y={b.y0 * scale + pointSize * 4}
+            fontSize={pointSize * 4}
+            fill={selectedId === i ? "green" : "red"}
+          >
+            {b.label}
+          </text>
+          <rect
+            x={b.x0 * scale }
+            y={b.y0 * scale }
+            width={(b.x1 - b.x0) * scale }
+            height={(b.y1 - b.y0) * scale }
+            fill="none"
+            stroke={selectedId === i ? "green" : "red"}
+            strokeWidth={pointSize / 4}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect && onSelect(i, InputMode.Box);
+            }}
+          />
+          <circle
+            cx={b.x0 * scale}
+            cy={b.y0 * scale}
+            r={pointSize}
+            stroke="none"
+            fill={selectedId === i ? "green" : "red"}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect && onSelect(i, InputMode.TL);
+            }}
+          />
+          <circle
+            cx={b.x1 * scale}
+            cy={b.y0 * scale}
+            r={pointSize}
+            fill={selectedId === i ? "green" : "red"}
+            stroke="none"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect && onSelect(i, InputMode.TR);
+            }}
+          />
+          <circle
+            cx={b.x0 * scale}
+            cy={b.y1 * scale}
+            r={pointSize}
+            fill={selectedId === i ? "green" : "red"}
+            stroke="none"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect && onSelect(i, InputMode.BL);
+            }}
+          />
+          <circle
+            cx={b.x1 * scale}
+            cy={b.y1 * scale}
+            r={pointSize}
+            stroke="none"
+            fill={selectedId === i ? "green" : "red"}
+            onClick={(e) => {
+              onSelect && onSelect(i, InputMode.BR);
+              e.stopPropagation();
+            }}
+          />
+        </g>
+      ))
+      .toList()}
     </svg>
   );
 };

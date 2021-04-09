@@ -34,7 +34,7 @@ export default function(props:{
         }
       }
     }
-  }, [data])
+  }, [data, box])
 
   return (
     <canvas 
