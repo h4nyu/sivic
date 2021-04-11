@@ -22,7 +22,7 @@ export type ImageProcess = {
   lineWidth: number;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
   save: () => void
-  fetchBoxes: () => void;
+  detectBoxes: () => void;
 };
 
 export const ImageProcess = (args: {
@@ -38,13 +38,16 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
-      editor.boxes = Map()
       self.image = image
+
+      const boxes = await api.box.filter({imageId})
+      if(boxes instanceof Error) { return boxes }
+      editor.boxes = Map(boxes.map(x => [uuid(), x]))
       onInit && onInit(workspaceId, imageId)
     })
   }
 
-  const fetchBoxes = async () => {
+  const detectBoxes = async () => {
     const { image } = self
     if(image === undefined) { return }
     const { data } = image
@@ -62,22 +65,24 @@ export const ImageProcess = (args: {
     const { image } = self
     if(image === undefined){ return }
     const boxes = editor.boxes.toList().toJS()
-    const err = api.box.replace({
-      imageId: image.id,
-      boxes,
+    await loading(async () => {
+      const err = api.box.replace({
+        imageId: image.id,
+        boxes,
+      })
+      if(err instanceof Error){
+        toast.error(err)
+      }else{
+        toast.info("saved")
+      }
     })
-    if(err instanceof Error){
-      toast.error(err)
-    }else{
-      toast.info("saved")
-    }
   }
 
   const self = observable<ImageProcess>({
     image: undefined,
     lineWidth: 10,
     init,
-    fetchBoxes,
+    detectBoxes,
     save,
   })
   return self
