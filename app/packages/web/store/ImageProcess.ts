@@ -15,18 +15,14 @@ import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Box } from "@charpoints/web/store";
-
-export type State = {
-};
+import Editor from "@sivic/web/store/BoxEditor"
 
 export type ImageProcess = {
   image?: Image;
-  boxes: Map<string, Box>;
-  selectedId? : string;
+  lineWidth: number;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
-  fetchBox: () => void;
-  selectBox:(id:string) => void
-  deleteBox: () => void
+  save: () => void
+  detectBoxes: () => void;
 };
 
 export const ImageProcess = (args: {
@@ -34,20 +30,24 @@ export const ImageProcess = (args: {
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (workspaceId:string, imageId:string) => void
+  editor: Editor
 }): ImageProcess => {
-  const { api, loading, toast, onInit } = args;
+  const { api, loading, toast, onInit, editor } = args;
 
   const init = async (workspaceId:string, imageId:string) => {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
-      self.boxes = Map({})
       self.image = image
+
+      const boxes = await api.box.filter({imageId})
+      if(boxes instanceof Error) { return boxes }
+      editor.boxes = Map(boxes.map(x => [uuid(), x]))
       onInit && onInit(workspaceId, imageId)
     })
   }
 
-  const fetchBox = async () => {
+  const detectBoxes = async () => {
     const { image } = self
     if(image === undefined) { return }
     const { data } = image
@@ -55,36 +55,35 @@ export const ImageProcess = (args: {
     await loading(async () => {
       const boxes = await api.detect.box({data})
       if(boxes instanceof Error) { return boxes }
-      self.boxes = Map(boxes.map(x => {
+      editor.boxes = Map(boxes.map(x => {
         return [uuid(), x]
       }))
+      editor.boxes = editor.boxes.sortBy(x => x.confidence)
     })
   }
-
-  const selectBox = (id:string) => {
-    console.log("select")
-    console.log(id)
-    if(self.selectedId === id){
-      self.selectedId = undefined
-    }else {
-      self.selectedId = id
-    }
-  }
-
-  const deleteBox = () => {
-    if(self.selectedId !== undefined) {
-      self.boxes = self.boxes.delete(self.selectedId)
-    }
+  const save = async () =>{
+    const { image } = self
+    if(image === undefined){ return }
+    const boxes = editor.boxes.toList().toJS()
+    await loading(async () => {
+      const err = api.box.replace({
+        imageId: image.id,
+        boxes,
+      })
+      if(err instanceof Error){
+        toast.error(err)
+      }else{
+        toast.info("saved")
+      }
+    })
   }
 
   const self = observable<ImageProcess>({
     image: undefined,
-    boxes: Map<string, Box>(),
-    selectedId: undefined,
+    lineWidth: 10,
     init,
-    fetchBox,
-    selectBox,
-    deleteBox,
+    detectBoxes,
+    save,
   })
   return self
 };

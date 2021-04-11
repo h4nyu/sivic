@@ -10,18 +10,18 @@ export const ImageTag = {
   Target: "Target"
 } as const
 
-
 export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
 export type Image = CharImage & {
   workspaceId: string,
   tag?: ImageTag,
 }
-export const Image = ():Image => {
+export const Image = (args?:object):Image => {
   return {
     ...CharImage(),
     tag: undefined,
     workspaceId: "",
+    ...args,
   }
 }
 

@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 export type ToastStore = {
   state: State;
   show: (message: string, level?: Level) => void;
+  info:(message:string) => void,
   error: (e: Error) => void;
 };
 
@@ -34,6 +35,13 @@ export const ToastStore = (): ToastStore => {
       level,
     };
   };
+  const info = (message:string) => {
+    state.message = {
+      id: uuid(),
+      message: message,
+      level: Level.Info
+    }
+  }
   const error = (e:Error) => {
     state.message = {
       id: uuid(),
@@ -44,6 +52,7 @@ export const ToastStore = (): ToastStore => {
   return {
     state,
     show,
+    info,
     error,
   };
 };
