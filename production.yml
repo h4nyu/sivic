@@ -6,7 +6,7 @@ x-app: &app
   environment:
     - DATABASE_URL=postgres://app:app@db/app
     - IMAGE_URL
-    - DETECTION_API  
+    - DETECTION_URL  
   restart: on-failure
 
 services:
