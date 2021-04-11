@@ -68,8 +68,10 @@ const Content = observer(() => {
             <div
               className="card m-1"
               style={{
-                width: 50,
-                height: 50,
+                maxWidth: 50,
+                maxHeight: 50,
+                display: "grid",
+                alignItems: "center",
               }}
               key={id}
             >
