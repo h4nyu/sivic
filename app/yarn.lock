@@ -10957,6 +10957,14 @@ react-sizeme@^3.0.1:
     shallowequal "^1.1.0"
     throttle-debounce "^3.0.1"
 
+react-svg-pan-zoom@^3.10.0:
+  version "3.10.0"
+  resolved "http://192.168.10.12:4080/react-svg-pan-zoom/-/react-svg-pan-zoom-3.10.0.tgz#d27453fa0dcc777d3e942f67d37718c01639fb1c"
+  integrity sha512-sJt/ekGlC/VNypwcLeg5+EXNuwj8ag0geRT2D7MTFpDXVN7Oot/6oxyrYyJ8R1WsgV4A4s4BaowZ2LNF7tSjGQ==
+  dependencies:
+    prop-types "^15.7.2"
+    transformation-matrix "^2.6.0"
+
 react-syntax-highlighter@^13.5.3:
   version "13.5.3"
   resolved "http://192.168.10.12:4080/react-syntax-highlighter/-/react-syntax-highlighter-13.5.3.tgz#9712850f883a3e19eb858cf93fad7bb357eea9c6"
@@ -12721,6 +12729,11 @@ tr46@^2.0.2:
   integrity sha512-3n1qG+/5kg+jrbTzwAykB5yRYtQCTqOGKq5U5PE3b0a1/mzo6snDhjGS0zJVJunO0NrT3Dg1MLy5TjWP/UJppg==
   dependencies:
     punycode "^2.1.1"
+
+transformation-matrix@^2.6.0:
+  version "2.7.0"
+  resolved "http://192.168.10.12:4080/transformation-matrix/-/transformation-matrix-2.7.0.tgz#ebf39c5f9e7110527fe398efa670296a5954df70"
+  integrity sha512-Q+0wR7xPOW9XOy8+S0+N2bPOQpXlDVPiFGPZKncgUIlcvlOnp6XtKF+TAgo0Ek9pRQAOEWZx2f506XnwWU/rwA==
 
 "traverse@>=0.3.0 <0.4":
   version "0.3.9"
