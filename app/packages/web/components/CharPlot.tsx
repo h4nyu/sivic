@@ -76,8 +76,7 @@ export const SvgCharPlot = (props: {
       if(b.x0 <= x && x <= b.x1 && b.y0 < y && y <= b.y1){
         onBoxClick(id)
       }else{
-        console.log()
-
+        console.log("box out")
       }
     }
   }
