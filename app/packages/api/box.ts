@@ -2,7 +2,7 @@ import { AxiosInstance } from "axios";
 import { toError } from ".";
 import {
   FilterPayload,
-  AnnotatePayload,
+  ReplacePayload,
   Service,
 } from "@sivic/core/box";
 
@@ -22,9 +22,9 @@ export const BoxApi = (arg: {
     }
   };
 
-  const annotate = async (payload: AnnotatePayload) => {
+  const replace = async (payload: ReplacePayload) => {
     try {
-      const res = await http.post(`${prefix}/annotate`, payload);
+      const res = await http.post(`${prefix}/replace`, payload);
     } catch (err) {
       return toError(err);
     }
@@ -32,6 +32,6 @@ export const BoxApi = (arg: {
 
   return {
     filter,
-    annotate,
+    replace,
   };
 };
