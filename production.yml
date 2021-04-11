@@ -5,6 +5,7 @@ x-app: &app
   image: "${DOCKER_REGISTRY}/sivic/app"
   environment:
     - DATABASE_URL=postgres://app:app@db/app
+    - IMAGE_URL
     - DETECTION_API  
   restart: on-failure
 
