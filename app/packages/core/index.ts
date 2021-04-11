@@ -28,6 +28,11 @@ export type DetectStore = {
   box: (payload: {data :string}) => Promise<Box[] | Error>;
 };
 
+export type BoxStore = {
+  filter: (payload: {imageId?: string;}) => Promise<Box[] | Error>;
+  replace: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
+};
+
 export type Lock = {
   auto: <T>(fn: () => Promise<T>) => Promise<T>;
 };
@@ -36,4 +41,5 @@ export type Store = {
   workspace: WorkspaceStore;
   image: ImageStore,
   detect: DetectStore,
+  box:BoxStore,
 };

@@ -41,12 +41,13 @@ export type DeleteImagePayload = {
   imageId: string;
 };
 
-export const Workspace = (args?: Workspace):Workspace => {
-  return args || {
+export const Workspace = (args?: object):Workspace => {
+  return {
     id: uuid(),
     name: "",
     imageIds:[],
     createdAt: new Date(),
+    ...args,
   }
 }
 

@@ -10,7 +10,6 @@ export const ImageTag = {
   Target: "Target"
 } as const
 
-
 export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
 export type Image = CharImage & {
