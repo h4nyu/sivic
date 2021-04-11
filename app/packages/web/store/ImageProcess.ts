@@ -21,6 +21,7 @@ export type ImageProcess = {
   image?: Image;
   lineWidth: number;
   init: (workspaceId:string, imageId:string) => Promise<void|Error>;
+  save: () => void
   fetchBoxes: () => void;
 };
 
@@ -57,12 +58,27 @@ export const ImageProcess = (args: {
       editor.boxes = editor.boxes.sortBy(x => x.confidence)
     })
   }
+  const save = async () =>{
+    const { image } = self
+    if(image === undefined){ return }
+    const boxes = editor.boxes.toList().toJS()
+    const err = api.box.replace({
+      imageId: image.id,
+      boxes,
+    })
+    if(err instanceof Error){
+      toast.error(err)
+    }else{
+      toast.info("saved")
+    }
+  }
 
   const self = observable<ImageProcess>({
     image: undefined,
     lineWidth: 10,
     init,
     fetchBoxes,
+    save,
   })
   return self
 };

@@ -23,7 +23,7 @@ const Content = observer(() => {
         <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
           Auto Fill
         </a>
-        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
+        <a className="button is-info is-light" onClick={imageProcess.save}>
           Save
         </a>
       </div>
