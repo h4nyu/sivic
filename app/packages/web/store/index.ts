@@ -53,7 +53,7 @@ export const RootStore = (): RootStore => {
   const workspaceStore = WorkspaceStore({ api, loading, toast });
   const imageStore = ImageStore({ api, loading, toast})
   const history = createHashHistory();
-  const editor = Editor({})
+  const editor = Editor({ api, loading, toast })
 
   const init = async () => {
     await workspaceStore.fetch();

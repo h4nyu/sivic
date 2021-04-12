@@ -18,8 +18,7 @@ describe("box", () => {
     workspaceId: uuid(),
   })
   const box = Box({x0: 30, y0: 30, x1: 80, y1: 80, confidence: 0.9})
-  console.log(box.validate())
-
+  const valErr = box.validate() 
   beforeAll(async () => {
     const buf = await fs.promises.readFile("/srv/package.json");
     row.data = buf.toString("base64");

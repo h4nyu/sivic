@@ -1,4 +1,7 @@
 import { observable } from "mobx";
+import { RootApi } from "@sivic/api";
+import { LoadingStore } from "./loading";
+import { ToastStore } from "./toast";
 import { Box } from "@charpoints/core/box";
 import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
@@ -26,12 +29,19 @@ export type Editor = {
   changeSize: (size: number) => void;
   init: (id: string) => void;
   clear: () => void;
+  save:(imageId:string) => void;
 };
 export const Editor = (root: {
+  api: RootApi;
+  loading: <T>(fn: () => Promise<T>) => Promise<T>;
+  toast: ToastStore;
   onInit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }): Editor => {
   const {
+    api,
+    loading,
+    toast,
     onInit,
     onDelete,
   } = root;
@@ -149,6 +159,11 @@ export const Editor = (root: {
     self.size = value;
   };
 
+  const save = async (imageId:string) => {
+    const err = await api.box.replace({imageId, boxes:self.boxes.toList().toJS()})
+    if(err instanceof Error) { return err }
+  };
+
   const self = observable<Editor>({
     boxes: Map<string,Box>(),
     draggingId: undefined,
@@ -163,6 +178,7 @@ export const Editor = (root: {
     del,
     init,
     clear,
+    save,
   })
 
   return self
