@@ -104,6 +104,7 @@ export const SvgCharPlot = (props: {
             }}
           />
           <circle
+            style={{cursor: "crosshair"}}
             cx={b.x0 * scale}
             cy={b.y0 * scale}
             r={pointSize}
@@ -115,6 +116,7 @@ export const SvgCharPlot = (props: {
             }}
           />
           <circle
+            style={{cursor: "crosshair"}}
             cx={b.x1 * scale}
             cy={b.y0 * scale}
             r={pointSize}
@@ -126,6 +128,7 @@ export const SvgCharPlot = (props: {
             }}
           />
           <circle
+            style={{cursor: "crosshair"}}
             cx={b.x0 * scale}
             cy={b.y1 * scale}
             r={pointSize}
@@ -137,6 +140,7 @@ export const SvgCharPlot = (props: {
             }}
           />
           <circle
+            style={{cursor: "crosshair"}}
             cx={b.x1 * scale}
             cy={b.y1 * scale}
             r={pointSize}

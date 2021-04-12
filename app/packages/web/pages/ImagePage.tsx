@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Map } from "immutable";
 import ImageView from "@sivic/web/components/ImageView";
 import store from "@sivic/web/store";
+import { InputMode } from "@sivic/web/store/BoxEditor"
 import CharPlot from "@sivic/web/components/CharPlot";
 import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
@@ -19,10 +20,13 @@ const Content = observer(() => {
       }}
     >
       <div className="buttons">
-        <a className="button is-info is-light" onClick={imageProcess.fetchBoxes}>
+        <a className="button is-info is-light" onClick={imageProcess.detectBoxes}>
           Auto Fill
         </a>
-        <a className="button is-info is-light" onClick={() => editor.save("imageId")}>
+        <a className="button is-danger is-light" onClick={editor.clear}>
+          Reset
+        </a>
+        <a className="button is-info is-light" onClick={imageProcess.save}>
           Save
         </a>
       </div>
@@ -49,7 +53,6 @@ const Content = observer(() => {
               onSelect={editor.toggleDrag}
               onAdd={editor.add}
               onMove={editor.move}
-              onLeave={editor.del}
               size={editor.size}
               width={1024}
           />
@@ -64,13 +67,16 @@ const Content = observer(() => {
         }}
       >
         {
-          editor.boxes.toList().map(b => (
+          editor.boxes.map((b, id) => (
             <div
               className="card m-1"
               style={{
-                width: 50,
-                height: 50,
+                maxWidth: 50,
+                maxHeight: 50,
+                display: "grid",
+                alignItems: "center",
               }}
+              key={id}
             >
               <CropedBox 
                 box={b}
@@ -81,7 +87,7 @@ const Content = observer(() => {
                 }}
               />
             </div>
-          ))
+          )).toList()
         }
       </div>
     </div>

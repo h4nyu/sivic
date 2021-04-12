@@ -27,8 +27,8 @@ export default {
 
 store.imageProcess.image = Image({data: imageData})
 store.editor.boxes = Map([Box({
-  x0: 0, 
-  y0: 0,
+  x0: 5, 
+  y0: 5,
   x1: 10,
   y1: 10,
 })].map(x => [uuid(), x]))
