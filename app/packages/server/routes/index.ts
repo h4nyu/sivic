@@ -5,6 +5,7 @@ import { WorkspaceRoutes } from "./workspace";
 import { ImageRoutes } from "./image";
 import { DetectRoutes } from "./detect";
 import { BoxRoutes } from "./box";
+import { PointRoutes } from "./point";
 
 import fastifyStatic from "fastify-static";
 
@@ -41,6 +42,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(BoxRoutes({ store, lock }), {
     prefix: `${prefix}/box`,
+  });
+  app.register(PointRoutes({ store, lock }), {
+    prefix: `${prefix}/point`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());

@@ -2,6 +2,7 @@ export { ErrorKind } from "./error";
 import { Workspace } from "./workspace";
 import { Image } from "@sivic/core/image"
 import { Box } from "@charpoints/core/box"
+import { Point } from "@charpoints/core/point"
 
 export type WorkspaceStore = {
   find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
@@ -33,6 +34,10 @@ export type BoxStore = {
   replace: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
 };
 
+export type PointStore = {
+  filter: (payload: {imageId?: string;}) => Promise<Point[] | Error>;
+};
+
 export type Lock = {
   auto: <T>(fn: () => Promise<T>) => Promise<T>;
 };
@@ -42,4 +47,5 @@ export type Store = {
   image: ImageStore,
   detect: DetectStore,
   box:BoxStore,
+  point: PointStore
 };
