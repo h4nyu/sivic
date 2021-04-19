@@ -2,6 +2,7 @@ import { WorkspaceApi } from "./workspace";
 import { ImageApi } from "./image";
 import { DetectApi } from "./detect";
 import { BoxApi } from "./box";
+import { PointApi } from "./point";
 import axios from "axios";
 
 export function toError(err: any): Error {
@@ -20,6 +21,7 @@ export type RootApi = {
   image: ImageApi;
   detect: DetectApi;
   box: BoxApi;
+  point: PointApi;
 };
 
 export const RootApi = (): RootApi => {
@@ -29,6 +31,7 @@ export const RootApi = (): RootApi => {
   const image = ImageApi({ http, prefix: `${prefix}/image` });
   const detect = DetectApi({ http, prefix: `${prefix}/detect` });
   const box = BoxApi({ http, prefix: `${prefix}/box` });
+  const point = PointApi({ http, prefix: `${prefix}/point` });
 
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
@@ -47,7 +50,8 @@ export const RootApi = (): RootApi => {
     getImageStoreUrl,
     workspace,
     image,
-    box,
     detect,
+    box,
+    point,
   };
 };
