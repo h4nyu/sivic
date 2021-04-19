@@ -8,10 +8,16 @@ export type FilterPayload = {
   imageId:string
 };
 
+export type ReplacePayload = {
+  imageId:string
+  points: Point[];
+};
 
 export type Service = {
   filter: (payload: FilterPayload) => Promise<Point[] | Error>;
+  replace: (payload: ReplacePayload) => Promise<void | Error>;
 };
+
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
   const { store, lock } = args;
@@ -20,7 +26,12 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     return await store.point.filter(payload);
   };
 
+  const replace = async (payload: ReplacePayload) => {
+    return await store.point.replace(payload);
+  };
+
   return {
     filter,
+    replace,
   }
 }

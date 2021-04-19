@@ -36,6 +36,7 @@ export type BoxStore = {
 
 export type PointStore = {
   filter: (payload: {imageId?: string;}) => Promise<Point[] | Error>;
+  replace: (payload: {imageId: string, points:Point[]}) => Promise<void | Error>;
 };
 
 export type Lock = {
