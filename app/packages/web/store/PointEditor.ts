@@ -121,7 +121,8 @@ export const Editor = (root: {
   };
 
   const getLine = () => {
-    return getBaseline(self.points)
+    console.log(self.points)
+    return getBaseline(self.points.toList().toJS())
   }
 
   const self = observable<Editor>({

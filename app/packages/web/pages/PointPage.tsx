@@ -50,6 +50,7 @@ const Content = observer(() => {
               onAdd={pointEditor.add}
               onMove={pointEditor.move}
               size={pointEditor.size}
+              line={pointEditor.line}
               width={512}
           />
         }
