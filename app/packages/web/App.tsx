@@ -13,6 +13,7 @@ const history = createHashHistory();
 const MainPage = lazy(() => import("@sivic/web/pages/MainPage"));
 const WorkspacePage = lazy(() => import("@sivic/web/pages/WorkspacePage"));
 const ImagePage = lazy(() => import("@sivic/web/pages/ImagePage"));
+const PointPage = lazy(() => import("@sivic/web/pages/PointPage"));
 
 const Loading = observer(() => <Loading_ isActive={rootStore.loadingStore.isActive}/>)
 
@@ -34,6 +35,7 @@ export default function App() {
               <Route exact path={"/workspace"} component={MainPage} />
               <Route exact path={"/workspace/id/:id"} component={WorkspacePage} />
               <Route exact path={"/workspace/id/:id/image-id/:imageId"} component={ImagePage} />
+              <Route exact path={"/point"} component={PointPage} />
             </Suspense>
           }
         />

@@ -1,6 +1,7 @@
 import React from "react";
 import Component from "./SvgCharPlot";
 import { Box, Boxes, InputMode } from "@charpoints/web/store";
+import { Point } from "@charpoints/core/point";
 import { Map } from "immutable";
 import annot from "/srv/data/annto.json";
 import {UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
@@ -17,6 +18,12 @@ const boxes = Map(
   ].map((x, i) => [`${i}`, x])
 );
 
+const points = Map(
+  [
+    Point({x: 30,  y: 80}),
+  ].map((x, i) => [`${i}`, x])
+);
+
 export const Primary = (args) => (
   <Component {...args} data={imageData} />
 );
@@ -30,22 +37,11 @@ export const Large = (args) => (
   />
 );
 
-export const PanAndZoom = (args) => {
-  const Viewer = React.useRef(null);
-  return (
-    <UncontrolledReactSVGPanZoom
-      ref={Viewer}
-      width={500} height={500}
-      onZoom={e => console.log('zoom')}
-      onPan={e => console.log('pan')}
-      onClick={event => console.log('click', event.x, event.y, event.originalEvent)}
-    >
-      <Component
-        {...args}
-        data={imageData}
-        size={512}
-        boxes={boxes}
-      />
-    </UncontrolledReactSVGPanZoom>
-  );
-}
+export const WithPoint = (args) => (
+  <Component
+    {...args}
+    data={imageData}
+    size={512}
+    points={points}
+  />
+);

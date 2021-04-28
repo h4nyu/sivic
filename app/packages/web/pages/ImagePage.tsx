@@ -9,7 +9,7 @@ import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
-  const { imageProcess, editor } = store;
+  const { imageProcess, editor, pointEditor } = store;
   return (
     <div
       className="box"
@@ -85,6 +85,7 @@ const Content = observer(() => {
                   maxWidth:"100%",
                   maxHeight:"100%"
                 }}
+                onClick={() => pointEditor.init("id")}
               />
             </div>
           )).toList()

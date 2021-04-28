@@ -2,21 +2,18 @@ import { observable } from "mobx";
 import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
-import { Box } from "@charpoints/core/box";
+import { Point } from "@charpoints/core/point";
 import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 
 export enum InputMode {
-  Box = "Box",
-  TL = "TL",
-  TR = "TR",
-  BL = "BL",
-  BR = "BR",
+  Add = "Add",
+  Edit = "Edit",
 }
 
 export type Editor = {
-  boxes: Map<string, Box>;
+  points: Map<string, Point>;
   draggingId: string | undefined;
   pos: {x:number, y:number},
   size: number;
@@ -31,7 +28,6 @@ export type Editor = {
   clear: () => void;
   save:(imageId:string) => void;
 };
-
 export const Editor = (root: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
@@ -47,9 +43,11 @@ export const Editor = (root: {
     onDelete,
   } = root;
   const init = async (id: string) => {
+    console.log("onClick")
+    onInit && onInit(id)
   };
   const clear = () => {
-    self.boxes = Map();
+    self.points = Map();
   };
 
   const setMode = (mode: InputMode) => {
@@ -67,64 +65,22 @@ export const Editor = (root: {
   };
 
   const move = (pos: { x: number; y: number }) => {
-    const { boxes, draggingId, mode } = self;
+    const { points, draggingId, mode } = self;
     self.pos = pos;
     if (draggingId === undefined) {
       return;
     }
-    if (mode === InputMode.TL) {
-      const box = boxes.get(draggingId);
-      if (box === undefined) {
+    if (mode === InputMode.Edit) {
+      const point = points.get(draggingId);
+      if (point === undefined) {
         return;
       }
-      if (pos.x > box.x1) {
-        return setMode(InputMode.TR);
-      }
-      if (pos.y > box.y1) {
-        return setMode(InputMode.BL);
-      }
-      self.boxes = boxes.set(draggingId, { ...box, x0: pos.x, y0: pos.y });
-    } else if (mode === InputMode.BR) {
-      const box = boxes.get(draggingId);
-      if (box === undefined) {
-        return;
-      }
-      if (pos.x < box.x0) {
-        return setMode(InputMode.BL);
-      }
-      if (pos.y < box.y0) {
-        return setMode(InputMode.TR);
-      }
-      self.boxes = boxes.set(draggingId, { ...box, x1: pos.x, y1: pos.y });
-    } else if (mode === InputMode.BL) {
-      const box = boxes.get(draggingId);
-      if (box === undefined) {
-        return;
-      }
-      if (pos.x > box.x1) {
-        return setMode(InputMode.BR);
-      }
-      if (pos.y < box.y0) {
-        return setMode(InputMode.TL);
-      }
-      self.boxes = boxes.set(draggingId, { ...box, x0: pos.x, y1: pos.y });
-    } else if (mode === InputMode.TR) {
-      const box = boxes.get(draggingId);
-      if (box === undefined) {
-        return;
-      }
-      if (pos.x < box.x0) {
-        return setMode(InputMode.TL);
-      }
-      if (pos.y > box.y1) {
-        return setMode(InputMode.BR);
-      }
-      self.boxes = boxes.set(draggingId, { ...box, x1: pos.x, y0: pos.y });
-    }
+      self.points = points.set(draggingId, { ...point, x: pos.x, y: pos.y });
+    } 
   };
 
   const add = () => {
-    const { mode, pos, boxes } = self;
+    const { mode, pos, points } = self;
     if ((self.draggingId = undefined)) {
       self.draggingId = undefined;
       return;
@@ -132,27 +88,22 @@ export const Editor = (root: {
     const newId = uuid();
     if (
       [
-        InputMode.Box,
-        InputMode.TR,
-        InputMode.TL,
-        InputMode.BL,
-        InputMode.BR,
+        InputMode.Add,
+        InputMode.Edit,
       ].includes(mode)
     ) {
-      self.boxes = self.boxes.set(newId, Box({
-        x0: pos.x,
-        y0: pos.y,
-        x1: pos.x,
-        y1: pos.y,
+      self.points = self.points.set(newId, Point({
+        x: pos.x,
+        y: pos.y,
       }))
-      setMode(InputMode.BR);
+      setMode(InputMode.Edit);
     }
     self.draggingId = newId;
   };
 
   const del = () => {
-    const { boxes, draggingId } = self;
-    self.boxes = boxes.filter((v, k) => k !== draggingId);
+    const { points, draggingId } = self;
+    self.points = points.filter((v, k) => k !== draggingId);
     self.draggingId = undefined;
   };
 
@@ -161,16 +112,16 @@ export const Editor = (root: {
   };
 
   const save = async (imageId:string) => {
-    const err = await api.box.replace({imageId, boxes:self.boxes.toList().toJS()})
+    const err = await api.point.replace({imageId, points:self.points.toList().toJS()})
     if(err instanceof Error) { return err }
   };
 
   const self = observable<Editor>({
-    boxes: Map<string,Box>(),
+    points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
     pos: { x: 0, y:0 },
-    mode: InputMode.Box,
+    mode: InputMode.Add,
     setMode,
     toggleDrag,
     move,

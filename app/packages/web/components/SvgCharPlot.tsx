@@ -1,18 +1,22 @@
 import React, { RefObject, useRef, useEffect, useState } from "react";
 import { Box } from "@charpoints/core/box";
+import { Point } from "@charpoints/core/point";
 import { InputMode } from "@sivic/web/store/BoxEditor"
+import { InputMode as PointMode } from "@sivic/web/store/PointEditor"
 import { Map } from "immutable"
 
 export const SvgCharPlot = (props: {
   data?: string;
   mode?: InputMode;
   boxes?: Map<string, Box>;
+  points?: Map<string, Point>;
   size?: number;
   selectedId?: string;
   width?:number;
   onAdd?: () => void;
   onMove?: (pos: { x: number; y: number }) => void;
   onSelect?: (id: string, InputMode: InputMode) => void;
+  onPointSelect?: (id: string, InputMode: PointMode) => void;
   onLeave?: () => void;
 }) => {
   const {
@@ -22,7 +26,9 @@ export const SvgCharPlot = (props: {
     onMove,
     selectedId,
     boxes,
+    points,
     onSelect,
+    onPointSelect,
     onLeave,
   } = props;
   if (data === undefined) {
@@ -149,6 +155,23 @@ export const SvgCharPlot = (props: {
             onClick={(e) => {
               onSelect && onSelect(i, InputMode.BR);
               e.stopPropagation();
+            }}
+          />
+        </g>
+      ))
+      .toList()}
+      {points?.map((p, i) => (
+        <g key={i}>
+          <circle
+            style={{cursor: "crosshair"}}
+            cx={p.x * scale}
+            cy={p.y * scale}
+            r={pointSize}
+            fill={selectedId === i ? "green" : "red"}
+            stroke="none"
+            onClick={(e) => {
+              e.stopPropagation();
+              onPointSelect && onPointSelect(i, PointMode.Edit);
             }}
           />
         </g>
