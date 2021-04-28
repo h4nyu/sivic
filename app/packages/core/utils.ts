@@ -1,23 +1,5 @@
 import { range, values, uniq, first, sortBy  } from 'lodash'
-
-// TODO import charpoints
-type Point = {
-  x: number;
-  y: number;
-  imageId: string;
-  label?: string;
-  confidence?: number;
-  isGrandTruth?: boolean;
-};
-
-export const Point = (): Point => {
-  return {
-    x: 0,
-    y: 0,
-    imageId: "",
-    label: undefined,
-  };
-};
+import { Point } from "@charpoints/core/point";
 
 const combinations = (size0:number, size1:number) =>  {
   const souceIds = range(size0)
@@ -32,7 +14,6 @@ const combinations = (size0:number, size1:number) =>  {
 }
 
 type Line = [ Point, Point ]
-
 
 export const getBaseline = (points: Point[]): undefined | Line =>
 {
