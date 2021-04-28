@@ -23,6 +23,7 @@ const points = Map(
     Point({x: 30,  y: 80}),
   ].map((x, i) => [`${i}`, x])
 );
+const line = [ {...Point(), x:10, y:10 }, {...Point(), x:50, y:50} ]
 
 export const Primary = (args) => (
   <Component {...args} data={imageData} />
@@ -43,5 +44,6 @@ export const WithPoint = (args) => (
     data={imageData}
     size={512}
     points={points}
+    line={line}
   />
 );

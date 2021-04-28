@@ -6,6 +6,7 @@ import { Point } from "@charpoints/core/point";
 import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
+import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
 
 export enum InputMode {
   Add = "Add",
@@ -14,6 +15,7 @@ export enum InputMode {
 
 export type Editor = {
   points: Map<string, Point>;
+  line: Line;
   draggingId: string | undefined;
   pos: {x:number, y:number},
   size: number;
@@ -42,6 +44,8 @@ export const Editor = (root: {
     onInit,
     onDelete,
   } = root;
+
+
   const init = async (id: string) => {
     console.log("onClick")
     onInit && onInit(id)
@@ -116,10 +120,15 @@ export const Editor = (root: {
     if(err instanceof Error) { return err }
   };
 
+  const getLine = () => {
+    return getBaseline(self.points)
+  }
+
   const self = observable<Editor>({
     points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
+    get line() { return getLine() },
     pos: { x: 0, y:0 },
     mode: InputMode.Add,
     setMode,

@@ -31,7 +31,7 @@ const combinations = (size0:number, size1:number) =>  {
   return uniq(res)
 }
 
-type Line = [ Point, Point ]
+export type Line = [ Point, Point ]
 
 export const getBaseline = (points: Point[]): undefined | Line =>
 {

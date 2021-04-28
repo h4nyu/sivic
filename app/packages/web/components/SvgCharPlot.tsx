@@ -3,6 +3,7 @@ import { Box } from "@charpoints/core/box";
 import { Point } from "@charpoints/core/point";
 import { InputMode } from "@sivic/web/store/BoxEditor"
 import { InputMode as PointMode } from "@sivic/web/store/PointEditor"
+import { Line } from "@sivic/core/utils";
 import { Map } from "immutable"
 
 export const SvgCharPlot = (props: {
@@ -10,6 +11,7 @@ export const SvgCharPlot = (props: {
   mode?: InputMode;
   boxes?: Map<string, Box>;
   points?: Map<string, Point>;
+  line?:Line;
   size?: number;
   selectedId?: string;
   width?:number;
@@ -27,6 +29,7 @@ export const SvgCharPlot = (props: {
     selectedId,
     boxes,
     points,
+    line,
     onSelect,
     onPointSelect,
     onLeave,
@@ -177,6 +180,35 @@ export const SvgCharPlot = (props: {
         </g>
       ))
       .toList()}
+      {
+        line && (
+          <g>
+            <line 
+            x1={line[0].x * scale}
+            y1={line[0].y * scale}
+            x2={line[1].x * scale}
+            y2={line[1].y * scale}
+            stroke="blue"
+            storole-width={1}/>
+            <circle
+              style={{cursor: "crosshair"}}
+              cx={line[0].x * scale}
+              cy={line[0].y * scale}
+              r={pointSize}
+              stroke="none"
+              fill={"blue"}
+            />
+            <circle
+              style={{cursor: "crosshair"}}
+              cx={line[1].x * scale}
+              cy={line[1].y * scale}
+              r={pointSize}
+              stroke="none"
+              fill={"blue"}
+            />
+          </g>
+        )
+      }
     </svg>
   );
 };
