@@ -15,7 +15,6 @@ export enum InputMode {
 
 export type Editor = {
   points: Map<string, Point>;
-  line: Line;
   draggingId: string | undefined;
   pos: {x:number, y:number},
   size: number;
@@ -30,6 +29,7 @@ export type Editor = {
   clear: () => void;
   save:(imageId:string) => void;
 };
+
 export const Editor = (root: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
@@ -47,7 +47,6 @@ export const Editor = (root: {
 
 
   const init = async (id: string) => {
-    console.log("onClick")
     onInit && onInit(id)
   };
   const clear = () => {
@@ -120,16 +119,10 @@ export const Editor = (root: {
     if(err instanceof Error) { return err }
   };
 
-  const getLine = () => {
-    console.log(self.points)
-    return getBaseline(self.points.toList().toJS())
-  }
-
   const self = observable<Editor>({
     points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
-    get line() { return getLine() },
     pos: { x: 0, y:0 },
     mode: InputMode.Add,
     setMode,

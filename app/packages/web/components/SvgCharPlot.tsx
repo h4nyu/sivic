@@ -4,21 +4,23 @@ import { Point } from "@charpoints/core/point";
 import { InputMode } from "@sivic/web/store/BoxEditor"
 import { InputMode as PointMode } from "@sivic/web/store/PointEditor"
 import { Line } from "@sivic/core/utils";
-import { Map } from "immutable"
+import { Map, Set } from "immutable"
 
 export const SvgCharPlot = (props: {
   data?: string;
   mode?: InputMode;
   boxes?: Map<string, Box>;
   points?: Map<string, Point>;
-  line?:Line;
+  lines?:Map<string, Line>;
   size?: number;
   selectedId?: string;
+  lineId?:string;
   width?:number;
   onAdd?: () => void;
   onMove?: (pos: { x: number; y: number }) => void;
   onSelect?: (id: string, InputMode: InputMode) => void;
   onPointSelect?: (id: string, InputMode: PointMode) => void;
+  onLineSelect?: (id: string) => void;
   onLeave?: () => void;
 }) => {
   const {
@@ -27,11 +29,13 @@ export const SvgCharPlot = (props: {
     onAdd,
     onMove,
     selectedId,
+    lineId,
     boxes,
     points,
-    line,
+    lines,
     onSelect,
     onPointSelect,
+    onLineSelect,
     onLeave,
   } = props;
   if (data === undefined) {
@@ -181,33 +185,42 @@ export const SvgCharPlot = (props: {
       ))
       .toList()}
       {
-        line && (
-          <g>
+        lines?.map((l, i) => (
+          <g key={i}>
             <line 
-            x1={line[0].x * scale}
-            y1={line[0].y * scale}
-            x2={line[1].x * scale}
-            y2={line[1].y * scale}
-            stroke="blue"
-            storole-width={1}/>
-            <circle
-              style={{cursor: "crosshair"}}
-              cx={line[0].x * scale}
-              cy={line[0].y * scale}
-              r={pointSize}
-              stroke="none"
-              fill={"blue"}
+              x1={l[0].x * scale}
+              y1={l[0].y * scale}
+              x2={l[1].x * scale}
+              y2={l[1].y * scale}
+              stroke={lineId === i ? "green" : "blue"}
+              storole-width={1}
             />
             <circle
               style={{cursor: "crosshair"}}
-              cx={line[1].x * scale}
-              cy={line[1].y * scale}
-              r={pointSize}
+              cx={l[0].x * scale}
+              cy={l[0].y * scale}
+              r={pointSize * 1.5}
               stroke="none"
-              fill={"blue"}
+              fill={lineId === i ? "green" : "blue"}
+              onClick={(e) => {
+                e.stopPropagation();
+                onLineSelect && onLineSelect(i);
+              }}
+            />
+            <circle
+              style={{cursor: "crosshair"}}
+              cx={l[1].x * scale}
+              cy={l[1].y * scale}
+              r={pointSize * 1.5}
+              stroke="none"
+              fill={lineId === i ? "green" : "blue"}
+              onClick={(e) => {
+                e.stopPropagation();
+                onLineSelect && onLineSelect(i);
+              }}
             />
           </g>
-        )
+        )).toList()
       }
     </svg>
   );
