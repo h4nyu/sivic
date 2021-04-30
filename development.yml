@@ -12,6 +12,7 @@ x-app: &app
     - NODE_ENV=development  
     - IMAGE_URL
     - YARN_REGISTRY
+    - DETECTION_URL
     - STORYBOOK_PORT
 
 services:
