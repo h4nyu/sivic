@@ -1,14 +1,16 @@
 version: '3.7'
 
 x-app: &app
-  image: "${DOCKER_REGISTRY}/sivic/app"
+  image: "${DOCKER_REGISTRY}/sivic/${PLATFORM}/app:dev"
   volumes:
     - ./app:/srv
+  build:
+    context: ./app
+  platform: $PLATFORM
   environment:
     - DATABASE_URL=postgres://app:app@db/app
     - NODE_ENV=development  
     - IMAGE_URL
-    - DETECTION_URL  
     - YARN_REGISTRY
     - STORYBOOK_PORT
 
