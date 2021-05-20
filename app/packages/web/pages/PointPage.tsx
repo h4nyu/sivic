@@ -15,15 +15,23 @@ const Content = observer(() => {
       className="box"
       style={{
         display: "grid",
-        gridTemplateRows: "auto 2fr 1fr",
+        gridTemplateRows: "auto 1fr",
         height: "100%",
       }}
     >
       <div className="buttons">
-        <a className="button is-danger is-light" onClick={() => {
-          pointEditor.clear()
-          lineEditor.clear()
-          }}>
+        <a 
+          className="button is-light" 
+        >
+          Detect
+        </a>
+        <a 
+          className="button is-danger is-light" 
+          onClick={() => {
+            pointEditor.clear()
+            lineEditor.clear()
+          }}
+        >
           Reset
         </a>
         <a className="button is-success is-light" onClick={() => lineEditor.getLine(pointEditor.points.toList().toJS())}>

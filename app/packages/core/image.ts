@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, Store, ErrorKind } from "@sivic/core"
 import { Image as CharImage } from "@charpoints/core/image"
-import { Workspace } from "@sivic/core/workspace"
 import { Box as CharBox } from "@charpoints/core/box"
+import { Workspace } from "@sivic/core/workspace"
 import { Service as WorkspaceService } from "@sivic/core/workspace"
 
 export const ImageTag = {
@@ -53,6 +53,7 @@ export type FindPayload = {
 };
 
 export type DetectBoxPayload = {imageId: string}
+
 
 type DetectedBoxes = {
   x0:number,
