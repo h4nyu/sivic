@@ -21,7 +21,7 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
 
   const crop = async (payload: CropPayload) => {
     return await lock.auto(async () => {
-      let image = await store.transfer.crop(payload);
+      let image = await store.transform.crop(payload);
       if (image instanceof Error) { return image; }
       return image
     });

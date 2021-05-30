@@ -41,9 +41,7 @@ export type PointStore = {
 };
 
 export type TransformStore = {
-  filter: (payload: {imageId?: string;}) => Promise<Point[] | Error>;
-  replace: (payload: {imageId: string, points:Point[]}) => Promise<void | Error>;
-  crop: (payload: {data?: string, box:CharBox}) => Promise<string | Error>;
+  crop: (payload: {data: string, box:CharBox}) => Promise<string | Error>;
 };
 
 export type Lock = {
@@ -52,7 +50,7 @@ export type Lock = {
 
 export type Store = {
   workspace: WorkspaceStore;
-  transfer: TransformStore;
+  transform: TransformStore;
   image: ImageStore,
   detect: DetectStore,
   box:BoxStore,

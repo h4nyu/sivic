@@ -15,7 +15,7 @@ export const Store = (
 
   const replace = async (payload: {imageId: string, boxes: Box[]}) => {
     console.log(payload)
-    return await imageApi.box.annotate({imageId: payload.imageId, boxes: payload.boxes})
+    return await imageApi.box.replace({imageId: payload.imageId, boxes: payload.boxes})
   };
 
   return {

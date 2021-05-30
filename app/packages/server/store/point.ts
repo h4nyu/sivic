@@ -14,7 +14,7 @@ export const Store = (
   };
 
   const replace = async (payload: {imageId: string, points: Point[]}) => {
-    return await imageApi.point.annotate({imageId: payload.imageId, points: payload.points})
+    return await imageApi.point.replace({imageId: payload.imageId, points: payload.points})
   };
 
   return {

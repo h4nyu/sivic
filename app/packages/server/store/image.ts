@@ -20,7 +20,6 @@ export const Store = (
       workspaceId: r.workspace_id,
       tag: r.tag || undefined,
       createdAt: r.created_at,
-      updatedAt: r.updated_at,
     };
   };
 
@@ -30,7 +29,6 @@ export const Store = (
       image_id: r.id,
       tag: r.tag || null,
       created_at: r.createdAt,
-      updated_at: r.updatedAt,
     };
   };
 
@@ -93,16 +91,6 @@ export const Store = (
     }
   };
 
-  const crop = async (payload:{data:string, box:CharBox}): Promise<string | Error> => {
-    try{
-      let image = await imageApi.transform.crop(payload)
-      if(image instanceof Error) { return image }
-      return image
-    }catch(e) {
-      return e
-    }
-  };
-
   const delete_ = async (payload:{id:string}): Promise<void | Error> => {
     let err = await imageApi.image.delete(payload)
     if(err instanceof Error) { return err }
@@ -112,7 +100,6 @@ export const Store = (
     insert,
     filter,
     update,
-    crop,
     delete: delete_,
   };
 };

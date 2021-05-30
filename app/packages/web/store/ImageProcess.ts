@@ -58,7 +58,6 @@ export const ImageProcess = (args: {
       editor.boxes = Map(boxes.map(x => {
         return [uuid(), x]
       }))
-      editor.boxes = editor.boxes.sortBy(x => x.confidence)
     })
   }
   const save = async () =>{
