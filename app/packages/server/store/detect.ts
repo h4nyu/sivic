@@ -12,6 +12,7 @@ export const Store = (url: string): DetectStore => {
   }): Promise<Box[] | Error> => {
     try{
       const res = await http.post("/detect", {data:payload.data})
+      console.log(res)
       const {image, boxes, confidences} = res.data
       return zip(boxes, confidences).map((c:any) => {
         return Box({
