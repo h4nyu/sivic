@@ -8,7 +8,10 @@ import { ImageStore } from "@sivic/core";
 import { RootApi as ImageApi } from "@charpoints/api"
 
 const COLUMNS = [
-  "workspace_id", "image_id", "tag", "updated_at", "created_at"
+  "workspace_id", 
+  "image_id", 
+  "tag", 
+  "created_at",
 ] as const
 export const Store = (
   imageApi: ImageApi,
