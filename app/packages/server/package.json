@@ -5,9 +5,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
     "clean": "tsc --build --clean",
+    "build": "tsc --noEmit false",
+    "prepack": "yarn build",
+    "postpack": "yarn clean",
+    "test": "yarn clean && jest --collectCoverage",
     "start": "node bin/start.js",
     "start:dev": "tsnd --respawn bin/start.ts",
     "test": "yarn clean && jest"

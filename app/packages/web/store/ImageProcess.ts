@@ -7,7 +7,7 @@ import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
 import { RootApi as ImageApi } from "@charpoints/api";
 import { Workspace } from "@sivic/core/workspace";
-import { Image } from "@charpoints/core/image"
+import { Image } from "@sivic/core/image"
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
@@ -60,18 +60,20 @@ export const ImageProcess = (args: {
       }))
     })
   }
+
   const save = async () =>{
     const { image } = self
     if(image === undefined){ return }
     const boxes = editor.boxes.toList().toJS()
     await loading(async () => {
+      const imageId = image.id
       const err = api.box.replace({
-        imageId: image.id,
-        boxes,
+        imageId,
+        boxes: boxes.map(x => Box({...x, imageId})),
       })
       if(err instanceof Error){
         toast.error(err)
-      }else{
+      } else {
         toast.info("saved")
       }
     })

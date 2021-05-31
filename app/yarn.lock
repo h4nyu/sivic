@@ -1107,9 +1107,9 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@charpoints/api@^0.1.0":
-  version "0.1.8"
-  resolved "http://192.168.10.12:4080/@charpoints%2fapi/-/api-0.1.8.tgz#6ee41d451f4463111d2bcc3048b5db348989faa7"
-  integrity sha512-w/6wRi8TeBbPB2elZ1bs9Fomra8KnNr4pEbBmGZONfwKDBDNBDtsSJIlTplDGCwzvrf2kKVexUj5xY6rw+rTYw==
+  version "0.1.9"
+  resolved "http://192.168.10.12:4080/@charpoints%2fapi/-/api-0.1.9.tgz#791d57385bbb188338ecf2310039cb7f49d20584"
+  integrity sha512-x+7NNw5vhg7b23dwFopDWDSciZrtruTibjlALQdiD2l7UYvpmOeK9ApDXoR7CzSxkwdg4DukgGxaZnMkHJfcXw==
   dependencies:
     "@charpoints/core" "^0.1.0"
     axios "^0.21.0"
@@ -1123,9 +1123,9 @@
     uuid "^8.3.1"
 
 "@charpoints/web@^0.1.0":
-  version "0.1.7"
-  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.7.tgz#7f4ac7f02f3e23b5e1f6ab32b5ff16f9c7f1b60a"
-  integrity sha512-vDgg3sRrybgZImT0WZtTRfnGX3Iwct3XJkMTVcP/XLLMM+q5jWn/G/pbyYKQ2vu3E21yTAsiNJDLMxEtRVT8ug==
+  version "0.1.9"
+  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.9.tgz#6183e3d07a56634e9c97443d7603434760e85995"
+  integrity sha512-rTfhDv5/t2onXm1/GoR5pSlLuIo1rsEtl1oamQ6uaiVb/5UJluK9XQ3IVsjzWGmk/DhkqrBx8x/8KiOiUZud6w==
   dependencies:
     "@charpoints/api" "^0.1.0"
     "@charpoints/core" "^0.1.0"
@@ -2488,12 +2488,12 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*":
+"@types/node@*", "@types/node@^15.0.1":
   version "15.6.1"
   resolved "http://192.168.10.12:4080/@types%2fnode/-/node-15.6.1.tgz#32d43390d5c62c5b6ec486a9bc9c59544de39a08"
   integrity sha512-7EIraBEyRHEe7CH+Fm1XvgqU6uwZN8Q7jppJGcqjROMT29qhAuuOxYB1uEY5UMYQKEmA5D+5tBnhdaPXSsLONA==
 
-"@types/node@^14.0.10", "@types/node@^14.14.8":
+"@types/node@^14.0.10":
   version "14.17.1"
   resolved "http://192.168.10.12:4080/@types%2fnode/-/node-14.17.1.tgz#5e07e0cb2ff793aa7a1b41deae76221e6166049f"
   integrity sha512-/tpUyFD7meeooTRwl3sYlihx2BrJE7q9XF71EguPFIySj9B7qgnRtHsHTho+0AUm4m1SvWGm6uSncrR94q6Vtw==
@@ -5605,7 +5605,7 @@ enhanced-resolve@^4.5.0:
     memory-fs "^0.5.0"
     tapable "^1.0.0"
 
-enhanced-resolve@^5.8.0:
+enhanced-resolve@^5.0.0, enhanced-resolve@^5.8.0:
   version "5.8.2"
   resolved "http://192.168.10.12:4080/enhanced-resolve/-/enhanced-resolve-5.8.2.tgz#15ddc779345cbb73e97c611cd00c01c1e7bf4d8b"
   integrity sha512-F27oB3WuHDzvR2DOGNTaYy0D5o0cnrv8TeI482VM4kYgQd/FT9lUQwuNsJ0oOHtBUq7eiW5ytqzp7nBFknL+GA==
@@ -12916,10 +12916,10 @@ ts-jest@^26.4.1:
     semver "7.x"
     yargs-parser "20.x"
 
-ts-loader@^8.0.6:
-  version "8.3.0"
-  resolved "http://192.168.10.12:4080/ts-loader/-/ts-loader-8.3.0.tgz#83360496d6f8004fab35825279132c93412edf33"
-  integrity sha512-MgGly4I6cStsJy27ViE32UoqxPTN9Xly4anxxVyaIWR+9BGxboV4EyJBGfR3RePV7Ksjj3rHmPZJeIt+7o4Vag==
+ts-loader@^9.1.1:
+  version "9.2.2"
+  resolved "http://192.168.10.12:4080/ts-loader/-/ts-loader-9.2.2.tgz#416333900621c82d5eb1b1f6dea4114111f096bf"
+  integrity sha512-hNIhGTQHtNKjOzR2ZtQ2OSVbXPykOae+zostf1IlHCf61Mt41GMJurKNqrYUbzHgpmj6UWRu8eBfb7q0XliV0g==
   dependencies:
     chalk "^4.1.0"
     enhanced-resolve "^5.0.0"

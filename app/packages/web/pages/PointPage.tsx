@@ -58,7 +58,7 @@ const Content = observer(() => {
         {
           imageProcess.image &&  
             <SvgCharPlot 
-              data={imageProcess.image.data} 
+              data={pointEditor.image?.data} 
               points={pointEditor.points}
               lines={lineEditor.lines}
               selectedId={pointEditor.draggingId}

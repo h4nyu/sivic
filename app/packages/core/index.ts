@@ -4,6 +4,7 @@ import { Image } from "@sivic/core/image"
 import { Box } from "@charpoints/core/box"
 import { Point } from "@charpoints/core/point"
 import { Box as CharBox } from "@charpoints/core/box"
+import { CropPayload } from "@charpoints/core/transform"
 
 export type WorkspaceStore = {
   find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
@@ -41,7 +42,7 @@ export type PointStore = {
 };
 
 export type TransformStore = {
-  crop: (payload: {data: string, box:CharBox}) => Promise<string | Error>;
+  crop: (payload: CropPayload) => Promise<string | Error>;
 };
 
 export type Lock = {
