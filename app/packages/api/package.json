@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "prebuild": "yarn clean",
-    "watch": "tsc -w",
     "clean": "tsc --build --clean",
-    "test": "yarn clean && jest"
+    "build": "tsc --noEmit false",
+    "prepack": "yarn build",
+    "postpack": "yarn clean",
+    "test": "yarn clean && jest --collectCoverage"
   },
   "devDependencies": {
     "jest": "^26.5.2",

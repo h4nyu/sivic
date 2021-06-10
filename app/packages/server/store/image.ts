@@ -3,11 +3,15 @@ import { first, keyBy } from "lodash";
 
 import { ErrorKind } from '@sivic/core'
 import { Image } from "@sivic/core/image";
+import { Box as CharBox } from "@charpoints/core/box"
 import { ImageStore } from "@sivic/core";
 import { RootApi as ImageApi } from "@charpoints/api"
 
 const COLUMNS = [
-  "workspace_id", "image_id", "tag", "updated_at", "created_at"
+  "workspace_id", 
+  "image_id", 
+  "tag", 
+  "created_at",
 ] as const
 export const Store = (
   imageApi: ImageApi,
@@ -19,7 +23,6 @@ export const Store = (
       workspaceId: r.workspace_id,
       tag: r.tag || undefined,
       createdAt: r.created_at,
-      updatedAt: r.updated_at,
     };
   };
 
@@ -29,7 +32,6 @@ export const Store = (
       image_id: r.id,
       tag: r.tag || null,
       created_at: r.createdAt,
-      updated_at: r.updatedAt,
     };
   };
 
@@ -85,7 +87,7 @@ export const Store = (
   const update = async (payload:Image): Promise<void | Error> => {
     try {
       await sql`UPDATE workspace_images SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
-      let err = await imageApi.image.update(payload)
+      const err = await imageApi.image.update(payload)
       if(err instanceof Error) {return err}
     }catch(e) {
       return e

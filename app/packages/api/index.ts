@@ -3,6 +3,7 @@ import { ImageApi } from "./image";
 import { DetectApi } from "./detect";
 import { BoxApi } from "./box";
 import { PointApi } from "./point";
+import { TransformApi } from "./transform";
 import axios from "axios";
 
 export function toError(err: any): Error {
@@ -22,6 +23,7 @@ export type RootApi = {
   detect: DetectApi;
   box: BoxApi;
   point: PointApi;
+  transform: TransformApi;
 };
 
 export const RootApi = (): RootApi => {
@@ -32,6 +34,7 @@ export const RootApi = (): RootApi => {
   const detect = DetectApi({ http, prefix: `${prefix}/detect` });
   const box = BoxApi({ http, prefix: `${prefix}/box` });
   const point = PointApi({ http, prefix: `${prefix}/point` });
+  const transform = TransformApi({ http, prefix: `${prefix}/transform` });
 
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
@@ -53,5 +56,6 @@ export const RootApi = (): RootApi => {
     detect,
     box,
     point,
+    transform,
   };
 };

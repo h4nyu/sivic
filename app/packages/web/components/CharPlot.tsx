@@ -33,7 +33,6 @@ export const SvgCharPlot = (props: {
     boxes?.forEach((b, id) => {
       ctx.lineWidth = lineWidth;
       ctx.strokeRect(b.x0, b.y0, b.x1 - b.x0, b.y1 - b.y0);
-      ctx.fillText(`${b.confidence}`, b.x0, b.y0);
       const edges = [
         [b.x0, b.y0],
         [b.x0, b.y1],

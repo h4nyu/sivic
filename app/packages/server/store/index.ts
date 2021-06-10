@@ -4,6 +4,7 @@ import { Store as ImageStore } from "./image"
 import { Store as DetectStore } from "./detect"
 import { Store as BoxStore } from "./box"
 import { Store as PointStore } from "./point"
+import { Store as TransformStore } from "./transform"
 import { RootApi as ImageApi } from "@charpoints/api"
 
 export const Store = (args: { 
@@ -24,10 +25,12 @@ export const Store = (args: {
   const image = ImageStore(imageApi, sql)
   const box = BoxStore(imageApi,sql)
   const point = PointStore(imageApi,sql)
+  const transform = TransformStore(imageApi,sql)
   const detect = DetectStore(args.detectUrl)
   return {
     workspace,
     image,
+    transform,
     detect,
     box,
     point,

@@ -4,7 +4,6 @@ import { uniq } from "lodash"
 import { Point } from "@charpoints/core/point"
 
 
-
 export type FilterPayload = {
   imageId:string
 };

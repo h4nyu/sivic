@@ -3,10 +3,12 @@ import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { Point } from "@charpoints/core/point";
+import { Box } from "@charpoints/core/box";
 import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
+import { Image } from "@sivic/core/image"
 
 export enum InputMode {
   Add = "Add",
@@ -14,8 +16,8 @@ export enum InputMode {
 }
 
 export type Editor = {
+  image: Image | undefined;
   points: Map<string, Point>;
-  line: Line;
   draggingId: string | undefined;
   pos: {x:number, y:number},
   size: number;
@@ -26,10 +28,11 @@ export type Editor = {
   move: (pos: { x: number; y: number }) => void;
   del: () => void;
   changeSize: (size: number) => void;
-  init: (id: string) => void;
+  init: (box: Box, image?:Image) => void;
   clear: () => void;
   save:(imageId:string) => void;
 };
+
 export const Editor = (root: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
@@ -46,10 +49,32 @@ export const Editor = (root: {
   } = root;
 
 
-  const init = async (id: string) => {
-    console.log("onClick")
-    onInit && onInit(id)
+  const init = async (box: Box, image?:Image) => {
+    if(image ==undefined){return}
+    console.log(box.imageId)
+    if(box.imageId === ""){
+      console.log("crop")
+      const data = await api.transform.crop({
+        box: {
+          x0: Math.floor(box.x0),
+          y0: Math.floor(box.y0),
+          x1: Math.floor(box.x1),
+          y1: Math.floor(box.y1),
+        }, 
+        imageData:image.data
+      })
+      if(data instanceof Error) { return data }
+      self.image = Image({workspaceId: image.workspaceId, data}) 
+      onInit && onInit(self.image.id)
+    }else{
+      console.log("load")
+      const image = await api.image.find({ id:box.imageId, hasData:true })
+      if(image instanceof Error) { return image }
+      self.image = image;
+      onInit && onInit(box.imageId)
+    }
   };
+
   const clear = () => {
     self.points = Map();
   };
@@ -120,16 +145,11 @@ export const Editor = (root: {
     if(err instanceof Error) { return err }
   };
 
-  const getLine = () => {
-    console.log(self.points)
-    return getBaseline(self.points.toList().toJS())
-  }
-
   const self = observable<Editor>({
+    image: undefined,
     points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
-    get line() { return getLine() },
     pos: { x: 0, y:0 },
     mode: InputMode.Add,
     setMode,
