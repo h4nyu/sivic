@@ -10,6 +10,7 @@ import {
 import { Image } from "@sivic/core/image";
 import ImageTable from "@sivic/web/components/ImageTable"
 import ImageTags from "@sivic/web/components/ImageTags";
+import BoxView from "@sivic/web/components/BoxView"
 
 
 const Content = observer(() => {
@@ -48,12 +49,25 @@ const Content = observer(() => {
         }}
       >
         <label className="label">Image List</label>
-        <ImageTable
-          images={imageStore.images.filter(x => x.workspaceId === workspaceForm.id).toList().toJS()}
-          onClick={(id) => imageProcess.init(workspaceForm.id, id)}
-          onDelete={workspaceForm.imageForm.deleteImage}
-          TagComponent={(props:{image:Image}) => <ImageTags image={props.image} onClick={workspaceForm.imageForm.updateTag}/>}
-        />
+        <div className="field">
+          {
+            imageStore.images.filter(x => x.workspaceId === workspaceForm.id).toList().map( i => {
+              return (
+                <div
+                  className="pb-2"
+                  key={i.id}
+                >
+                  <BoxView 
+                    image={i}
+                    onNameClick={(id) => imageProcess.init(workspaceForm.id, id)}
+                    onDeleteClick={workspaceForm.imageForm.deleteImage}
+                    onTagClick={workspaceForm.imageForm.updateTag}
+                  />
+                </div>
+              )
+            })
+          }
+        </div>
       </div>
       <div 
         style={{

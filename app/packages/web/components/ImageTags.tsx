@@ -8,9 +8,9 @@ const Tags = (props:{
   const { image, onClick } = props;
   const { id, tag } = image
   return (
-    <div className="buttons has-addons">
-      <button className={`button is-small ${tag === "Source" ? "is-success" : ""}`} onClick={() => onClick && onClick({id, tag:ImageTag.Source})}>Source</button>
-      <button className={`button is-small ${tag === "Target" ? "is-info" : ""}`} onClick={() => onClick && onClick({id, tag:ImageTag.Target})}>Target</button>
+    <div className="buttons has-addons m-0">
+      <button className={`button is-small m-0 ${tag === "Source" ? "is-success" : ""}`} onClick={() => onClick && onClick({id, tag:ImageTag.Source})}>Source</button>
+      <button className={`button is-small m-0 ${tag === "Target" ? "is-info" : ""}`} onClick={() => onClick && onClick({id, tag:ImageTag.Target})}>Target</button>
     </div>
   );
 };
