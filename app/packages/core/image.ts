@@ -14,6 +14,7 @@ export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
 export type Image = CharImage & {
   workspaceId: string,
+  parentId?: string
   tag?: ImageTag,
 }
 export const Image = (args?:object):Image => {
@@ -21,6 +22,7 @@ export const Image = (args?:object):Image => {
     ...CharImage(),
     tag: undefined,
     workspaceId: "",
+    parentId: undefined,
     ...args,
   }
 }

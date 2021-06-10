@@ -14,7 +14,10 @@ export const Store = (
   };
 
   const replace = async (payload: {imageId: string, boxes: Box[]}) => {
-    return await imageApi.box.replace({imageId: payload.imageId, boxes: payload.boxes})
+    const res = await imageApi.box.replace({imageId: payload.imageId, boxes: payload.boxes})
+    if (res instanceof Error) {
+      return res
+    }
   };
 
   return {

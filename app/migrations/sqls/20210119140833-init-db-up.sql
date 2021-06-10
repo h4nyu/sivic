@@ -7,9 +7,10 @@ CREATE TABLE workspaces (
 );
 
 CREATE TABLE workspace_images ( 
-    workspace_id text NOT NULL,
     image_id text NOT NULL,
+    workspace_id text NOT NULL,
     tag text,
+    parent_id text,
     created_at timestamp NOT NULL,
     UNIQUE(workspace_id, image_id)
 );

@@ -14,6 +14,7 @@ describe("image", () => {
   let row = Image({
     id: uuid(),
     workspaceId: uuid(),
+    parentId: uuid(),
   })
   beforeAll(async () => {
     const buf = await fs.promises.readFile("/srv/package.json");
@@ -26,31 +27,12 @@ describe("image", () => {
   test("insert, find and update", async () => {
     let err = await store.insert(row)
     if(err instanceof Error) { throw err }
-    // let res = await store.find({ id: row.id, hasData:true });
-    // if (res instanceof Error) {
-    //   throw res;
-    // }
-    // expect(res).toEqual(row)
-    // row = {
-    //   ...row,
-    //   tag: ImageTag.Source
-    // }
-    // const update = await store.update(row);
-    // if (update instanceof Error) {
-    //   throw update;
-    // }
-    // res = await store.find({ id: row.id, hasData: true });
-    // if (res instanceof Error) {
-    //   throw res;
-    // }
-    // expect(res).toEqual(row)
   });
   test("update", async () => {
     let err = await store.update({
       ...row,
       tag: ImageTag.Target
     })
-    // if(err instanceof Error) { throw err }
-    // expect(res).toEqual(row)
+    if(err instanceof Error) { throw err }
   });
 });
