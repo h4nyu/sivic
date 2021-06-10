@@ -1,15 +1,16 @@
 import { observable } from "mobx";
+import { Map, List } from "immutable";
 import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { Point } from "@charpoints/core/point";
 import { Box } from "@charpoints/core/box";
-import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
 import { Image } from "@sivic/core/image"
 import { ImageStore } from "@sivic/web/store/ImageStore"
+import { BoxStore } from "@sivic/web/store/BoxStore"
 
 export enum InputMode {
   Add = "Add",
@@ -17,7 +18,8 @@ export enum InputMode {
 }
 
 export type Editor = {
-  image: Image | undefined;
+  images: List<Image>;
+  cursor:number;
   points: Map<string, Point>;
   draggingId: string | undefined;
   pos: {x:number, y:number},
@@ -32,11 +34,15 @@ export type Editor = {
   init: (imageId: string) => void;
   clear: () => void;
   save:(imageId:string) => void;
+  next: () => undefined | string;
+  prev: () => undefined | string;
+  setCursor: (id: string) => void;
 };
 
 export const Editor = (root: {
   api: RootApi;
   imageStore: ImageStore;
+  boxStore: BoxStore;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (id: string) => void;
@@ -48,15 +54,19 @@ export const Editor = (root: {
     toast,
     onInit,
     onDelete,
-    imageStore
+    imageStore,
+    boxStore,
   } = root;
 
 
   const init = async (imageId:string) => {
-    self.image = imageStore.images.get(imageId)
-    if(self.image){
-      console.log(self.image.data)
-    }
+    const boxes = boxStore.boxes.filter(b => b.imageId !== imageId).map(x => x.id).toList()
+    const images = imageStore.images
+    .filter(x => boxes.includes(x.id))
+    .toList()
+
+    self.images = images
+    self.setCursor(imageId)
     onInit && onInit(imageId)
   };
 
@@ -130,8 +140,29 @@ export const Editor = (root: {
     if(err instanceof Error) { return err }
   };
 
+  const next = () => {
+    const img = self.images.get(self.cursor + 1);
+    if (img) {
+      self.cursor = self.cursor + 1;
+    }
+    return img?.id;
+  };
+
+  const prev = () => {
+    const img = self.images.get(self.cursor - 1);
+    if (img) {
+      self.cursor = self.cursor - 1;
+    }
+    return img?.id;
+  };
+
+  const setCursor = (id: string) => {
+    self.cursor = self.images.findIndex((x) => x.id === id);
+  };
+
   const self = observable<Editor>({
-    image: undefined,
+    images:List<Image>(),
+    cursor:0,
     points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
@@ -146,6 +177,9 @@ export const Editor = (root: {
     init,
     clear,
     save,
+    next,
+    prev,
+    setCursor,
   })
 
   return self
