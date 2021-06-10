@@ -66,6 +66,7 @@ export const RootStore = (): RootStore => {
     loading, 
     toast,
     imageStore,
+    boxStore,
     onInit: (id) => {
       history.push(`/point`)
     },

@@ -64,7 +64,6 @@ const Content = observer(() => {
             .filter(x => x.parentId === undefined)
             .toList().map( i => {
               const boxes = boxStore.boxes.filter(b => b.imageId !== i.id).map(x => x.id).toList()
-              console.log(boxes)
               const boxImages = imageStore.images.filter(x => boxes.includes(x.id)).toList().toJS()
               return (
                 <div
