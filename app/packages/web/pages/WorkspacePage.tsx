@@ -15,7 +15,15 @@ import BoxView from "@sivic/web/components/BoxView"
 
 const Content = observer(() => {
   let { id } = useParams<{id:string}>();
-  const { workspaceForm, imageProcess, workspaceStore, imageStore } = store
+  const { 
+    workspaceForm, 
+    imageProcess, 
+    workspaceStore, 
+    imageStore, 
+    boxStore,
+    pointEditor,
+  } = store
+
   const { save } = store.workspaceForm;
   return (
     <div
@@ -51,7 +59,13 @@ const Content = observer(() => {
         <label className="label">Image List</label>
         <div className="field">
           {
-            imageStore.images.filter(x => x.workspaceId === workspaceForm.id).toList().map( i => {
+            imageStore.images
+            .filter(x => x.workspaceId === workspaceForm.id)
+            .filter(x => x.parentId === undefined)
+            .toList().map( i => {
+              const boxes = boxStore.boxes.filter(b => b.imageId !== i.id).map(x => x.id).toList()
+              console.log(boxes)
+              const boxImages = imageStore.images.filter(x => boxes.includes(x.id)).toList().toJS()
               return (
                 <div
                   className="pb-2"
@@ -59,9 +73,11 @@ const Content = observer(() => {
                 >
                   <BoxView 
                     image={i}
+                    boxImages={boxImages}
                     onNameClick={(id) => imageProcess.init(workspaceForm.id, id)}
                     onDeleteClick={workspaceForm.imageForm.deleteImage}
                     onTagClick={workspaceForm.imageForm.updateTag}
+                    onBoxClick={(id) => pointEditor.init(id)}
                   />
                 </div>
               )

@@ -14,6 +14,8 @@ import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { ImageForm } from "@sivic/web/store/ImageForm"
+import { ImageStore } from "@sivic/web/store/ImageStore"
+import { BoxStore } from "@sivic/web/store/BoxStore"
 
 
 export type WorkspaceFrom = {
@@ -32,12 +34,14 @@ export const WorkspaceFrom = (args: {
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   imageForm: ImageForm;
+  imageStore: ImageStore;
+  boxStore:BoxStore;
   onInit?: (workspace:Workspace) => void;
   onCreate?:() => void;
   onSave?: (workspace:Workspace) => void;
   onDelete?: (id:string) => void;
 }): WorkspaceFrom => {
-  const { api, loading, toast, onInit, onSave, onDelete, imageForm, onCreate } = args;
+  const { api, loading, toast, onInit, onSave, onDelete, imageForm, imageStore, boxStore, onCreate } = args;
   const reset = () => {
     self.id = ""
     self.name = ""
@@ -55,6 +59,11 @@ export const WorkspaceFrom = (args: {
       self.id = row.id
       self.name = row.name
       await imageForm.init(row)
+      await imageStore.fetch(id)
+      const imageIds = imageStore.images.filter(x => x.parentId === undefined).toList()
+      for (const image of imageIds){
+        await boxStore.fetch(image.id)
+      }
       onInit && onInit(row)
     })
   }

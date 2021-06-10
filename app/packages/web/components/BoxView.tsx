@@ -11,6 +11,7 @@ export const BoxView = (props: {
   boxImages?:Image[]
   onNameClick?: (imageId:string) => void
   onTagClick?: ({id: string, tag:ImageTag}) => void;
+  onBoxClick?:(id: string) => void;
   onDeleteClick?: (imageId: string) => void
 }) => {
   return (
@@ -49,7 +50,7 @@ export const BoxView = (props: {
             props.boxImages && props.boxImages.map((x, i) => {
               return (
                 <div key={i} className='p-1'>
-                  <img src={`data:image/png;base64, ${x.data}`} width={50} height={50}/>
+                  <img src={`data:image/png;base64, ${x.data}`} width={50} height={50} onClick={() => props.onBoxClick && props.onBoxClick(x.id)}/>
                 </div>
               )
             })

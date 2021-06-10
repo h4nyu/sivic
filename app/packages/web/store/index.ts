@@ -9,6 +9,7 @@ import { Image } from "@sivic/core/image";
 import WorkspaceForm from "@sivic/web/store/WorkspaceForm"
 import { WorkspaceStore } from "@sivic/web/store/WorkspaceStore"
 import { ImageStore } from "@sivic/web/store/ImageStore"
+import { BoxStore } from "@sivic/web/store/BoxStore"
 import ImageForm from "@sivic/web/store/ImageForm"
 import ImageProcess from "@sivic/web/store/ImageProcess"
 import Editor from "@sivic/web/store/BoxEditor"
@@ -37,6 +38,7 @@ export type History = {
 export type RootStore = {
   workspaceStore: WorkspaceStore;
   imageStore: ImageStore;
+  boxStore:BoxStore;
   loadingStore: LoadingStore;
   editor: Editor;
   pointEditor: PointEditor;
@@ -56,12 +58,14 @@ export const RootStore = (): RootStore => {
   const toast = ToastStore();
   const workspaceStore = WorkspaceStore({ api, loading, toast });
   const imageStore = ImageStore({ api, loading, toast})
+  const boxStore = BoxStore({ api, loading, toast})
   const history = createHashHistory();
   const editor = Editor({ api, loading, toast })
   const pointEditor = PointEditor({ 
     api, 
     loading, 
     toast,
+    imageStore,
     onInit: (id) => {
       history.push(`/point`)
     },
@@ -100,9 +104,10 @@ export const RootStore = (): RootStore => {
     loading,
     toast,
     imageForm,
+    imageStore,
+    boxStore,
     onInit: (workspace) => {
       history.push(`/workspace/id/${workspace.id}`)
-      imageStore.fetch(workspace.id)
     },
     onCreate: () => {
       history.push(`/workspace/create`)
@@ -127,6 +132,7 @@ export const RootStore = (): RootStore => {
     history,
     workspaceForm,
     imageStore,
+    boxStore,
     imageForm,
     imageProcess,
   };

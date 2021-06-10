@@ -56,7 +56,7 @@ const Content = observer(() => {
         }}
       >
         {
-          imageProcess.image &&  
+          pointEditor.image &&  
             <SvgCharPlot 
               data={pointEditor.image?.data} 
               points={pointEditor.points}

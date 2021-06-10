@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
 import { Image } from "@sivic/core/image"
+import { ImageStore } from "@sivic/web/store/ImageStore"
 
 export enum InputMode {
   Add = "Add",
@@ -28,13 +29,14 @@ export type Editor = {
   move: (pos: { x: number; y: number }) => void;
   del: () => void;
   changeSize: (size: number) => void;
-  init: (box: Box, image?:Image) => void;
+  init: (imageId: string) => void;
   clear: () => void;
   save:(imageId:string) => void;
 };
 
 export const Editor = (root: {
   api: RootApi;
+  imageStore: ImageStore;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (id: string) => void;
@@ -46,33 +48,16 @@ export const Editor = (root: {
     toast,
     onInit,
     onDelete,
+    imageStore
   } = root;
 
 
-  const init = async (box: Box, image?:Image) => {
-    if(image ==undefined){return}
-    console.log(box.imageId)
-    if(box.imageId === ""){
-      console.log("crop")
-      const data = await api.transform.crop({
-        box: {
-          x0: Math.floor(box.x0),
-          y0: Math.floor(box.y0),
-          x1: Math.floor(box.x1),
-          y1: Math.floor(box.y1),
-        }, 
-        imageData:image.data
-      })
-      if(data instanceof Error) { return data }
-      self.image = Image({workspaceId: image.workspaceId, data}) 
-      onInit && onInit(self.image.id)
-    }else{
-      console.log("load")
-      const image = await api.image.find({ id:box.imageId, hasData:true })
-      if(image instanceof Error) { return image }
-      self.image = image;
-      onInit && onInit(box.imageId)
+  const init = async (imageId:string) => {
+    self.image = imageStore.images.get(imageId)
+    if(self.image){
+      console.log(self.image.data)
     }
+    onInit && onInit(imageId)
   };
 
   const clear = () => {
