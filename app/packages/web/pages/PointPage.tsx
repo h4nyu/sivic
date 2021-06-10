@@ -9,19 +9,33 @@ import SvgCharPlot from "@sivic/web/components/SvgCharPlot"
 import CropedBox from "@sivic/web/components/CropedBox"
 
 const Content = observer(() => {
-  const { imageProcess, pointEditor } = store;
+  const { imageProcess, pointEditor, lineEditor } = store;
   return (
     <div
       className="box"
       style={{
         display: "grid",
-        gridTemplateRows: "auto 2fr 1fr",
+        gridTemplateRows: "auto 1fr",
         height: "100%",
       }}
     >
       <div className="buttons">
-        <a className="button is-danger is-light" onClick={pointEditor.clear}>
+        <a 
+          className="button is-light" 
+        >
+          Detect
+        </a>
+        <a 
+          className="button is-danger is-light" 
+          onClick={() => {
+            pointEditor.clear()
+            lineEditor.clear()
+          }}
+        >
           Reset
+        </a>
+        <a className="button is-success is-light" onClick={() => lineEditor.getLine(pointEditor.points.toList().toJS())}>
+          BaseLine 
         </a>
         <a className="button is-info is-light" onClick={imageProcess.save}>
           Save
@@ -32,6 +46,7 @@ const Content = observer(() => {
         onKeyDown={e => {
           if (e.keyCode === 8) {
             pointEditor.del()
+            lineEditor.del()
           }
         }}
         style={{
@@ -43,14 +58,16 @@ const Content = observer(() => {
         {
           imageProcess.image &&  
             <SvgCharPlot 
-              data={imageProcess.image.data} 
+              data={pointEditor.image?.data} 
               points={pointEditor.points}
+              lines={lineEditor.lines}
               selectedId={pointEditor.draggingId}
+              lineId={lineEditor.draggingId}
               onPointSelect={pointEditor.toggleDrag}
+              onLineSelect={lineEditor.toggleDrag}
               onAdd={pointEditor.add}
               onMove={pointEditor.move}
               size={pointEditor.size}
-              line={pointEditor.line}
               width={512}
           />
         }
