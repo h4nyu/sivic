@@ -53,10 +53,23 @@ export const Store = (
     }
   };
   const filter = async (payload: {
-    workspaceId: string;
+    ids?: string[],
+    workspaceId?: string,
+    parentId?: string,
   }): Promise<Image[] | Error> => {
     try{
-      const rows = await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId}`
+      const rows =  await (async () =>{
+        if(payload.ids !== undefined && payload.ids.length > 0) {
+          return await sql`SELECT * FROM workspace_images WHERE id IN (${payload.ids})`
+        } else if(payload.workspaceId !== undefined && payload.parentId !== undefined) {
+          return await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId} AND parent_id = ${payload.parentId}`
+        } else if(payload.workspaceId !== undefined) {
+          return await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId}`
+        }else if(payload.parentId !== undefined) {
+          return await sql`SELECT * FROM workspace_images WHERE parent_id = ${payload.parentId}`
+        }
+        return []
+      })()
       const workspaceImages = rows.map(to)
       const imageIds = workspaceImages.map(x => x.id)
       const images = await imageApi.image.filter({ids: imageIds})

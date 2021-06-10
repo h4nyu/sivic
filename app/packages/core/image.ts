@@ -28,7 +28,9 @@ export const Image = (args?:object):Image => {
 }
 
 export type FilterPayload = {
-  workspaceId: string;
+  workspaceId?: string;
+  parentId?: string
+  ids?: string[]
 };
 
 export type CreatePayload = {
