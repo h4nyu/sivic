@@ -12,6 +12,7 @@ const COLUMNS = [
   "image_id", 
   "tag", 
   "created_at",
+  "parent_id",
 ] as const
 export const Store = (
   imageApi: ImageApi,
@@ -22,6 +23,7 @@ export const Store = (
       id: r.image_id,
       workspaceId: r.workspace_id,
       tag: r.tag || undefined,
+      parentId: r.parent_id || undefined,
       createdAt: r.created_at,
     };
   };
@@ -32,6 +34,7 @@ export const Store = (
       image_id: r.id,
       tag: r.tag || null,
       created_at: r.createdAt,
+      parent_id: r.parentId || null,
     };
   };
 
