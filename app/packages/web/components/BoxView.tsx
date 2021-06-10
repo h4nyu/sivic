@@ -3,18 +3,17 @@ import { Image } from "@sivic/core/image";
 import { Workspace } from "@sivic/core/workspace";
 
 export const ImageView = (props: {
-  workspace:Workspace,
   image: Image,
   boxImages?:Image[]
 }) => {
-  const { workspace, image, boxImages } = props
+  const { image, boxImages } = props
   return (
     <div
       className="card"
     >
       <div className= "card-header">
         <p className="card-header-title">
-          {workspace.name} / {image.name}
+          {image.name}
         </p>
       </div>
       <div className="card-content">
