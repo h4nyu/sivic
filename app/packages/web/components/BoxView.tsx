@@ -1,8 +1,9 @@
 import React, { useRef, RefObject, useState, useEffect } from "react";
 import { Image } from "@sivic/core/image";
 import { Workspace } from "@sivic/core/workspace";
+import ImageView from "@sivic/web/components/ImageView";
 
-export const ImageView = (props: {
+export const BoxView = (props: {
   image: Image,
   boxImages?:Image[]
 }) => {
@@ -17,12 +18,12 @@ export const ImageView = (props: {
         </p>
       </div>
       <div className="card-content">
-        <div className="content">
+        <div className="content" style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
           {
-            boxImages && boxImages.map(x => {
+            boxImages && boxImages.map((x, i) => {
               return (
-                <div>
-                  aaaaa
+                <div key={i} className='p-1'>
+                  <img src={`data:image/png;base64, ${x.data}`} width={50} height={50}/>
                 </div>
               )
             })
@@ -32,4 +33,4 @@ export const ImageView = (props: {
     </div>
   );
 };
-export default ImageView;
+export default BoxView;
