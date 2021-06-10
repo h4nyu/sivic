@@ -5,7 +5,7 @@ export default function(props:{
   box: Box,
   data?: string,
   onLoad?: (data:string) => void,
-  onClick: () => void;
+  onClick?: () => void;
   style?:React.CSSProperties,
 }){
   const canvasRef:RefObject<HTMLCanvasElement> = useRef(null);
@@ -37,7 +37,7 @@ export default function(props:{
   }, [data, box])
 
   return (
-    <div onClick={() => onClick()}>
+    <div onClick={() => onClick && onClick()}>
       <canvas 
         style={props.style}
         ref={canvasRef}

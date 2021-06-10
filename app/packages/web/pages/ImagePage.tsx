@@ -85,7 +85,6 @@ const Content = observer(() => {
                   maxWidth:"100%",
                   maxHeight:"100%"
                 }}
-                onClick={() => pointEditor.init(b, imageProcess.image)}
               />
             </div>
           )).toList()
