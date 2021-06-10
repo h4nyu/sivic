@@ -9,16 +9,14 @@ import { range } from "lodash";
 // @ts-ignore
 import imageData from "@charpoints/web/data/imageData.txt" 
 
-const workspace = {
-  ...Workspace(),
+const workspace = Workspace({
   name: "WorkspaceName"
-}
+})
 
-const image = {
-  ...Image(),
+const image = Image({
   name: "ImageName",
   data: imageData
-}
+})
 const images = range(10).map(x => {
   return image
 })
