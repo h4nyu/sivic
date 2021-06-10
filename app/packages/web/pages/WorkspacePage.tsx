@@ -63,7 +63,7 @@ const Content = observer(() => {
             .filter(x => x.workspaceId === workspaceForm.id)
             .filter(x => x.parentId === undefined)
             .toList().map( i => {
-              const boxes = boxStore.boxes.filter(b => b.imageId !== i.id).map(x => x.id).toList()
+              const boxes = boxStore.boxes.filter(b => b.imageId === i.id).map(x => x.id).toList()
               const boxImages = imageStore.images.filter(x => boxes.includes(x.id)).toList().toJS()
               return (
                 <div
