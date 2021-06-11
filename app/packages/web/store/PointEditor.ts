@@ -7,11 +7,10 @@ import { Point } from "@charpoints/core/point";
 import { Box } from "@charpoints/core/box";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
-import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
-import { Image } from "@sivic/core/image"
+import { rotatePoint, getBaseline, Line } from "@sivic/core/utils"; import { Image } from "@sivic/core/image"
 import { ImageStore } from "@sivic/web/store/ImageStore"
-import { BoxStore } from "@sivic/web/store/BoxStore"
 
+import PointStore from "@sivic/web/store/PointStore"
 export enum InputMode {
   Add = "Add",
   Edit = "Edit",
@@ -34,7 +33,7 @@ export type Editor = {
   changeSize: (size: number) => void;
   init: (imageId: string) => void;
   clear: () => void;
-  save:(imageId:string) => void;
+  save:() => void;
   next: () => undefined | string;
   prev: () => undefined | string;
 };
@@ -42,7 +41,7 @@ export type Editor = {
 export const Editor = (root: {
   api: RootApi;
   imageStore: ImageStore;
-  boxStore: BoxStore;
+  pointStore: PointStore;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (id: string) => void;
@@ -55,12 +54,14 @@ export const Editor = (root: {
     onInit,
     onDelete,
     imageStore,
-    boxStore,
+    pointStore,
   } = root;
 
   const init = async (imageId:string) => {
     self.imageId = imageId
     self.cursor = self.images.findIndex((x) => x.id === imageId);
+    await pointStore.fetch({imageId})
+    self.points = pointStore.points.filter(x => x.imageId === self.imageId)
     onInit && onInit(imageId)
   };
   const getImages = () => {
@@ -69,6 +70,8 @@ export const Editor = (root: {
       .images
       .filter(x => x.parentId === currentImage?.parentId)
       .toList()
+  }
+  const getPoints = () => {
   }
 
   const clear = () => {
@@ -136,8 +139,8 @@ export const Editor = (root: {
     self.size = value;
   };
 
-  const save = async (imageId:string) => {
-    const err = await api.point.replace({imageId, points:self.points.toList().toJS()})
+  const save = async () => {
+    const err = await api.point.replace({imageId: self.imageId, points:self.points.toList().toJS()})
     if(err instanceof Error) { return err }
   };
 

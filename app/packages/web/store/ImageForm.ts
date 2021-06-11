@@ -13,6 +13,7 @@ import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Image, ImageTag } from "@sivic/core/image";
 import { ErrorKind } from "@sivic/core";
+import ImageStore from "@sivic/web/store/ImageStore"
 
 export type ImageForm = {
   workspace?:Workspace;
@@ -26,14 +27,14 @@ export type ImageForm = {
 export const ImageForm = (args: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
+  imageStore: ImageStore,
   toast: ToastStore;
   onSave?: (workspaceId:string) => void
 }): ImageForm => {
-  const { api, loading, toast, onSave } = args;
+  const { api, loading, toast, onSave, imageStore } = args;
   const fetch = async () => {
     const { workspace } = self
     if(workspace === undefined) {return}
-
     const { imageIds } = workspace
   }
 
@@ -69,6 +70,7 @@ export const ImageForm = (args: {
       toast.error(err)
       return err
     }
+    imageStore.delete({ids:[imageId]})
     onSave && onSave(workspaceId)
   }
 

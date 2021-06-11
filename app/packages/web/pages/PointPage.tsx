@@ -43,7 +43,7 @@ const Content = observer(() => {
         <a className="button is-success is-light" onClick={() => lineEditor.getLine(pointEditor.points.toList().toJS())}>
           BaseLine 
         </a>
-        <a className="button is-info is-light" onClick={imageProcess.save}>
+        <a className="button is-info is-light" onClick={() => pointEditor.save()}>
           Save
         </a>
       </div>

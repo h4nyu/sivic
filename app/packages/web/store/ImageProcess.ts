@@ -41,7 +41,6 @@ export const ImageProcess = (args: {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
       self.image = image
-
       const boxes = await api.box.filter({imageId})
       if(boxes instanceof Error) { return boxes }
       editor.boxes = Map(boxes.map(x => [uuid(), x]))

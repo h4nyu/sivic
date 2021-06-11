@@ -42,7 +42,7 @@ export const ImageStore = (args: {
     if(workspaceId !== undefined){
       self.images = self.images.filter(x => x.workspaceId !== workspaceId)
     }else if(ids) {
-      self.images = self.images.filter(x => !ids.includes(x.id))
+      self.images = self.images.filter(x => !(ids.includes(x.id) || ids.includes(x.parentId || "")))
     }else if(parentId) {
       self.images = self.images.filter(x => x.parentId !== parentId)
     }
