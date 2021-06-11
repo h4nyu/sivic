@@ -114,7 +114,7 @@ export const Store = (
     let err = await imageApi.image.delete(payload)
     if(err instanceof Error) { return err }
     try {
-      await sql`DELETE FROM workspace_images WHERE image_id = ${payload.id}`
+      await sql`DELETE FROM workspace_images WHERE image_id = ${payload.id} OR parent_id = ${payload.id}`
     }catch(e) {
       return e
     }

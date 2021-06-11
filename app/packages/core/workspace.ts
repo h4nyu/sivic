@@ -127,16 +127,16 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     return await lock.auto(async () => {
       const { id } = payload;
       const row = await store.workspace.find({ id });
-      if (row instanceof Error) {
-        return row;
-      }
-      if (row === undefined) {
-        return new Error(ErrorKind.WorkspaceNotFound);
+      if (row instanceof Error) { return row; }
+      if (row === undefined) { return new Error(ErrorKind.WorkspaceNotFound); }
+      const savedImages = await store.image.filter({workspaceId: id})
+      if (savedImages instanceof Error) { return savedImages }
+      for(const img of savedImages){
+        const err = await store.image.delete({id: img.id})
+        if (err instanceof Error) { return err; }
       }
       let err = await store.workspace.delete({ id });
-      if (err instanceof Error) {
-        return err;
-      }
+      if (err instanceof Error) { return err; }
       return id;
     });
   }
