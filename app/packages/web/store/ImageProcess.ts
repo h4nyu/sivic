@@ -67,7 +67,7 @@ export const ImageProcess = (args: {
     const boxes = editor.boxes.toList().toJS()
     await loading(async () => {
       const imageId = image.id
-      const err = api.box.replace({
+      const err = await api.box.replace({
         imageId,
         boxes: boxes.map(x => Box({...x, imageId})),
       })

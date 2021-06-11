@@ -8,12 +8,13 @@ import ImageTags from "@sivic/web/components/ImageTags";
 
 export const BoxView = (props: {
   image: Image,
-  boxImages?:Image[]
+  images?:Image[]
   onNameClick?: (imageId:string) => void
   onTagClick?: ({id: string, tag:ImageTag}) => void;
   onBoxClick?:(id: string) => void;
   onDeleteClick?: (imageId: string) => void
 }) => {
+  const boxImages = props.images?.filter(x => x.parentId === props.image.id) || []
   return (
     <div
       className="card"
@@ -47,9 +48,9 @@ export const BoxView = (props: {
       <div className="card-content">
         <div className="content" style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
           {
-            props.boxImages && props.boxImages.map((x, i) => {
+            boxImages.map((x, i) => {
               return (
-                <div key={i} className='p-1'>
+                <div key={i} className={`p-1 ${props.onBoxClick ? "is-clickable" : ""}`}>
                   <img src={`data:image/png;base64, ${x.data}`} width={50} height={50} onClick={() => props.onBoxClick && props.onBoxClick(x.id)}/>
                 </div>
               )

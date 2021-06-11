@@ -22,7 +22,6 @@ export type WorkspaceFrom = {
   name: string,
   imageForm: ImageForm,
   rootImages: Map<string, Image>,
-  cropedImageMaps: Map<string, Map<string, Image>>,
   create: () => void;
   update: (id:string) => void;
   setName: (value:string) => void;
@@ -74,10 +73,6 @@ export const WorkspaceFrom = (args: {
     .filter(x => x.workspaceId === self.id && x.parentId === undefined)
   }
 
-  const getCropedImageMaps = () => {
-    return self.rootImages.map(x => imageStore.images.filter(x => x.parentId === x.id))
-  }
-
   const setName = (value:string) => {
     self.name = value
   }
@@ -114,7 +109,6 @@ export const WorkspaceFrom = (args: {
     setName,
     save,
     get rootImages() { return getRootImages() },
-    get cropedImageMaps() { return getCropedImageMaps() },
     delete: _delete
   })
   return self

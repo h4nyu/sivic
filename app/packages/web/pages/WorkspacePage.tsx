@@ -68,7 +68,7 @@ const Content = observer(() => {
                 >
                   <BoxView 
                     image={i}
-                    boxImages={(workspaceForm.cropedImageMaps.get(i.id) || Map()).toList().toJS()}
+                    images={imageStore.images.toList().toJS()}
                     onNameClick={(id) => imageProcess.init(workspaceForm.id, id)}
                     onDeleteClick={workspaceForm.imageForm.deleteImage}
                     onTagClick={workspaceForm.imageForm.updateTag}
