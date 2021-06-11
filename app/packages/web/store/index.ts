@@ -16,6 +16,7 @@ import Editor from "@sivic/web/store/BoxEditor"
 import PointEditor from "@sivic/web/store/PointEditor"
 import LineEditor from "@sivic/web/store/LineEditor"
 import PointStore from "@sivic/web/store/PointStore"
+import LineStore from "@sivic/web/store/LineStore"
 
 configure({
   enforceActions: "never",
@@ -41,6 +42,7 @@ export type RootStore = {
   imageStore: ImageStore;
   boxStore:BoxStore;
   loadingStore: LoadingStore;
+  lineStore: LineStore,
   editor: Editor;
   pointEditor: PointEditor;
   lineEditor: LineEditor;
@@ -61,24 +63,28 @@ export const RootStore = (): RootStore => {
   const workspaceStore = WorkspaceStore({ api, loading, toast });
   const imageStore = ImageStore({ api, loading, toast})
   const pointStore = PointStore({ api })
+  const lineStore = LineStore({api})
   const boxStore = BoxStore({ api, loading, toast})
   const history = createHashHistory();
   const editor = Editor({ api, loading, toast })
+
+  const lineEditor = LineEditor({ 
+    api, 
+    lineStore,
+    loading, 
+    toast,
+  })
+
   const pointEditor = PointEditor({ 
     api, 
     loading, 
     toast,
     pointStore,
     imageStore,
+    lineEditor,
     onInit: (id) => {
       history.push(`/point`)
     },
-  })
-
-  const lineEditor = LineEditor({ 
-    api, 
-    loading, 
-    toast,
   })
 
   const init = async () => {
@@ -142,6 +148,7 @@ export const RootStore = (): RootStore => {
     pointStore,
     imageForm,
     imageProcess,
+    lineStore,
   };
 };
 

@@ -7,6 +7,7 @@ import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 import { rotatePoint, getBaseline, Line } from "@sivic/core/utils";
+import LineStore from "@sivic/web/store/LineStore"
 
 export enum InputMode {
   Add = "Add",
@@ -26,6 +27,7 @@ export type Editor = {
 export const Editor = (root: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
+  lineStore: LineStore,
   toast: ToastStore;
   onInit?: (id: string) => void;
   onDelete?: (id: string) => void;
@@ -36,10 +38,13 @@ export const Editor = (root: {
     toast,
     onInit,
     onDelete,
+    lineStore,
   } = root;
 
-  const init = async (id: string) => {
-    onInit && onInit(id)
+  const init = async (imageId: string) => {
+    await lineStore.fetch({imageId})
+    self.lines = Map()
+    onInit && onInit(imageId)
   };
 
   const clear = () => {
@@ -50,7 +55,6 @@ export const Editor = (root: {
     let rows = points;
     const line = getBaseline(rows);
     if(line === undefined){return}
-    self.lines = self.lines.set(uuid(), line)
     const [start, end] = line
     rows = rows.filter(p => (
       (p.x !== start.x && p.y !== start.y) 
@@ -58,6 +62,9 @@ export const Editor = (root: {
     ))
     const secondLine = getBaseline(rows)
     if(secondLine === undefined){return}
+
+    self.lines = Map()
+    self.lines = self.lines.set(uuid(), line)
     self.lines = self.lines.set(uuid(), secondLine)
   }
 

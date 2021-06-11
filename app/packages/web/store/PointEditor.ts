@@ -11,6 +11,7 @@ import { rotatePoint, getBaseline, Line } from "@sivic/core/utils"; import { Ima
 import { ImageStore } from "@sivic/web/store/ImageStore"
 
 import PointStore from "@sivic/web/store/PointStore"
+import LineEditor from "@sivic/web/store/LineEditor"
 export enum InputMode {
   Add = "Add",
   Edit = "Edit",
@@ -42,6 +43,7 @@ export const Editor = (root: {
   api: RootApi;
   imageStore: ImageStore;
   pointStore: PointStore;
+  lineEditor: LineEditor;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
   toast: ToastStore;
   onInit?: (id: string) => void;
@@ -55,6 +57,7 @@ export const Editor = (root: {
     onDelete,
     imageStore,
     pointStore,
+    lineEditor,
   } = root;
 
   const init = async (imageId:string) => {
@@ -140,7 +143,9 @@ export const Editor = (root: {
   };
 
   const save = async () => {
-    const err = await api.point.replace({imageId: self.imageId, points:self.points.toList().toJS()})
+    let err = await api.point.replace({imageId: self.imageId, points:self.points.toList().toJS()})
+    if(err instanceof Error) { return err }
+    err = await api.line.replace({imageId: self.imageId, lines:lineEditor.lines.toList().toJS()})
     if(err instanceof Error) { return err }
   };
 

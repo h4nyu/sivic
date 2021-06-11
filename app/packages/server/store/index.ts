@@ -6,6 +6,7 @@ import { Store as BoxStore } from "./box"
 import { Store as PointStore } from "./point"
 import { Store as TransformStore } from "./transform"
 import { RootApi as ImageApi } from "@charpoints/api"
+import { Store as LineStore } from "./line"
 
 export const Store = (args: { 
   url: string; 
@@ -27,6 +28,7 @@ export const Store = (args: {
   const point = PointStore(imageApi,sql)
   const transform = TransformStore(imageApi,sql)
   const detect = DetectStore(args.detectUrl)
+  const line = LineStore(sql)
   return {
     workspace,
     image,
@@ -34,6 +36,7 @@ export const Store = (args: {
     detect,
     box,
     point,
+    line,
     close,
   };
 };

@@ -5,6 +5,7 @@ import { WorkspaceRoutes } from "./workspace";
 import { ImageRoutes } from "./image";
 import { DetectRoutes } from "./detect";
 import { BoxRoutes } from "./box";
+import { LineRoutes } from "./line";
 import { PointRoutes } from "./point";
 import { TrasnformRoutes } from "./transform";
 
@@ -43,6 +44,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(BoxRoutes({ store, lock }), {
     prefix: `${prefix}/box`,
+  });
+  app.register(LineRoutes({ store, lock }), {
+    prefix: `${prefix}/line`,
   });
   app.register(PointRoutes({ store, lock }), {
     prefix: `${prefix}/point`,
