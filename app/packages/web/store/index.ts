@@ -95,8 +95,9 @@ export const RootStore = (): RootStore => {
     api,
     loading,
     toast,
-    onInit: (workspaceId, imageId) => {
-      history.push(`/workspace/id/${workspaceId}/image-id/${imageId}`)
+    imageStore,
+    onInit: (imageId) => {
+      history.push(`/workspace/id/${workspaceForm.id}/image-id/${imageId}`)
     },
     editor,
   })

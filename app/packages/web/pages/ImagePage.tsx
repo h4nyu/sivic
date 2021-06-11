@@ -15,7 +15,7 @@ const Content = observer(() => {
       className="box"
       style={{
         display: "grid",
-        gridTemplateRows: "auto 2fr 1fr",
+        gridTemplateRows: "auto 1fr",
         height: "100%",
       }}
     >
@@ -56,38 +56,6 @@ const Content = observer(() => {
               size={editor.size}
               width={1024}
           />
-        }
-      </div>
-      <div
-        style={{
-          overflow:"scroll",
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
-        }}
-      >
-        {
-          editor.boxes.map((b, id) => (
-            <div
-              className="card m-1"
-              style={{
-                maxWidth: 50,
-                maxHeight: 50,
-                display: "grid",
-                alignItems: "center",
-              }}
-              key={id}
-            >
-              <CropedBox 
-                box={b}
-                data={imageProcess.image?.data}
-                style={{
-                  maxWidth:"100%",
-                  maxHeight:"100%"
-                }}
-              />
-            </div>
-          )).toList()
         }
       </div>
     </div>

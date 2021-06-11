@@ -7,7 +7,6 @@ import { RootApi } from "@sivic/api";
 import { Image, FilterPayload } from "@sivic/core/image";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
-import { keyBy } from "lodash";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
@@ -16,6 +15,11 @@ import { ImageForm } from "@sivic/web/store/ImageForm"
 export type ImageStore = {
   images: Map<string, Image>;
   fetch: (payload:FilterPayload) => Promise<void>
+  delete: (payload: {
+    parentId?: string,
+    workspaceId?:string, 
+    ids?:string[]
+  }) => void
 };
 
 export const ImageStore = (args: {
@@ -27,11 +31,26 @@ export const ImageStore = (args: {
   const fetch = async (payload: FilterPayload) => {
     const images = await api.image.filter(payload)
     if(images instanceof Error) { return }
-    self.images = Map(keyBy(images, x => x.id))
+    self.images = self.images.merge(Map(images.map(x => [x.id, x])))
+  }
+  const delete_ = (payload:{
+    workspaceId?: string,
+    parentId?: string,
+    ids?: string[]
+  }) => {
+    const { ids, workspaceId, parentId } = payload
+    if(workspaceId !== undefined){
+      self.images = self.images.filter(x => x.workspaceId !== workspaceId)
+    }else if(ids) {
+      self.images = self.images.filter(x => !ids.includes(x.id))
+    }else if(parentId) {
+      self.images = self.images.filter(x => x.parentId !== parentId)
+    }
   }
   const self = observable({
     images: Map<string, Image>(),
     fetch,
+    delete: delete_
   })
   return self
 }

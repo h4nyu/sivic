@@ -19,6 +19,7 @@ export enum InputMode {
 
 export type Editor = {
   images: List<Image>;
+  imageId: string;
   cursor:number;
   points: Map<string, Point>;
   draggingId: string | undefined;
@@ -36,7 +37,6 @@ export type Editor = {
   save:(imageId:string) => void;
   next: () => undefined | string;
   prev: () => undefined | string;
-  setCursor: (id: string) => void;
 };
 
 export const Editor = (root: {
@@ -58,17 +58,18 @@ export const Editor = (root: {
     boxStore,
   } = root;
 
-
   const init = async (imageId:string) => {
-    const boxes = boxStore.boxes.filter(b => b.imageId !== imageId).map(x => x.id).toList()
-    const images = imageStore.images
-    .filter(x => boxes.includes(x.id))
-    .toList()
-
-    self.images = images
-    self.setCursor(imageId)
+    self.imageId = imageId
+    self.cursor = self.images.findIndex((x) => x.id === imageId);
     onInit && onInit(imageId)
   };
+  const getImages = () => {
+    const currentImage = imageStore.images.get(self.imageId)
+    return imageStore
+      .images
+      .filter(x => x.parentId === currentImage?.parentId)
+      .toList()
+  }
 
   const clear = () => {
     self.points = Map();
@@ -156,12 +157,9 @@ export const Editor = (root: {
     return img?.id;
   };
 
-  const setCursor = (id: string) => {
-    self.cursor = self.images.findIndex((x) => x.id === id);
-  };
-
   const self = observable<Editor>({
-    images:List<Image>(),
+    imageId: "",
+    get images(){ return getImages() },
     cursor:0,
     points: Map<string, Point>(),
     draggingId: undefined,
@@ -179,7 +177,6 @@ export const Editor = (root: {
     save,
     next,
     prev,
-    setCursor,
   })
 
   return self

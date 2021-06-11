@@ -69,7 +69,7 @@ const Content = observer(() => {
                   <BoxView 
                     image={i}
                     images={imageStore.images.toList().toJS()}
-                    onNameClick={(id) => imageProcess.init(workspaceForm.id, id)}
+                    onNameClick={imageProcess.init}
                     onDeleteClick={workspaceForm.imageForm.deleteImage}
                     onTagClick={workspaceForm.imageForm.updateTag}
                     onBoxClick={(id) => pointEditor.init(id)}

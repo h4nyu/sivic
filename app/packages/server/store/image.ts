@@ -60,7 +60,7 @@ export const Store = (
     try{
       const rows =  await (async () =>{
         if(payload.ids !== undefined && payload.ids.length > 0) {
-          return await sql`SELECT * FROM workspace_images WHERE id IN (${payload.ids})`
+          return await sql`SELECT * FROM workspace_images WHERE image_id IN (${payload.ids})`
         } else if(payload.workspaceId !== undefined && payload.parentId !== undefined) {
           return await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId} AND parent_id = ${payload.parentId}`
         } else if(payload.workspaceId !== undefined) {

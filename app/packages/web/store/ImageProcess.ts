@@ -16,11 +16,12 @@ import { Level } from "@sivic/web/store"
 import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { Box } from "@charpoints/web/store";
 import Editor from "@sivic/web/store/BoxEditor"
+import ImageStore from "@sivic/web/store/ImageStore"
 
 export type ImageProcess = {
   image?: Image;
   lineWidth: number;
-  init: (workspaceId:string, imageId:string) => Promise<void|Error>;
+  init: (imageId:string) => Promise<void|Error>;
   save: () => void
   detectBoxes: () => void;
 };
@@ -28,13 +29,14 @@ export type ImageProcess = {
 export const ImageProcess = (args: {
   api: RootApi;
   loading: <T>(fn: () => Promise<T>) => Promise<T>;
+  imageStore: ImageStore,
   toast: ToastStore;
-  onInit?: (workspaceId:string, imageId:string) => void
+  onInit?: (imageId:string) => void
   editor: Editor
 }): ImageProcess => {
-  const { api, loading, toast, onInit, editor } = args;
+  const { api, loading, toast, onInit, editor, imageStore } = args;
 
-  const init = async (workspaceId:string, imageId:string) => {
+  const init = async (imageId:string) => {
     await loading(async () => {
       const image = await api.image.find({id:imageId, hasData:true})
       if(image instanceof Error) { return image }
@@ -43,7 +45,7 @@ export const ImageProcess = (args: {
       const boxes = await api.box.filter({imageId})
       if(boxes instanceof Error) { return boxes }
       editor.boxes = Map(boxes.map(x => [uuid(), x]))
-      onInit && onInit(workspaceId, imageId)
+      onInit && onInit(imageId)
     })
   }
 
@@ -73,9 +75,12 @@ export const ImageProcess = (args: {
       })
       if(err instanceof Error){
         toast.error(err)
-      } else {
-        toast.info("saved")
+        return
       }
+      const imageIds = boxes.map(x => x.id)
+      imageStore.delete({parentId: self.image?.id || ""})
+      await imageStore.fetch({parentId: self.image?.id})
+      toast.info("saved")
     })
   }
 
