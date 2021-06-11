@@ -59,12 +59,8 @@ const Content = observer(() => {
         <label className="label">Image List</label>
         <div className="field">
           {
-            imageStore.images
-            .filter(x => x.workspaceId === workspaceForm.id)
-            .filter(x => x.parentId === undefined)
-            .toList().map( i => {
-              const boxes = boxStore.boxes.filter(b => b.imageId === i.id).map(x => x.id).toList()
-              const boxImages = imageStore.images.filter(x => boxes.includes(x.id)).toList().toJS()
+            workspaceForm.rootImages.toList()
+            .map( i => {
               return (
                 <div
                   className="pb-2"
@@ -72,7 +68,7 @@ const Content = observer(() => {
                 >
                   <BoxView 
                     image={i}
-                    boxImages={boxImages}
+                    boxImages={(workspaceForm.cropedImageMaps.get(i.id) || Map()).toList().toJS()}
                     onNameClick={(id) => imageProcess.init(workspaceForm.id, id)}
                     onDeleteClick={workspaceForm.imageForm.deleteImage}
                     onTagClick={workspaceForm.imageForm.updateTag}

@@ -4,9 +4,7 @@ import { Images } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
-import {
-  Image,
-} from "@sivic/core/image";
+import { Image, FilterPayload } from "@sivic/core/image";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { keyBy } from "lodash";
@@ -17,7 +15,7 @@ import { ImageForm } from "@sivic/web/store/ImageForm"
 
 export type ImageStore = {
   images: Map<string, Image>;
-  fetch: (workspaceId:string) => Promise<void>
+  fetch: (payload:FilterPayload) => Promise<void>
 };
 
 export const ImageStore = (args: {
@@ -26,8 +24,8 @@ export const ImageStore = (args: {
   toast: ToastStore;
 }): ImageStore => {
   const { api, loading, toast } = args;
-  const fetch = async (workspaceId:string) => {
-    const images = await api.image.filter({workspaceId})
+  const fetch = async (payload: FilterPayload) => {
+    const images = await api.image.filter(payload)
     if(images instanceof Error) { return }
     self.images = Map(keyBy(images, x => x.id))
   }

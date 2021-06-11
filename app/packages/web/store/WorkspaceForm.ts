@@ -4,9 +4,8 @@ import { Workspaces } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
-import {
-  Workspace,
-} from "@sivic/core/workspace";
+import { Workspace } from "@sivic/core/workspace";
+import { Image, } from "@sivic/core/image";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
@@ -22,6 +21,8 @@ export type WorkspaceFrom = {
   id: string,
   name: string,
   imageForm: ImageForm,
+  rootImages: Map<string, Image>,
+  cropedImageMaps: Map<string, Map<string, Image>>,
   create: () => void;
   update: (id:string) => void;
   setName: (value:string) => void;
@@ -50,22 +51,31 @@ export const WorkspaceFrom = (args: {
     reset()
     onCreate && onCreate()
   }
-  const update = async (id:string) => {
+  const update = async (workspaceId:string) => {
     await loading(async () => {
-      const row = await api.workspace.find({id})
+      const row = await api.workspace.find({id: workspaceId})
       if(row instanceof Error) {
         return row
       }
       self.id = row.id
       self.name = row.name
       await imageForm.init(row)
-      await imageStore.fetch(id)
+      await imageStore.fetch({workspaceId})
       const imageIds = imageStore.images.filter(x => x.parentId === undefined).toList()
       for (const image of imageIds){
         await boxStore.fetch(image.id)
       }
       onInit && onInit(row)
     })
+  }
+
+  const getRootImages = () => {
+    return imageStore.images
+    .filter(x => x.workspaceId === self.id && x.parentId === undefined)
+  }
+
+  const getCropedImageMaps = () => {
+    return self.rootImages.map(x => imageStore.images.filter(x => x.parentId === x.id))
   }
 
   const setName = (value:string) => {
@@ -103,6 +113,8 @@ export const WorkspaceFrom = (args: {
     update,
     setName,
     save,
+    get rootImages() { return getRootImages() },
+    get cropedImageMaps() { return getCropedImageMaps() },
     delete: _delete
   })
   return self

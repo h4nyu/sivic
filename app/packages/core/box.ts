@@ -51,12 +51,13 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
         })
       )
     }
-    const savedBoxImages = await store.image.filter({parentId: image.id})
-    if(savedBoxImages instanceof Error) { return savedBoxImages }
     let err = await store.box.replace(payload);
     if(err instanceof Error) { return err;}
-    for ( const savedBoxImage of savedBoxImages ){
-      err = await store.image.delete({id: savedBoxImage.id})
+
+    const savedBoxImages = await store.image.filter({parentId: image.id})
+    if(savedBoxImages instanceof Error) { return savedBoxImages }
+    for (const sb of savedBoxImages ){
+      err = await store.image.delete({id: sb.id})
       if(err instanceof Error) { return err;}
     }
     for (const img of cropedImages){

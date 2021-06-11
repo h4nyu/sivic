@@ -11,28 +11,37 @@ afterAll(async () => {
 
 describe("image", () => {
   const store = rootStore.image;
-  let row = Image({
-    id: uuid(),
-    workspaceId: uuid(),
-    parentId: uuid(),
+  const rows = [0, 1, 2, 3].map(i => {
+    return Image({
+      id: uuid(),
+      workspaceId: uuid(),
+      parentId: uuid(),
+    })
   })
   beforeAll(async () => {
     const buf = await fs.promises.readFile("/srv/package.json");
-    row.data = buf.toString("base64");
-    row.id = uuid();
+    const base64Data = buf.toString("base64");
+    for(const row of rows){
+      row.data = base64Data
+      let err = await store.insert(row)
+      if(err instanceof Error) { throw err }
+    }
   });
   afterAll(async () => {
-    await store.delete({id: row.id});
-  });
-  test("insert, find and update", async () => {
-    let err = await store.insert(row)
-    if(err instanceof Error) { throw err }
+    for(const row of rows){
+      await store.delete({id: row.id});
+    }
   });
   test("update", async () => {
     let err = await store.update({
-      ...row,
+      ...rows[0],
       tag: ImageTag.Target
     })
     if(err instanceof Error) { throw err }
+  });
+  test("filter.parentId", async () => {
+    let res = await store.filter({ parentId: rows[0].parentId })
+    if(res instanceof Error) { throw res }
+    expect(res[0].id).toBe(rows[0].id)
   });
 });

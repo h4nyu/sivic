@@ -47,10 +47,10 @@ export const Store = (
     const rows = await sql`SELECT * FROM workspace_images WHERE image_id = ${image.id} LIMIT 1`
     const row = first(rows.map(to))
     if(row === undefined) { return new Error(ErrorKind.ImageNotFound)}
-    return {
+    return Image({
       ...image,
       ...row,
-    }
+    })
   };
   const filter = async (payload: {
     ids?: string[],
@@ -76,10 +76,10 @@ export const Store = (
       if(images instanceof Error) { return images }
       const rel:any = keyBy(workspaceImages, x => x.id)
       return images.map(x => {
-        return {
+        return Image({
           ...x,
           ...rel[x.id],
-        }
+        })
       })
     }catch(err){
       return err
@@ -113,6 +113,11 @@ export const Store = (
   const delete_ = async (payload:{id:string}): Promise<void | Error> => {
     let err = await imageApi.image.delete(payload)
     if(err instanceof Error) { return err }
+    try {
+      await sql`DELETE FROM workspace_images WHERE image_id = ${payload.id}`
+    }catch(e) {
+      return e
+    }
   };
   return {
     find,
