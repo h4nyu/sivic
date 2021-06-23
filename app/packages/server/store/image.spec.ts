@@ -35,7 +35,6 @@ describe("image", () => {
   test("update", async () => {
     let err = await store.update({
       ...rows[0],
-      tag: ImageTag.Target
     })
     if(err instanceof Error) { throw err }
   });

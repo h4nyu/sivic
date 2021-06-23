@@ -7,34 +7,41 @@ import { Box as CharBox } from "@charpoints/core/box"
 import { ImageStore } from "@sivic/core";
 import { RootApi as ImageApi } from "@charpoints/api"
 
+const TABLE = "images"
+
 const COLUMNS = [
+  "id", 
+  "name",
   "workspace_id", 
-  "image_id", 
-  "tag", 
-  "created_at",
   "parent_id",
+  "tag_id", 
+  "created_at",
 ] as const
 export const Store = (
   imageApi: ImageApi,
   sql: Sql<any>,
 ): ImageStore => {
   const to = (r: Row) => {
-    return {
+    return Image({
       id: r.image_id,
-      workspaceId: r.workspace_id,
-      tag: r.tag || undefined,
+      name: r.name,
+      workspaceId: r.workspace_id || undefined,
+      tagId: r.tag_id || undefined,
       parentId: r.parent_id || undefined,
+      fileId: r.file_id || undefined,
       createdAt: r.created_at,
-    };
+    });
   };
 
   const from = (r: Image): Row => {
     return {
+      id: r.id,
+      name: r.name,
       workspace_id: r.workspaceId,
-      image_id: r.id,
-      tag: r.tag || null,
-      created_at: r.createdAt,
       parent_id: r.parentId || null,
+      tag_id: r.tagId || null,
+      file_id: r.fileId || null,
+      created_at: r.createdAt,
     };
   };
 
@@ -44,7 +51,7 @@ export const Store = (
   }): Promise<Image | Error> => {
     let image = await imageApi.image.find(payload)
     if(image instanceof Error) { return image }
-    const rows = await sql`SELECT * FROM workspace_images WHERE image_id = ${image.id} LIMIT 1`
+    const rows = await sql`SELECT * FROM ${sql(TABLE)} WHERE image_id = ${image.id} LIMIT 1`
     const row = first(rows.map(to))
     if(row === undefined) { return new Error(ErrorKind.ImageNotFound)}
     return Image({
@@ -60,27 +67,17 @@ export const Store = (
     try{
       const rows =  await (async () =>{
         if(payload.ids !== undefined && payload.ids.length > 0) {
-          return await sql`SELECT * FROM workspace_images WHERE image_id IN (${payload.ids})`
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE image_id IN (${payload.ids})`
         } else if(payload.workspaceId !== undefined && payload.parentId !== undefined) {
-          return await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId} AND parent_id = ${payload.parentId}`
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE workspace_id = ${payload.workspaceId} AND parent_id = ${payload.parentId}`
         } else if(payload.workspaceId !== undefined) {
-          return await sql`SELECT * FROM workspace_images WHERE workspace_id = ${payload.workspaceId}`
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE workspace_id = ${payload.workspaceId}`
         }else if(payload.parentId !== undefined) {
-          return await sql`SELECT * FROM workspace_images WHERE parent_id = ${payload.parentId}`
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE parent_id = ${payload.parentId}`
         }
         return []
       })()
-      const workspaceImages = rows.map(to)
-      const imageIds = workspaceImages.map(x => x.id)
-      const images = await imageApi.image.filter({ids: imageIds})
-      if(images instanceof Error) { return images }
-      const rel:any = keyBy(workspaceImages, x => x.id)
-      return images.map(x => {
-        return Image({
-          ...x,
-          ...rel[x.id],
-        })
-      })
+     return rows.map(to)
     }catch(err){
       return err
     }
@@ -88,13 +85,7 @@ export const Store = (
 
   const insert = async (payload: Image): Promise<void | Error> => {
     try {
-      await sql`INSERT INTO workspace_images ${sql(from(payload), ...COLUMNS)}`
-      let err = await imageApi.image.create({
-        id: payload.id,
-        data: payload.data || "",
-        name: payload.name,
-      })
-      if(err instanceof Error) {return err}
+      await sql`INSERT INTO ${sql(TABLE)} ${sql(from(payload), ...COLUMNS)}`
     }catch(e) {
       return e
     }
@@ -102,7 +93,7 @@ export const Store = (
 
   const update = async (payload:Image): Promise<void | Error> => {
     try {
-      await sql`UPDATE workspace_images SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
+      await sql`UPDATE ${sql(TABLE)} SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
       const err = await imageApi.image.update(payload)
       if(err instanceof Error) {return err}
     }catch(e) {
@@ -114,7 +105,7 @@ export const Store = (
     let err = await imageApi.image.delete(payload)
     if(err instanceof Error) { return err }
     try {
-      await sql`DELETE FROM workspace_images WHERE image_id = ${payload.id} OR parent_id = ${payload.id}`
+      await sql`DELETE FROM ${sql(TABLE)} WHERE image_id = ${payload.id} OR parent_id = ${payload.id}`
     }catch(e) {
       return e
     }

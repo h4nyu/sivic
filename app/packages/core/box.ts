@@ -40,16 +40,16 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     const imageData = image.data
     const cropedImages:Image[] = []
     for(const box of payload.boxes){
-      const croped = await store.transform.crop({imageData, box})
-      if(croped instanceof Error) { return croped }
-      cropedImages.push(
-        Image({
-          id: box.id,
-          data: croped,
-          workspaceId: image.workspaceId,
-          parentId: image.id,
-        })
-      )
+      // const croped = await store.transform.crop({imageData, box})
+      // if(croped instanceof Error) { return croped }
+      // cropedImages.push(
+      //   Image({
+      //     id: box.id,
+      //     data: croped,
+      //     workspaceId: image.workspaceId,
+      //     parentId: image.id,
+      //   })
+      // )
     }
     let err = await store.box.replace(payload);
     if(err instanceof Error) { return err;}

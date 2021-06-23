@@ -10,20 +10,46 @@ export const ImageTag = {
   Target: "Target"
 } as const
 
+
 export type ImageTag = typeof ImageTag[keyof typeof ImageTag];
 
-export type Image = CharImage & {
-  workspaceId: string,
+export type Image = {
+  id: string,
+  name: string,
+  workspaceId?: string,
   parentId?: string
-  tag?: ImageTag,
+  tagId?: string,
+  data?:string,
+  fileId?: string,
+  createdAt: Date,
 }
-export const Image = (args?:object):Image => {
+export const Image = (args?:{
+  id?:string,
+  name?: string,
+  workspaceId?:string,
+  parentId?: string,
+  data?: string,
+  tagId?:string,
+  fileId?: string,
+  createdAt?: Date,
+}):Image => {
+  const id = args?.id || uuid()
+  const name = args?.name || ""
+  const data = args?.data
+  const workspaceId = args?.workspaceId
+  const parentId = args?.parentId
+  const tagId = args?.tagId
+  const createdAt = args?.createdAt || new Date()
+  const fileId = args?.fileId
   return {
-    ...CharImage(),
-    tag: undefined,
-    workspaceId: "",
-    parentId: undefined,
-    ...args,
+    id,
+    name,
+    data,
+    workspaceId,
+    parentId,
+    tagId,
+    fileId,
+    createdAt,
   }
 }
 

@@ -6,13 +6,14 @@ CREATE TABLE workspaces (
     created_at timestamp NOT NULL
 );
 
-CREATE TABLE workspace_images ( 
-    image_id text NOT NULL,
-    workspace_id text NOT NULL,
-    tag text,
+CREATE TABLE images ( 
+    id text NOT NULL,
+    name text NOT NULL,
+    workspace_id text,
+    tag_id text,
     parent_id text,
-    created_at timestamp NOT NULL,
-    UNIQUE(workspace_id, image_id)
+    file_id text,
+    created_at timestamp NOT NULL
 );
 
 CREATE TABLE lines ( 
