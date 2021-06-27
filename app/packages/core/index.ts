@@ -1,9 +1,8 @@
 export { ErrorKind } from "./error";
 import { Workspace } from "./workspace";
 import { Image } from "@sivic/core/image"
-import { Box } from "@charpoints/core/box"
+import { Box } from "@sivic/core/box"
 import { Point } from "@charpoints/core/point"
-import { Box as CharBox } from "@charpoints/core/box"
 import { CropPayload } from "@charpoints/core/transform"
 import { Line } from "@sivic/core/line";
 
@@ -34,7 +33,8 @@ export type DetectStore = {
 
 export type BoxStore = {
   filter: (payload: {imageId?: string;}) => Promise<Box[] | Error>;
-  replace: (payload: {imageId: string, boxes:Box[]}) => Promise<void | Error>;
+  load: (payload: Box[]) => Promise<void | Error>;
+  delete: (payload: {imageId?: string}) => Promise<void | Error>;
 };
 
 export type PointStore = {

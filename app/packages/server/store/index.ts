@@ -24,7 +24,7 @@ export const Store = (args: {
   };
   const workspace = WorkspaceStore(sql);
   const image = ImageStore(sql)
-  const box = BoxStore(imageApi,sql)
+  const box = BoxStore(sql)
   const point = PointStore(imageApi,sql)
   const transform = TransformStore(imageApi,sql)
   const detect = DetectStore(args.detectUrl)

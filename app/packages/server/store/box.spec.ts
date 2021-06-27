@@ -11,26 +11,20 @@ afterAll(async () => {
 });
 
 describe("box", () => {
-  const imageStore = rootStore.image;
   const boxStore = rootStore.box;
-  let row = Image({
-    id: uuid(),
-    workspaceId: uuid(),
-  })
-  const box = Box({x0: 30, y0: 30, x1: 80, y1: 80, confidence: 0.9})
+  const imageId = uuid()
+  const box = Box({x0: 30, y0: 30, x1: 80, y1: 80, imageId})
   const valErr = box.validate() 
-  beforeAll(async () => {
-    const buf = await fs.promises.readFile("/srv/package.json");
-    row.data = buf.toString("base64");
-  });
-  afterAll(async () => {
-    await imageStore.delete({id: row.id});
-  });
-  test("replace and filter", async () => {
-    let img = await imageStore.insert(row)
-    if(img instanceof Error) { throw img }
-    let b = await boxStore.replace({boxes:[box], imageId: row.id})
-    if(b instanceof Error) { throw b }
-    const err = await boxStore.filter({imageId: row.id})
+  test("load and delete", async () => {
+    let err = await boxStore.load([box])
+    if(err instanceof Error) { throw err }
+    let savedRows = await boxStore.filter({imageId})
+    if(savedRows instanceof Error) { throw savedRows }
+    expect(JSON.stringify([box])).toBe(JSON.stringify(savedRows))
+    err = await boxStore.delete({imageId})
+    if(err instanceof Error) { throw err }
+    savedRows = await boxStore.filter({imageId})
+    if(savedRows instanceof Error) { throw savedRows }
+    expect(savedRows.length).toBe(0)
   });
 });

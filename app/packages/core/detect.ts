@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, ErrorKind, Store } from ".";
 import { uniq } from "lodash"
-import { Box } from "@charpoints/core/box"
+import { Box } from "@sivic/core/box"
 
 export type DetectPayload = {
   data: string; //base64

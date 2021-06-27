@@ -1,27 +1,85 @@
 import { Row, Sql } from "postgres";
-import { Box } from "@charpoints/core/box";
+import { Box } from "@sivic/core/box";
 import { BoxStore } from "@sivic/core";
-import { RootApi as ImageApi } from "@charpoints/api"
+
+
+const TABLE = "boxes"
+const COLUMNS = [
+  "id", 
+  "x0",
+  "y0",
+  "x1",
+  "y1",
+  "image_id", 
+  "tag_id", 
+] as const
 
 export const Store = (
-  imageApi: ImageApi,
   sql: Sql<any>
 ): BoxStore => {
+  const to = (r: Row) => {
+    return Box({
+      id: r.id,
+      x0: r.x0,
+      y0: r.y0,
+      x1: r.x1,
+      y1: r.y1,
+      imageId: r.image_id || undefined,
+      tagId: r.tag_id || undefined,
+    });
+  };
+
+  const from = (r: Box): Row => {
+    return {
+      id: r.id,
+      x0: r.x0,
+      y0: r.y0,
+      x1: r.x1,
+      y1: r.y1,
+      tag_id: r.tagId || null,
+      image_id: r.imageId || null,
+    };
+  };
+
   const filter = async (payload: {
     imageId?: string;
   }) => {
-    return await imageApi.box.filter(payload)
+    try{
+      const { imageId } = payload
+      const rows = await(async () => {
+        if(imageId !== undefined){
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE image_id = ${imageId}`
+        }
+        return []
+      })()
+      return rows.map(to)
+    }catch(e){
+      return e
+    }
   };
 
-  const replace = async (payload: {imageId: string, boxes: Box[]}) => {
-    const res = await imageApi.box.replace({imageId: payload.imageId, boxes: payload.boxes})
-    if (res instanceof Error) {
-      return res
+  const load = async (payload:  Box[]) => {
+    try {
+      await sql`INSERT INTO ${sql(TABLE)} ${sql(payload.map(from), ...COLUMNS)}`
+    }catch(e){
+      return e
+    }
+  };
+
+  const delete_ = async (payload: {imageId?: string}) => {
+    const { imageId } = payload
+    try {
+      if(imageId !== undefined) { 
+        await sql`DELETE FROM ${sql(TABLE)} WHERE image_id = ${imageId}`
+      }
+    }catch(e) {
+      return e
     }
   };
 
   return {
     filter,
-    replace,
+    load,
+    delete: delete_,
   };
 };
