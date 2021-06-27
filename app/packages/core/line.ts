@@ -6,21 +6,34 @@ import { Service as ImageService, Image } from "@sivic/core/image"
 
 export type Line = {
   id: string
-  imageId: string;
+  imageId?: string;
   x0: number;
   y0: number;
   x1: number;
   y1: number;
 }
-export const Line  = (args?:object) => {
+
+export const Line  = (args?:{
+  id?:string,
+  x0?:number,
+  y0?:number,
+  x1?:number,
+  y1?:number,
+  imageId?:string,
+}) => {
+  const id = args?.id || uuid()
+  const x0 = args?.x0 || 0
+  const y0 = args?.y0 || 0
+  const x1 = args?.x1 || 0
+  const y1 = args?.y1 || 0
+  const imageId = args?.imageId || undefined
   return {
-    id: uuid(),
-    imageId: "",
-    x0: 0,
-    y0: 0,
-    x1: 0,
-    y1: 0,
-    ...args,
+    id,
+    x0,
+    y0,
+    x1,
+    y1,
+    imageId,
   }
 }
 
