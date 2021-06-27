@@ -26,6 +26,13 @@ CREATE TABLE boxes (
     tag_id text
 );
 
+CREATE TABLE points ( 
+    id text NOT NULL,
+    x double precision NOT NULL,
+    y double precision NOT NULL,
+    image_id text
+);
+
 CREATE TABLE lines ( 
     id text NOT NULL PRIMARY KEY,
     image_id text,
