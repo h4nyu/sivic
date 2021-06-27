@@ -23,7 +23,7 @@ export const Store = (args: {
     await sql.end({ timeout: 5 });
   };
   const workspace = WorkspaceStore(sql);
-  const image = ImageStore(imageApi, sql)
+  const image = ImageStore(sql)
   const box = BoxStore(imageApi,sql)
   const point = PointStore(imageApi,sql)
   const transform = TransformStore(imageApi,sql)

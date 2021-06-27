@@ -18,12 +18,11 @@ const COLUMNS = [
   "created_at",
 ] as const
 export const Store = (
-  imageApi: ImageApi,
   sql: Sql<any>,
 ): ImageStore => {
   const to = (r: Row) => {
     return Image({
-      id: r.image_id,
+      id: r.id,
       name: r.name,
       workspaceId: r.workspace_id || undefined,
       tagId: r.tag_id || undefined,
@@ -47,17 +46,12 @@ export const Store = (
 
   const find = async (payload: {
     id: string;
-    hasData?:boolean,
   }): Promise<Image | Error> => {
-    let image = await imageApi.image.find(payload)
-    if(image instanceof Error) { return image }
-    const rows = await sql`SELECT * FROM ${sql(TABLE)} WHERE image_id = ${image.id} LIMIT 1`
+    const { id } = payload
+    const rows = await sql`SELECT * FROM ${sql(TABLE)} WHERE id = ${id} LIMIT 1`
     const row = first(rows.map(to))
     if(row === undefined) { return new Error(ErrorKind.ImageNotFound)}
-    return Image({
-      ...image,
-      ...row,
-    })
+    return row
   };
   const filter = async (payload: {
     ids?: string[],
@@ -67,7 +61,7 @@ export const Store = (
     try{
       const rows =  await (async () =>{
         if(payload.ids !== undefined && payload.ids.length > 0) {
-          return await sql`SELECT * FROM ${sql(TABLE)} WHERE image_id IN (${payload.ids})`
+          return await sql`SELECT * FROM ${sql(TABLE)} WHERE id IN (${payload.ids})`
         } else if(payload.workspaceId !== undefined && payload.parentId !== undefined) {
           return await sql`SELECT * FROM ${sql(TABLE)} WHERE workspace_id = ${payload.workspaceId} AND parent_id = ${payload.parentId}`
         } else if(payload.workspaceId !== undefined) {
@@ -93,19 +87,16 @@ export const Store = (
 
   const update = async (payload:Image): Promise<void | Error> => {
     try {
-      await sql`UPDATE ${sql(TABLE)} SET ${sql(from(payload), ...COLUMNS)} WHERE image_id = ${payload.id}`
-      const err = await imageApi.image.update(payload)
-      if(err instanceof Error) {return err}
+      await sql`UPDATE ${sql(TABLE)} SET ${sql(from(payload), ...COLUMNS)} WHERE id = ${payload.id}`
     }catch(e) {
       return e
     }
   };
 
   const delete_ = async (payload:{id:string}): Promise<void | Error> => {
-    let err = await imageApi.image.delete(payload)
-    if(err instanceof Error) { return err }
+    const { id } = payload
     try {
-      await sql`DELETE FROM ${sql(TABLE)} WHERE image_id = ${payload.id} OR parent_id = ${payload.id}`
+      await sql`DELETE FROM ${sql(TABLE)} WHERE id = ${id} OR parent_id = ${id}`
     }catch(e) {
       return e
     }
