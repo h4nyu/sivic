@@ -3,7 +3,7 @@ import { Workspace } from "./workspace";
 import { Image } from "@sivic/core/image"
 import { Box } from "@sivic/core/box"
 import { Point } from "@sivic/core/point"
-import { CropPayload } from "@charpoints/core/transform"
+import { CropPayload } from "@sivic/core/transform"
 import { Line } from "@sivic/core/line";
 
 export type WorkspaceStore = {

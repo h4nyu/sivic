@@ -1,9 +1,17 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, Store, ErrorKind } from "@sivic/core"
-import { CropPayload } from "@charpoints/core/transform"
 import { Workspace } from "@sivic/core/workspace"
-export { CropPayload } from "@charpoints/core/transform"
 import { Service as WorkspaceService } from "@sivic/core/workspace"
+
+export type CropPayload = {
+  imageData: string,
+  box:{
+    x0:number,
+    y0:number,
+    x1:number,
+    y1:number,
+  }
+};
 
 export type Service = {
   crop: (payload:CropPayload) => Promise<string | Error>;

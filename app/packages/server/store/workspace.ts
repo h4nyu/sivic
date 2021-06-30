@@ -40,8 +40,8 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
       if (row === undefined) {
         return;
       }
-      const workspaceImages = await sql`SELECT * FROM workspace_images WHERE workspace_id = ${row.id}`
-      row.imageIds = workspaceImages.map(x => x.image_id)
+      const workspaceImages = await sql`SELECT * FROM images WHERE workspace_id = ${row.id}`
+      row.imageIds = workspaceImages.map(x => x.id)
       return row;
     } catch (err) {
       return err;
@@ -71,7 +71,7 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
       }
       const workspaces = rows.map(to)
       const workspaceIds = workspaces.map(x => x.id)
-      const workspaceImages = await sql`SELECT * FROM workspace_images WHERE workspace_id IN (${workspaceIds})`
+      const workspaceImages = await sql`SELECT * FROM images WHERE workspace_id IN (${workspaceIds})`
       for(const workspace of workspaces){
         workspace.imageIds = workspaceImages.filter(x => x.workspace_id === workspace.id).map(x => x.image_id)
       }

@@ -17,7 +17,7 @@ export const Point = (args?: {
   imageId?: string,
 }): Point => {
   const id = args?.id || uuid()
-  const imageId = args?.imageId || undefined
+  const imageId = args?.imageId
   const x = args?.x || 0
   const y = args?.y || 0
   const equals = (other: Point): boolean => {

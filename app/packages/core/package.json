@@ -12,7 +12,6 @@
     "test": "yarn clean && jest --collectCoverage"
   },
   "dependencies": {
-    "@charpoints/core": "^0.1.7",
     "dayjs": "^1.9.4",
     "lodash": "^4.17.20",
     "uuid": "^8.3.1"

@@ -1,7 +1,5 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, Store, ErrorKind } from "@sivic/core"
-import { Image as CharImage } from "@charpoints/core/image"
-import { Box as CharBox } from "@charpoints/core/box"
 import { Workspace } from "@sivic/core/workspace"
 import { Service as WorkspaceService } from "@sivic/core/workspace"
 

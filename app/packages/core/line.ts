@@ -1,7 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, ErrorKind, Store } from ".";
 import { uniq } from "lodash"
-import { Box } from "@charpoints/core/box"
 import { Service as ImageService, Image } from "@sivic/core/image"
 
 export type Line = {

@@ -1,7 +1,6 @@
 import { Row, Sql } from "postgres";
 import { Point } from "@sivic/core/point";
 import { PointStore } from "@sivic/core";
-import { RootApi as ImageApi } from "@charpoints/api"
 
 const TABLE = "points"
 const COLUMNS = [

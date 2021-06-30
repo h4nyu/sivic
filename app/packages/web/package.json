@@ -31,9 +31,6 @@
     "webpack-cli": "^4.1.0"
   },
   "dependencies": {
-    "@charpoints/api": "^0.1.0",
-    "@charpoints/core": "^0.1.0",
-    "@charpoints/web": "^0.1.0",
     "@creativebulma/bulma-divider": "^1.1.0",
     "bulma": "^0.9.1",
     "date-fns": "^2.16.1",

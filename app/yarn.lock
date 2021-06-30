@@ -1106,43 +1106,6 @@
   resolved "http://192.168.10.12:4080/@bcoe%2fv8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@charpoints/api@^0.1.0":
-  version "0.1.9"
-  resolved "http://192.168.10.12:4080/@charpoints%2fapi/-/api-0.1.9.tgz#791d57385bbb188338ecf2310039cb7f49d20584"
-  integrity sha512-x+7NNw5vhg7b23dwFopDWDSciZrtruTibjlALQdiD2l7UYvpmOeK9ApDXoR7CzSxkwdg4DukgGxaZnMkHJfcXw==
-  dependencies:
-    "@charpoints/core" "^0.1.0"
-    axios "^0.21.0"
-
-"@charpoints/core@^0.1.0", "@charpoints/core@^0.1.7":
-  version "0.1.9"
-  resolved "http://192.168.10.12:4080/@charpoints%2fcore/-/core-0.1.9.tgz#f05f11cce9810679c81e7951df9d9ec568c340b0"
-  integrity sha512-iWxoV9ynE7Z/Xk/Fj5pifbieb2oe+sia/pA2ue3KN8Di65fuT9Sy3H8lylJ+ZwFXqhsoBkl26Q5xXo72+TKHag==
-  dependencies:
-    lodash "^4.17.20"
-    uuid "^8.3.1"
-
-"@charpoints/web@^0.1.0":
-  version "0.1.9"
-  resolved "http://192.168.10.12:4080/@charpoints%2fweb/-/web-0.1.9.tgz#6183e3d07a56634e9c97443d7603434760e85995"
-  integrity sha512-rTfhDv5/t2onXm1/GoR5pSlLuIo1rsEtl1oamQ6uaiVb/5UJluK9XQ3IVsjzWGmk/DhkqrBx8x/8KiOiUZud6w==
-  dependencies:
-    "@charpoints/api" "^0.1.0"
-    "@charpoints/core" "^0.1.0"
-    "@creativebulma/bulma-divider" "^1.1.0"
-    bulma "^0.9.1"
-    date-fns "^2.16.1"
-    file-saver "^2.0.5"
-    immutable "^4.0.0-rc.12"
-    mobx "^6.0.4"
-    mobx-react-lite "^3.1.6"
-    react "^17.0.1"
-    react-dom "^17.0.1"
-    react-dropzone "^11.2.0"
-    react-router-dom "^5.2.0"
-    react-toastify "^7.0.3"
-    styled-components "^5.2.1"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "http://192.168.10.12:4080/@cnakazawa%2fwatch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -11257,7 +11220,7 @@ react-textarea-autosize@^8.3.0:
     use-composed-ref "^1.0.0"
     use-latest "^1.0.0"
 
-react-toastify@^7.0.2, react-toastify@^7.0.3:
+react-toastify@^7.0.2:
   version "7.0.4"
   resolved "http://192.168.10.12:4080/react-toastify/-/react-toastify-7.0.4.tgz#7d0b743f2b96f65754264ca6eae31911a82378db"
   integrity sha512-Rol7+Cn39hZp5hQ/k6CbMNE2CKYV9E5OQdC/hBLtIQU2xz7DdAm7xil4NITQTHR6zEbE5RVFbpgSwTD7xRGLeQ==
