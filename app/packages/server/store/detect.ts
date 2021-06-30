@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { zip } from "lodash"
-import { Box } from "@charpoints/core/box";
+import { Box } from "@sivic/core/box";
 import { DetectStore } from "@sivic/core";
 import { Row, Sql } from "postgres";
 
@@ -20,7 +20,6 @@ export const Store = (url: string): DetectStore => {
           y0:c[0][1],
           x1:c[0][2],
           y1:c[0][3],
-          confidence: c[1],
         })
       })
     }catch(e) {

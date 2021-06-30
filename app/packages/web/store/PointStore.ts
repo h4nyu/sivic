@@ -1,5 +1,4 @@
 import { observable, computed } from "mobx";
-import { Point } from "@charpoints/core/point";
 import { Map, List } from "immutable";
 import { Images } from ".";
 import { ToastStore } from "./toast";
@@ -8,7 +7,7 @@ import { RootApi } from "@sivic/api";
 import {
   FilterPayload,
 } from "@sivic/core/point";
-import { saveAs } from 'file-saver';
+import { Point } from "@sivic/core/point"
 import { keyBy } from "lodash";
 
 export type PointStore = {

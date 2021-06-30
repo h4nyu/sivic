@@ -2,7 +2,7 @@ import { observable } from "mobx";
 import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
-import { Point } from "@charpoints/core/point";
+import { Point } from "@sivic/core/point";
 import { Map, Set } from "immutable";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";

@@ -5,7 +5,6 @@ import { Store as DetectStore } from "./detect"
 import { Store as BoxStore } from "./box"
 import { Store as PointStore } from "./point"
 import { Store as TransformStore } from "./transform"
-import { RootApi as ImageApi } from "@charpoints/api"
 import { Store as LineStore } from "./line"
 
 export const Store = (args: { 
@@ -17,8 +16,6 @@ export const Store = (args: {
   const sql = postgres(args.url, {
     max: args.max || 5,
   });
-  const imageApi = ImageApi()
-  imageApi.setUrl(args.imageUrl)
   const close = async () => {
     await sql.end({ timeout: 5 });
   };
@@ -26,7 +23,7 @@ export const Store = (args: {
   const image = ImageStore(sql)
   const box = BoxStore(sql)
   const point = PointStore(sql)
-  const transform = TransformStore(imageApi,sql)
+  const transform = TransformStore()
   const detect = DetectStore(args.detectUrl)
   const line = LineStore(sql)
   return {

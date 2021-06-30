@@ -1,30 +1,27 @@
-import { Row, Sql } from "postgres";
-import { first, keyBy } from "lodash";
+import sharp from "sharp";
+import { CropFn } from '@sivic/core/transform'
+import { floor } from "lodash";
 
-import { ErrorKind } from '@sivic/core'
-import { CropPayload } from "@sivic/core/transform";
-import { Point } from "@charpoints/core/point"
-import { TransformStore } from "@sivic/core";
-import { RootApi as ImageApi } from "@charpoints/api"
-
-export const Store = (
-  imageApi: ImageApi,
-  sql: Sql<any>,
-): TransformStore => {
-  const crop = async (payload:CropPayload): Promise<string | Error> => {
-    try{
-      let image = await imageApi.transform.crop({
-        box: payload.box,
-        imageData: payload.imageData,
-      })
-      if(image instanceof Error) { return image }
-      return image
-    }catch(e) {
-      return e
-    }
-  };
-
+export const crop:CropFn = async ({imageData, box}) => {
+  try{
+    const x0 = floor(box.x0)
+    const x1 = floor(box.x1)
+    const y0 = floor(box.y0)
+    const y1 = floor(box.y1)
+    const width = x1 - x0
+    const height = y1 - y0
+    const buf = await sharp(Buffer.from(imageData, "base64"))
+      .extract({ width, height, left: x0, top: y0 })
+      .resize(width, height)
+      .toBuffer();
+    return buf.toString("base64")
+  }catch(e){
+    return e
+  }
+}
+export const Store = () => {
   return {
-    crop,
-  };
-};
+    crop
+  }
+}
+export default Store

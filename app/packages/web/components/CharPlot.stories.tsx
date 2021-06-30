@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "./CharPlot";
 import store from "../store";
-import { Image, Box, Point } from "@charpoints/web/store";
+import { Box } from "@sivic/core/box"
 import { Map } from "immutable";
 import annot from "/srv/data/annto.json";
 

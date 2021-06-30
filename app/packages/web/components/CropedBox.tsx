@@ -1,5 +1,5 @@
 import React, {useRef, useState, RefObject} from 'react';
-import { Points, Box, Boxes, InputMode } from "@charpoints/web/store";
+import { Box } from "@sivic/core/box"
 
 export default function(props:{
   box: Box,

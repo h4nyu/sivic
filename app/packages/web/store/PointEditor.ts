@@ -3,8 +3,8 @@ import { Map, List } from "immutable";
 import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
-import { Point } from "@charpoints/core/point";
-import { Box } from "@charpoints/core/box";
+import { Point } from "@sivic/core/point";
+import { Box } from "@sivic/core/box";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
 import { rotatePoint, getBaseline, Line } from "@sivic/core/utils"; import { Image } from "@sivic/core/image"

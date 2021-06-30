@@ -2,10 +2,10 @@ import React from "react";
 import ImageView from "./ImageView";
 import { action } from "@storybook/addon-actions";
 import { boolean } from "@storybook/addon-knobs";
-import { Image } from "@charpoints/core/image";
+import { Image } from "@sivic/core/image";
 
 // @ts-ignore
-import imageData from "@charpoints/web/data/imageData.txt" 
+import imageData from "@sivic/web/data/imageData.txt" 
 
 export default {
   title: "ImageView",

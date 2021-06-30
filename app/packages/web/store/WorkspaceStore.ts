@@ -12,7 +12,6 @@ import { MemoryRouter } from "react-router";
 import { keyBy } from "lodash";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
-import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { ImageForm } from "@sivic/web/store/ImageForm"
 
 export type WorkspaceStore = {

@@ -11,6 +11,7 @@ export type Box = {
   y1: number;
   tagId? :string,
   imageId?: string,
+  validate: () => void | Error;
 }
 export const Box = (args?:{
   id?: string,
@@ -28,7 +29,12 @@ export const Box = (args?:{
   const y1 = args?.y1 || 0
   const imageId = args?.imageId
   const tagId = args?.tagId
-  return {
+  const validate = () => {
+    if (self.x0 >= self.x1 || self.y0 >= self.y1) {
+      return new Error(ErrorKind.ZeroSizeBox);
+    }
+  }
+  const self = {
     id,
     x0,
     y0,
@@ -36,7 +42,9 @@ export const Box = (args?:{
     y1,
     imageId,
     tagId,
+    validate,
   }
+  return self
 }
 
 export type FilterPayload = {

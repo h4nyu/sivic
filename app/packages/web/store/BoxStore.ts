@@ -1,5 +1,5 @@
 import { observable, computed } from "mobx";
-import { Box } from "@charpoints/core/box";
+import { Box } from "@sivic/core/box";
 import { Map, List } from "immutable";
 import { Images } from ".";
 import { ToastStore } from "./toast";

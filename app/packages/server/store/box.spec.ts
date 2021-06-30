@@ -1,7 +1,7 @@
 import { Store } from "@sivic/server"; 
 import fs from "fs"; 
 import { v4 as uuid } from "uuid";
-import { Box } from "@charpoints/core/box";
+import { Box } from "@sivic/core/box";
 import { Image, ImageTag } from "@sivic/core/image";
 
 const rootStore = Store();

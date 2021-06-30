@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Map } from "immutable";
-import FileUpload from "@charpoints/web/components/FileUpload";
 import store from "@sivic/web/store";
 
 const Content = observer(() => {

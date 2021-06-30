@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "./SvgCharPlot";
-import { Box, Boxes, InputMode } from "@charpoints/web/store";
-import { Point } from "@charpoints/core/point";
+import { Box } from "@sivic/core/box";
+import { Point } from "@sivic/core/point";
 import { Map } from "immutable";
 import annot from "/srv/data/annto.json";
 import {UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';

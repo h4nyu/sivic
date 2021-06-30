@@ -1,6 +1,6 @@
 import React, { RefObject, useRef, useEffect, useState } from "react";
-import { Points, Box, Boxes, InputMode } from "@charpoints/web/store";
 import { Map, List } from "immutable";
+import { Box } from "@sivic/core/box"
 
 export const SvgCharPlot = (props: {
   data?: string;

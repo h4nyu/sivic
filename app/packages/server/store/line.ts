@@ -1,6 +1,5 @@
 import { Row, Sql } from "postgres";
 import { Line } from "@sivic/core/line";
-import { RootApi as ImageApi } from "@charpoints/api"
 
 const COLUMNS = [
   "id", 

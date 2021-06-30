@@ -1,6 +1,6 @@
 import React, { RefObject, useRef, useEffect, useState } from "react";
-import { Box } from "@charpoints/core/box";
-import { Point } from "@charpoints/core/point";
+import { Box } from "@sivic/core/box";
+import { Point } from "@sivic/core/point";
 import { InputMode } from "@sivic/web/store/BoxEditor"
 import { InputMode as PointMode } from "@sivic/web/store/PointEditor"
 import { Line } from "@sivic/core/utils";
@@ -95,14 +95,6 @@ export const SvgCharPlot = (props: {
 
       {boxes?.map((b, i) => (
         <g key={i}>
-          <text
-            x={b.x0 * scale}
-            y={b.y0 * scale + pointSize * 4}
-            fontSize={pointSize * 4}
-            fill={selectedId === i ? "green" : "red"}
-          >
-            {b.label}
-          </text>
           <rect
             x={b.x0 * scale }
             y={b.y0 * scale }

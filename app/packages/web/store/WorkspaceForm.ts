@@ -11,7 +11,6 @@ import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
-import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
 import { ImageForm } from "@sivic/web/store/ImageForm"
 import { ImageStore } from "@sivic/web/store/ImageStore"
 import { BoxStore } from "@sivic/web/store/BoxStore"

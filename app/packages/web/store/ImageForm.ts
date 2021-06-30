@@ -10,7 +10,7 @@ import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map, find } from "lodash";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
-import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
+import { readAsBase64, b64toBlob } from "@sivic/web/utils";
 import { Image, ImageTag } from "@sivic/core/image";
 import { ErrorKind } from "@sivic/core";
 import ImageStore from "@sivic/web/store/ImageStore"

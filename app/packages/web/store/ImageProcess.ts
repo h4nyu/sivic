@@ -5,7 +5,6 @@ import { Workspaces } from ".";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
-import { RootApi as ImageApi } from "@charpoints/api";
 import { Workspace } from "@sivic/core/workspace";
 import { Image } from "@sivic/core/image"
 import { saveAs } from 'file-saver';
@@ -13,8 +12,7 @@ import { MemoryRouter } from "react-router";
 import { take, flow, sortBy, map } from "lodash/fp";
 import { parseISO } from "date-fns";
 import { Level } from "@sivic/web/store"
-import { readAsBase64, b64toBlob } from "@charpoints/web/utils";
-import { Box } from "@charpoints/web/store";
+import { Box } from "@sivic/core/box";
 import Editor from "@sivic/web/store/BoxEditor"
 import ImageStore from "@sivic/web/store/ImageStore"
 

@@ -4,7 +4,7 @@ import { Router, Switch, Route } from "react-router-dom";
 import { createHashHistory } from "history";
 import { Image } from "@sivic/core/image";
 import { Map } from "immutable"
-import { Box } from "@charpoints/core/box"
+import { Box } from "@sivic/core/box"
 import { v4 as uuid } from "uuid"
 import store from "@sivic/web/store"
 import annot from "/srv/data/annto.json";

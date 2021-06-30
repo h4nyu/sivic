@@ -1,8 +1,4 @@
-import { v4 as uuid } from 'uuid';
-import { Lock, Store, ErrorKind } from "@sivic/core"
-import { Workspace } from "@sivic/core/workspace"
-import { Service as WorkspaceService } from "@sivic/core/workspace"
-
+import { Store, ErrorKind, Lock } from "@sivic/core";
 export type CropPayload = {
   imageData: string,
   box:{
@@ -12,26 +8,20 @@ export type CropPayload = {
     y1:number,
   }
 };
+export type CropFn = (payload: CropPayload) => Promise<string | Error>
 
 export type Service = {
-  crop: (payload:CropPayload) => Promise<string | Error>;
+  crop: CropFn
 };
-
-export const Service = (args: { store: Store; lock: Lock }): Service => {
-  const { store, lock } = args;
-  const services = {
-    workspace: WorkspaceService(args)
+export const Service = (args: {
+  store: Store,
+  lock: Lock,
+}):Service => {
+  const { store } = args;
+  const crop = async (payload:CropPayload) => {
+    return store.transform.crop(payload)
   }
-
-  const crop = async (payload: CropPayload) => {
-    return await lock.auto(async () => {
-      let image = await store.transform.crop(payload);
-      if (image instanceof Error) { return image; }
-      return image
-    });
-  };
-
   return {
-    crop,
-  };
-};
+    crop
+  }
+}

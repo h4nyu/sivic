@@ -3,9 +3,7 @@ import { first, keyBy } from "lodash";
 
 import { ErrorKind } from '@sivic/core'
 import { Image } from "@sivic/core/image";
-import { Box as CharBox } from "@charpoints/core/box"
 import { ImageStore } from "@sivic/core";
-import { RootApi as ImageApi } from "@charpoints/api"
 
 const TABLE = "images"
 
