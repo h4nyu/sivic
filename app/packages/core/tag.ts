@@ -6,6 +6,14 @@ export type Tag = {
   workspaceId?: string,
 }
 
+export type FilterPayload = {
+  workspaceId?: string;
+};
+
+export type DeletePayload = {
+  id: string;
+};
+
 export const Tag = (args?: {
   id?:string;
   name?: string;
@@ -20,4 +28,3 @@ export const Tag = (args?: {
     workspaceId
   }
 }
-
