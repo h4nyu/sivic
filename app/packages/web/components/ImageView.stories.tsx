@@ -5,7 +5,7 @@ import { boolean } from "@storybook/addon-knobs";
 import { Image } from "@sivic/core/image";
 
 // @ts-ignore
-import imageData from "@sivic/web/data/imageData.txt" 
+import { data as imageData } from "@sivic/web/data/image.json" 
 
 export default {
   title: "ImageView",

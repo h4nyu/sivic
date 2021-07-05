@@ -7,7 +7,7 @@ import { Workspace } from "@sivic/core/workspace";
 import { range } from "lodash";
 
 // @ts-ignore
-import imageData from "@charpoints/web/data/imageData.txt" 
+import { data as imageData } from "@sivic/web/data/image.json" 
 
 const workspace = Workspace({
   name: "WorkspaceName"
