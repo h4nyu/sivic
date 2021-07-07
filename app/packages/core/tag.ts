@@ -6,12 +6,24 @@ export type Tag = {
   workspaceId?: string,
 }
 
+export type CreatePayload = {
+  id: string;
+  name: string;
+  workspaceId?: string;
+};
+
 export type FilterPayload = {
   workspaceId?: string;
 };
 
 export type DeletePayload = {
   id: string;
+};
+
+export type Service = {
+  create: (payload: CreatePayload) => Promise<Tag | Error>;
+  filter: (payload: FilterPayload) => Promise<Tag[] | Error>;
+  delete: (payload: DeletePayload) => Promise<string | Error>;
 };
 
 export const Tag = (args?: {
