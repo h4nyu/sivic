@@ -19,9 +19,9 @@ export const LineStore = (args: {
 }): LineStore => {
   const { api } = args;
   const fetch = async (payload:FilterPayload) => {
-    // const lines = await api.line.filter(payload)
-    // if(lines instanceof Error) { return }
-    // self.lines = self.lines.merge(Map(keyBy(lines, x => x.id)))
+    const tags = await api.tag.filter(payload)
+    if(tags instanceof Error) { return }
+    self.tags = self.tags.merge(Map(keyBy(tags, x => x.id)))
   }
   const self = observable({
     tags: Map<string, Tag>(),

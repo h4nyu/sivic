@@ -1,6 +1,7 @@
 import {
-  rotatePoint, getBaseline, Point
+  rotatePoint, getBaseline
 } from "@sivic/core/utils";
+import { Point } from "@sivic/core/point"
 
 describe("spec", () => {
   test("getBaseline", async () => {
