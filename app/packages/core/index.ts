@@ -7,7 +7,10 @@ import { CropPayload } from "@sivic/core/transform"
 import { Line } from "@sivic/core/line";
 
 export type WorkspaceStore = {
-  find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
+  find: (payload: {
+    id? :string,
+    name?: string,
+  }) => Promise<Workspace | undefined | Error>;
   filter: (payload: {
     ids?: string[];
   }) => Promise<Workspace[] | Error>;

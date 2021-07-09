@@ -41,13 +41,21 @@ export type DeleteImagePayload = {
   imageId: string;
 };
 
-export const Workspace = (args?: object):Workspace => {
+export const Workspace = (args?: {
+  id?: string,
+  name?: string,
+  imageIds?:string[],
+  createdAt?: Date,
+}):Workspace => {
+  const id = args?.id ?? uuid()
+  const name = args?.name ?? ""
+  const imageIds = args?.imageIds ?? []
+  const createdAt = args?.createdAt ?? new Date()
   return {
-    id: uuid(),
-    name: "",
-    imageIds:[],
-    createdAt: new Date(),
-    ...args,
+    id,
+    name,
+    imageIds,
+    createdAt,
   }
 }
 
@@ -80,46 +88,41 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
     if(ctx instanceof Error) { return ctx }
     return ctx.workspace
   };
+  const checkUniq = async (workspace: Workspace):Promise<void | Error> => {
+    const row = await store.workspace.find({name: workspace.name})
+    if(row instanceof Error) { return row }
+    if(row?.id !== workspace.id && row?.name === workspace.name ){
+      return new Error(ErrorKind.WorkspaceAlreadyExist)
+    }
+  }
 
   const create = async (payload: CreatePayload) => {
     return await lock.auto(async () => {
       const { name, id } = payload;
-      const row = Workspace()
-      row.id = id || row.id
-      row.name = name
-      const prev = await store.workspace.find({id: row.id});
-
-      if(prev instanceof Error) {return prev}
-      if(prev !== undefined) {
-        return new Error(ErrorKind.WorkspaceAlreadyExist)
-      }
-
-      let err = await store.workspace.insert(row);
+      const workspace = Workspace(payload)
+      const uniqErr = await checkUniq(workspace)
+      if(uniqErr instanceof Error) { return uniqErr }
+      let err = await store.workspace.insert(workspace);
       if (err instanceof Error) {
         return err;
       }
-      return row;
+      return workspace;
     });
   };
 
   const update = async (payload: UpdatePayload) => {
     return await lock.auto(async () => {
       const { name, id } = payload;
-      const row = Workspace()
-      row.id = id
-      row.name = name
-      const prev = await store.workspace.find({id: row.id});
-
-      if(prev instanceof Error) {return prev}
-      if(prev == undefined) {
-        return new Error(ErrorKind.WorkspaceNotFound)
-      }
-
-      let err = await store.workspace.update(row);
+      const workspace = await find({id: payload.id})
+      if(workspace instanceof Error) {return workspace}
+      workspace.name = payload.name
+      const uniqErr = await checkUniq(workspace)
+      if(uniqErr instanceof Error) { return uniqErr }
+      let err = await store.workspace.update(workspace);
       if (err instanceof Error) {
         return err;
       }
-      return row;
+      return workspace;
     });
   };
 
