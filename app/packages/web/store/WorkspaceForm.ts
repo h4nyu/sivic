@@ -20,7 +20,7 @@ export type WorkspaceFrom = {
   id: string,
   name: string,
   imageForm: ImageForm,
-  rootImages: Map<string, Image>,
+  rootImages: Image[],
   create: () => void;
   update: (id:string) => void;
   setName: (value:string) => void;
@@ -68,8 +68,7 @@ export const WorkspaceFrom = (args: {
   }
 
   const getRootImages = () => {
-    return imageStore.images
-    .filter(x => x.workspaceId === self.id && x.parentId === undefined)
+    return imageStore.images.toList().filter(x => x.workspaceId === self.id && x.parentId === undefined).toJS()
   }
 
   const setName = (value:string) => {

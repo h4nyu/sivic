@@ -5,6 +5,7 @@ import { Box } from "@sivic/core/box"
 import { Point } from "@sivic/core/point"
 import { CropPayload } from "@sivic/core/transform"
 import { Line } from "@sivic/core/line";
+import { File } from "@sivic/core/file"
 
 export type WorkspaceStore = {
   find: (payload: {
@@ -52,6 +53,12 @@ export type LineStore = {
   load: (payload: Line[]) => Promise<void | Error>;
 };
 
+export type FileStore = {
+  create: (payload: File) => Promise<File | Error>;
+  find: (payload: {id?: string;}) => Promise<File | undefined | Error>;
+  delete: (payload: {id?: string}) => Promise<void | Error>
+};
+
 export type TransformStore = {
   crop: (payload: CropPayload) => Promise<string | Error>;
 };
@@ -68,4 +75,5 @@ export type Store = {
   box:BoxStore,
   point: PointStore,
   line: LineStore,
+  file: FileStore,
 }

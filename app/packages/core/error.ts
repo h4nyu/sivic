@@ -3,4 +3,5 @@ export enum ErrorKind {
   WorkspaceNotFound = "WorkspaceNotFound",
   ImageNotFound = "ImageNotFound",
   ZeroSizeBox = "ZeroSizeBox",
+  FileNotFound="FileNotFound",
 }
