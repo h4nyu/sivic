@@ -1,19 +1,23 @@
 import {
-  rotatePoint, getBaseline, Point
+  rotatePoint, getBaseline
 } from "@sivic/core/utils";
+import { Point } from "@sivic/core/point"
 
 describe("spec", () => {
   test("getBaseline", async () => {
     const points = [
-      {...Point(), x:0, y:0},
-      {...Point(), x:2, y:2},
-      {...Point(), x:5, y:5}
+      Point({x:0, y:0}), 
+      Point({x:2, y:2}), 
+      Point({x:5, y:5}),
     ]
     const baseline = getBaseline(points)
-    console.log(baseline)
     expect(baseline).toEqual([
-      {...Point(), x:0, y:0},
-      {...Point(), x:5, y:5}
+      Point({
+        x:0, y:0
+      }),
+      Point({
+        x:5, y:5
+      })
     ])
   });
   test("getBaseline", async () => {

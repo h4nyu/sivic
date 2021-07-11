@@ -5,6 +5,7 @@ import { Box } from "@sivic/core/box"
 import { Point } from "@sivic/core/point"
 import { CropPayload } from "@sivic/core/transform"
 import { Line } from "@sivic/core/line";
+import { Tag } from "@sivic/core/tag"
 
 export type WorkspaceStore = {
   find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
@@ -15,6 +16,25 @@ export type WorkspaceStore = {
   update: (payload: Workspace) => Promise<void | Error>;
   delete: (payload: {
     id: string;
+  }) => Promise<void | Error>;
+  clear: () => Promise<void | Error>;
+};
+
+export type TagStore = {
+  find: (payload: {
+    id? :string,
+    name?: string,
+    workspaceId?:string,
+  }) => Promise<Tag | undefined | Error>;
+  filter: (payload: { 
+    ids?: string[],
+    workspaceId?:string
+  }) => Promise<Tag[] | Error>;
+  insert: (payload: Tag) => Promise<void | Error>;
+  update: (payload: Tag) => Promise<void | Error>;
+  delete: (payload: {
+    id?: string;
+    workspaceId?:string,
   }) => Promise<void | Error>;
   clear: () => Promise<void | Error>;
 };
@@ -65,4 +85,5 @@ export type Store = {
   box:BoxStore,
   point: PointStore,
   line: LineStore,
+  tag: TagStore,
 }

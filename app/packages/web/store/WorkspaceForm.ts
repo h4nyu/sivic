@@ -14,12 +14,14 @@ import { Level } from "@sivic/web/store"
 import { ImageForm } from "@sivic/web/store/ImageForm"
 import { ImageStore } from "@sivic/web/store/ImageStore"
 import { BoxStore } from "@sivic/web/store/BoxStore"
+import { Tag } from "@sivic/core/tag"
 
 
 export type WorkspaceFrom = {
   id: string,
   name: string,
   imageForm: ImageForm,
+  tags: Tag[],
   rootImages: Map<string, Image>,
   create: () => void;
   update: (id:string) => void;
@@ -98,6 +100,9 @@ export const WorkspaceFrom = (args: {
       toast.show("Success", Level.Success);
     })
   }
+  const getTags = () => {
+    return []
+  }
 
   const self = observable({
     id:"", 
@@ -108,6 +113,7 @@ export const WorkspaceFrom = (args: {
     setName,
     save,
     get rootImages() { return getRootImages() },
+    get tags() { return getTags() },
     delete: _delete
   })
   return self
