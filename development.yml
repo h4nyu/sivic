@@ -6,6 +6,10 @@ x-app: &app
     - ./app:/srv
   build:
     context: ./app
+    args:
+      - http_proxy
+      - https_proxy
+
   platform: $PLATFORM
   environment:
     - DATABASE_URL=postgres://app:app@db/app

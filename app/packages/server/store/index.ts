@@ -6,6 +6,8 @@ import { Store as BoxStore } from "./box"
 import { Store as PointStore } from "./point"
 import { Store as TransformStore } from "./transform"
 import { Store as LineStore } from "./line"
+import TagStore from "./tag"
+import FileStore from "./file"
 
 export const Store = (args: { 
   url: string; 
@@ -26,6 +28,8 @@ export const Store = (args: {
   const transform = TransformStore()
   const detect = DetectStore(args.detectUrl)
   const line = LineStore(sql)
+  const tag = TagStore(sql)
+  const file = FileStore(sql)
   return {
     workspace,
     image,
@@ -34,6 +38,8 @@ export const Store = (args: {
     box,
     point,
     line,
+    tag,
+    file,
     close,
   };
 };

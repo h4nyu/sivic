@@ -6,9 +6,13 @@ import { Point } from "@sivic/core/point"
 import { CropPayload } from "@sivic/core/transform"
 import { Line } from "@sivic/core/line";
 import { Tag } from "@sivic/core/tag"
+import { File } from "@sivic/core/file"
 
 export type WorkspaceStore = {
-  find: (payload: {id :string}) => Promise<Workspace | undefined | Error>;
+  find: (payload: {
+    id? :string,
+    name?: string,
+  }) => Promise<Workspace | undefined | Error>;
   filter: (payload: {
     ids?: string[];
   }) => Promise<Workspace[] | Error>;
@@ -69,6 +73,12 @@ export type LineStore = {
   load: (payload: Line[]) => Promise<void | Error>;
 };
 
+export type FileStore = {
+  find: (payload: {id?: string;}) => Promise<File | undefined | Error>;
+  insert: (payload: File) => Promise<void | Error>;
+  delete: (payload: {id?: string}) => Promise<void | Error>
+};
+
 export type TransformStore = {
   crop: (payload: CropPayload) => Promise<string | Error>;
 };
@@ -86,4 +96,5 @@ export type Store = {
   point: PointStore,
   line: LineStore,
   tag: TagStore,
+  file: FileStore,
 }

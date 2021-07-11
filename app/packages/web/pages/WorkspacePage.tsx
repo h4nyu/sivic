@@ -12,6 +12,7 @@ import ImageTable from "@sivic/web/components/ImageTable"
 import ImageTags from "@sivic/web/components/ImageTags";
 import TagTable from "@sivic/web/components/TagTable"
 import BoxView from "@sivic/web/components/BoxView"
+import TagTable from "@sivic/web/components/TagTable"
 
 
 const Content = observer(() => {
@@ -57,10 +58,44 @@ const Content = observer(() => {
           gridRow: "2"
         }}
       >
+<<<<<<< HEAD
         {
           <TagTable  
           />
         }
+||||||| 8826f25
+        <label className="label">Image List</label>
+        <div className="field">
+          {
+            workspaceForm.rootImages.toList()
+            .map( i => {
+              return (
+                <div
+                  className="pb-2"
+                  key={i.id}
+                >
+                  <BoxView 
+                    image={i}
+                    images={imageStore.images.toList().toJS()}
+                    onNameClick={imageProcess.init}
+                    onDeleteClick={workspaceForm.imageForm.deleteImage}
+                    onTagClick={workspaceForm.imageForm.updateTag}
+                    onBoxClick={(id) => pointEditor.init(id)}
+                  />
+                </div>
+              )
+            })
+          }
+        </div>
+=======
+        <label className="label">Image List</label>
+        <div className="field">
+          <TagTable 
+          />
+        </div>
+>>>>>>> 3017da5db2033f62c5f4cd2e94d23baf74dde6ae
+      </div>
+      <div>
       </div>
       <div 
         style={{

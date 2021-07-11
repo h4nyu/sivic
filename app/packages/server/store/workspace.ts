@@ -29,13 +29,19 @@ export const Store = (sql: Sql<any>): WorkspaceStore => {
 
   const find = async (payload: {
     id?: string;
+    name?: string
   }): Promise<Workspace | undefined | Error> => {
     try {
-      const { id } = payload;
-      let rows = [];
-      if (id !== undefined) {
-        rows = await sql`SELECT * FROM workspaces WHERE id=${id}`;
-      }
+      const rows= await (async () => {
+        const { id, name } = payload;
+        if (id !== undefined) {
+          return await sql`SELECT * FROM workspaces WHERE id=${id}`;
+        }
+        if (name !== undefined) {
+          return await sql`SELECT * FROM workspaces WHERE name=${name}`;
+        }
+        return []
+      })()
       const row = first(rows.map(to));
       if (row === undefined) {
         return;

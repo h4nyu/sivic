@@ -5,4 +5,5 @@ export enum ErrorKind {
   TagAlreadyExist="TagAlreadyExist",
   ImageNotFound = "ImageNotFound",
   ZeroSizeBox = "ZeroSizeBox",
+  FileNotFound="FileNotFound",
 }
