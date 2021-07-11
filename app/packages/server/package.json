@@ -9,9 +9,10 @@
     "build": "tsc --noEmit false",
     "prepack": "yarn build",
     "postpack": "yarn clean",
-    "test": "yarn clean && jest",
+    "demo": "node bin/demo.js",
     "start": "node bin/start.js",
-    "start:dev": "tsnd --respawn bin/start.ts"
+    "start:dev": "tsnd --respawn bin/start.ts",
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",
