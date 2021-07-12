@@ -5,6 +5,7 @@ import { BoxApi } from "./box";
 import { PointApi } from "./point";
 import { TransformApi } from "./transform";
 import { LineApi } from "./line"
+import FileApi from "./file"
 import axios from "axios";
 
 export function toError(err: any): Error {
@@ -26,6 +27,7 @@ export type RootApi = {
   line: LineApi,
   point: PointApi;
   transform: TransformApi;
+  file: FileApi;
 };
 
 export const RootApi = (): RootApi => {
@@ -38,6 +40,7 @@ export const RootApi = (): RootApi => {
   const line = LineApi({ http, prefix: `${prefix}/line` });
   const point = PointApi({ http, prefix: `${prefix}/point` });
   const transform = TransformApi({ http, prefix: `${prefix}/transform` });
+  const file = FileApi({ http, prefix: `${prefix}/file` });
 
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
@@ -61,5 +64,6 @@ export const RootApi = (): RootApi => {
     line,
     point,
     transform,
+    file,
   };
 };

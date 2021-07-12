@@ -21,14 +21,8 @@ export type WorkspaceFrom = {
   id: string,
   name: string,
   imageForm: ImageForm,
-<<<<<<< HEAD
   tags: Tag[],
-  rootImages: Map<string, Image>,
-||||||| 8826f25
-  rootImages: Map<string, Image>,
-=======
   rootImages: Image[],
->>>>>>> 3017da5db2033f62c5f4cd2e94d23baf74dde6ae
   create: () => void;
   update: (id:string) => void;
   setName: (value:string) => void;

@@ -45,5 +45,4 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
   return {
     find
   }
-
 }

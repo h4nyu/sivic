@@ -3,7 +3,7 @@ import { Map, List } from "immutable";
 import { ToastStore } from "./toast";
 import { LoadingStore } from "./loading";
 import { RootApi } from "@sivic/api";
-import { File, FilterPayload } from "@sivic/core/file";
+import { File, FindPayload } from "@sivic/core/file";
 import { saveAs } from 'file-saver';
 import { MemoryRouter } from "react-router";
 import { parseISO } from "date-fns";
@@ -11,7 +11,7 @@ import { Level } from "@sivic/web/store"
 
 export type FileStore = {
   files: Map<string, File>;
-  fetch: (payload:FilterPayload) => Promise<void>
+  fetch: (payload:FindPayload) => Promise<void>
   delete: (payload: {
     parentId?: string,
     workspaceId?:string, 
@@ -25,14 +25,15 @@ export const FileStore = (args: {
   toast: ToastStore;
 }): FileStore => {
   const { api, loading, toast } = args;
-  const fetch = async (payload: FilterPayload) => {
-    const files = await api.file.filter(payload)
-    if(files instanceof Error) { return }
-    self.files = self.files.merge(Map(files.map(x => [x.id, x])))
+  const fetch = async (payload: FindPayload) => {
+    const file = await api.file.find(payload)
+    if(file instanceof Error) { return }
+    self.files = self.files.set(file.id, file)
   }
   const delete_ = (payload:{
     id:string
   }) => {
+    const { id } = payload
     self.files = self.files.filter(x => x.id !== id)
   }
   const self = observable({
