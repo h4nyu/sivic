@@ -4,11 +4,8 @@ import { first } from "lodash";
 
 const COLUMNS = [
   "id", 
-  "image_id", 
-  "x0", 
-  "y0",
-  "x1",
-  "y1",
+  "data", 
+  "created_at", 
 ] as const
 
 export const Store = (
@@ -17,7 +14,7 @@ export const Store = (
   const to = (r: Row) => {
     return File({
       id: r.id,
-      data: r.data ?? undefined,
+      data: (r.data && r.data.toString("base64")) ?? undefined,
       createdAt: r.created_at,
     });
   };
@@ -25,7 +22,7 @@ export const Store = (
   const from = (r: File): Row => {
     return {
       id: r.id,
-      data: r.data ?? null,
+      data: (r.data && Buffer.from(r.data, "base64")) ?? null,
       created_at: r.createdAt,
     };
   };
@@ -36,8 +33,8 @@ export const Store = (
     try{
       const { id } = payload
       const rows =  await (async () =>{
-        if(id) {
-          return await sql`SELECT * FROM files WHERE id = ${id}`
+        if(id !== undefined) {
+          return await sql`SELECT * FROM files WHERE id = ${id} LIMIT 1`
         }
         return []
       })()

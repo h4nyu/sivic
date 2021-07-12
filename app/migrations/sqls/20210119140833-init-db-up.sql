@@ -45,3 +45,9 @@ CREATE TABLE tags (
     name text NOT NULL,
     workspace_id text
 );
+
+CREATE TABLE files ( 
+    id text NOT NULL PRIMARY KEY,
+    data bytea,
+    created_at timestamp NOT NULL
+);

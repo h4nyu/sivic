@@ -4,3 +4,4 @@ DROP TABLE boxes;
 DROP TABLE points;
 DROP TABLE lines;
 DROP TABLE tags;
+DROP TABLE files;
