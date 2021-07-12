@@ -32,13 +32,14 @@ export const Store = (
   };
 
   const filter = async (payload: {
-    imageId?: string;
+    ids?: string[],
+    workspaceId?: string;
   }) => {
     try{
-      const { imageId } = payload
+      const { workspaceId } = payload
       const rows =  await (async () =>{
-        if(imageId) {
-          return await sql`SELECT * FROM tags WHERE image_id = ${imageId}`
+        if(workspaceId) {
+          return await sql`SELECT * FROM tags WHERE workspace_id = ${workspaceId}`
         }
         return []
       })()
@@ -87,17 +88,24 @@ export const Store = (
   };
 
   const delete_ = async (payload: {
-    imageId: string;
+    id?: string,
+    workspaceId?: string;
   }) => {
     try {
-      const { imageId } = payload;
-      await sql`DELETE FROM tags WHERE image_id=${imageId}`;
+      const { workspaceId, id } = payload;
+      if(workspaceId !== undefined){
+        await sql`DELETE FROM tags WHERE workspace_id=${workspaceId}`;
+      }
+      if(id !== undefined) {
+        await sql`DELETE FROM tags WHERE id=${id}`;
+      }
     } catch (err) {
       return err;
     }
   };
 
   return {
+    find,
     filter,
     insert,
     update,

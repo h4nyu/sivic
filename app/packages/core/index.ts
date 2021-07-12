@@ -40,7 +40,6 @@ export type TagStore = {
     id?: string;
     workspaceId?:string,
   }) => Promise<void | Error>;
-  clear: () => Promise<void | Error>;
 };
 
 export type ImageStore = {
