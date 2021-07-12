@@ -1,5 +1,3 @@
-/* Replace with your SQL commands */
-
 CREATE TABLE workspaces ( 
     id text NOT NULL PRIMARY KEY,
     name text NOT NULL,
@@ -40,4 +38,10 @@ CREATE TABLE lines (
     y0 double precision NOT NULL,
     x1 double precision NOT NULL,
     y1 double precision NOT NULL
+);
+
+CREATE TABLE tags ( 
+    id text NOT NULL PRIMARY KEY,
+    name text NOT NULL,
+    workspace_id text
 );

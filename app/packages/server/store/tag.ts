@@ -5,11 +5,8 @@ import { first } from "lodash"
 const TABLE = "tags"
 const COLUMNS = [
   "id", 
-  "image_id", 
-  "x0", 
-  "y0",
-  "x1",
-  "y1",
+  "name",
+  "workspace_id", 
 ] as const
 
 export const Store = (
@@ -55,10 +52,13 @@ export const Store = (
     workspaceId?: string;
   }) => {
     try{
-      const { id } = payload
+      const { id, name, workspaceId } = payload
       const rows =  await (async () =>{
-        if(id) {
+        if(id !== undefined) {
           return await sql`SELECT * FROM tags WHERE id = ${id} LIMIT 1`
+        }
+        if(name !== undefined && workspaceId !== undefined){
+          return await sql`SELECT * FROM tags WHERE workspace_id = ${workspaceId} AND name=${name} LIMIT 1`
         }
         return []
       })()
