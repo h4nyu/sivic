@@ -23,17 +23,8 @@ export const FileApi = (arg: {
     }
   };
 
-  const create = async (payload: CreatePayload) => {
-    try {
-      const res = await http.post(`${prefix}/replace`, payload);
-    } catch (err) {
-      return toError(err);
-    }
-  };
-
   return {
-    filter,
-    create,
+    find,
   };
 };
 export default FileApi
