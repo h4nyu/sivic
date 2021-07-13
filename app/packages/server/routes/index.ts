@@ -9,6 +9,7 @@ import { LineRoutes } from "./line";
 import { PointRoutes } from "./point";
 import { TrasnformRoutes } from "./transform";
 import TagRoutes from "./tag"
+import FileRoutes from "./file"
 
 import fastifyStatic from "fastify-static";
 
@@ -57,6 +58,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(TagRoutes({ store, lock }), {
     prefix: `${prefix}/tag`,
+  });
+  app.register(FileRoutes({ store, lock }), {
+    prefix: `${prefix}/file`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());
