@@ -8,6 +8,7 @@ import { BoxRoutes } from "./box";
 import { LineRoutes } from "./line";
 import { PointRoutes } from "./point";
 import { TrasnformRoutes } from "./transform";
+import TagRoutes from "./tag"
 
 import fastifyStatic from "fastify-static";
 
@@ -53,6 +54,9 @@ export const App = (args: { store: Store; lock: Lock }) => {
   });
   app.register(TrasnformRoutes({ store, lock }), {
     prefix: `${prefix}/transform`,
+  });
+  app.register(TagRoutes({ store, lock }), {
+    prefix: `${prefix}/tag`,
   });
   app.ready(async () => {
     console.log(app.printRoutes());

@@ -49,10 +49,10 @@ export type DeletePayload = {
 
 export type Service = {
   create: (payload: CreatePayload) => Promise<Tag | Error>;
+  update: (payload: UpdatePayload) => Promise<Tag | Error>;
   find: (payload: FindPayload) => Promise<Tag | Error>;
   filter: (payload: FilterPayload) => Promise<Tag[] | Error>;
   delete: (payload: DeletePayload) => Promise<string| Error>;
-  update: (payload: UpdatePayload) => Promise<Tag | Error>;
 };
 
 

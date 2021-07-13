@@ -17,6 +17,25 @@ export const TagApi = (arg: {
   prefix: string;
 }): Service => {
   const { http, prefix } = arg;
+  const create = async (payload: CreatePayload) => {
+    try {
+      const res = await http.post(`${prefix}/create`, payload);
+      return Tag(res.data)
+    } catch (err) {
+      return toError(err);
+    }
+  };
+
+
+  const update = async (payload: UpdatePayload) => {
+    try {
+      const res = await http.post(`${prefix}/update`, payload);
+      return Tag(res.data)
+    } catch (err) {
+      return toError(err);
+    }
+  };
+
   const filter = async (payload: FilterPayload) => {
     try {
       const res = await http.post(`${prefix}/filter`, payload);
@@ -28,35 +47,16 @@ export const TagApi = (arg: {
 
   const find = async (payload: FindPayload) => {
     try {
-      const res = await http.post(`${prefix}/replace`, payload);
+      const res = await http.post(`${prefix}/find`, payload);
       return Tag(res.data)
     } catch (err) {
       return toError(err);
     }
   };
-
-  const update = async (payload: UpdatePayload) => {
-    try {
-      const res = await http.post(`${prefix}/update`, payload);
-      return Tag(res.data)
-    } catch (err) {
-      return toError(err);
-    }
-  };
-
-  const create = async (payload: CreatePayload) => {
-    try {
-      const res = await http.post(`${prefix}/create`, payload);
-      return Tag(res.data)
-    } catch (err) {
-      return toError(err);
-    }
-  };
-
 
   const delete_ = async (payload: DeletePayload) => {
     try {
-      const res = await http.post(`${prefix}/replace`, payload);
+      const res = await http.post(`${prefix}/delete`, payload);
       return res.data
     } catch (err) {
       return toError(err);
