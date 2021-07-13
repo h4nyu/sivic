@@ -23,6 +23,7 @@ const Content = observer(() => {
     imageStore, 
     boxStore,
     pointEditor,
+    fileStore,
   } = store
 
   const { save } = store.workspaceForm;
@@ -59,6 +60,8 @@ const Content = observer(() => {
       >
         {
           <TagTable  
+            images={workspaceForm.rootImages}
+            files={fileStore.files.toList().toJS()}
           />
         }
       </div>

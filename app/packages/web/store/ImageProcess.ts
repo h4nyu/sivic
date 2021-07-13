@@ -15,9 +15,11 @@ import { Level } from "@sivic/web/store"
 import { Box } from "@sivic/core/box";
 import Editor from "@sivic/web/store/BoxEditor"
 import ImageStore from "@sivic/web/store/ImageStore"
+import { File } from "@sivic/core/file"
 
 export type ImageProcess = {
   image?: Image;
+  file?: File;
   lineWidth: number;
   init: (imageId:string) => Promise<void|Error>;
   save: () => void
@@ -47,9 +49,9 @@ export const ImageProcess = (args: {
   }
 
   const detectBoxes = async () => {
-    const { image } = self
-    if(image === undefined) { return }
-    const { data } = image
+    const { file } = self
+    if(file === undefined) { return }
+    const { data } = file
     if(data === undefined) { return}
     await loading(async () => {
       const boxes = await api.detect.box({data})

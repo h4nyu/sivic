@@ -13,6 +13,7 @@ const COLUMNS = [
   "workspace_id", 
   "parent_id",
   "tag_id", 
+  "file_id", 
   "created_at",
 ] as const
 export const Store = (
@@ -22,10 +23,10 @@ export const Store = (
     return Image({
       id: r.id,
       name: r.name,
-      workspaceId: r.workspace_id || undefined,
-      tagId: r.tag_id || undefined,
-      parentId: r.parent_id || undefined,
-      fileId: r.file_id || undefined,
+      workspaceId: r.workspace_id ?? undefined,
+      tagId: r.tag_id ?? undefined,
+      parentId: r.parent_id ?? undefined,
+      fileId: r.file_id ?? undefined,
       createdAt: r.created_at,
     });
   };
@@ -35,9 +36,9 @@ export const Store = (
       id: r.id,
       name: r.name,
       workspace_id: r.workspaceId,
-      parent_id: r.parentId || null,
-      tag_id: r.tagId || null,
-      file_id: r.fileId || null,
+      parent_id: r.parentId ?? null,
+      tag_id: r.tagId ?? null,
+      file_id: r.fileId ?? null,
       created_at: r.createdAt,
     };
   };

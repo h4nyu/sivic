@@ -72,7 +72,6 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
   const replace = async (payload: ReplacePayload) => {
     const image = await imageService.find({id: payload.imageId, hasData: true})
     if(image instanceof Error) { return image }
-    const imageData = image.data
     const cropedImages:Image[] = []
     for(const box of payload.boxes){
       // const croped = await store.transform.crop({imageData, box})

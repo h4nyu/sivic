@@ -1,6 +1,7 @@
 import React, { useRef, RefObject, useState, useEffect } from "react";
 import { Image } from "@sivic/core/image";
 import { Workspace } from "@sivic/core/workspace";
+import { File } from "@sivic/core/file";
 import DateView from "@sivic/web/components/DateView";
 import ImageView from "@sivic/web/components/ImageView";
 import DeleteBtn from "@sivic/web/components/DeleteBtn";
@@ -8,7 +9,8 @@ import ImageTags from "@sivic/web/components/ImageTags";
 
 export const BoxView = (props: {
   image: Image,
-  images?:Image[]
+  images?:Image[],
+  files?: File[],
   onNameClick?: (imageId:string) => void
   onTagClick?: ({id: string, tag:ImageTag}) => void;
   onBoxClick?:(id: string) => void;
@@ -49,9 +51,10 @@ export const BoxView = (props: {
         <div className="content" style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
           {
             boxImages.map((x, i) => {
-              return (
+              const file = props.files?.find(f => f.id === x.fileId)
+              return file && (
                 <div key={i} className={`p-1 ${props.onBoxClick ? "is-clickable" : ""}`}>
-                  <img src={`data:image/png;base64, ${x.data}`} width={50} height={50} onClick={() => props.onBoxClick && props.onBoxClick(x.id)}/>
+                  <img src={`data:image/png;base64, ${file.data}`} width={50} height={50} onClick={() => props.onBoxClick && props.onBoxClick(x.id)}/>
                 </div>
               )
             })

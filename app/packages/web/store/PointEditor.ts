@@ -4,6 +4,7 @@ import { RootApi } from "@sivic/api";
 import { LoadingStore } from "./loading";
 import { ToastStore } from "./toast";
 import { Point } from "@sivic/core/point";
+import { File } from "@sivic/core/file"
 import { Box } from "@sivic/core/box";
 import { v4 as uuid } from "uuid";
 import { keyBy, zip } from "lodash";
@@ -19,6 +20,7 @@ export enum InputMode {
 
 export type Editor = {
   images: List<Image>;
+  files: File[];
   imageId: string;
   cursor:number;
   points: Map<string, Point>;
@@ -172,6 +174,7 @@ export const Editor = (root: {
     points: Map<string, Point>(),
     draggingId: undefined,
     size: 10,
+    files: [],
     pos: { x: 0, y:0 },
     mode: InputMode.Add,
     setMode,

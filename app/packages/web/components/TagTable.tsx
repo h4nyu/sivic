@@ -32,6 +32,7 @@ export const TagTable = (props: {
         className="card"
         style={centerStyle}
       >
+        <div className="button"> + tag </div>
       </div>
       {
         tags.map((t, i) => {
@@ -56,10 +57,11 @@ export const TagTable = (props: {
       {
         parentImages.map((p, rowIdx) => {
           return (
-            <>
+            <div
+              key={p.id}
+            >
               <div
                 className="card p-1 has-text-weight-semibold"
-                key={p.id}
                 style={{
                   ...centerStyle,
                   gridRow: rowIdx + 2,
@@ -96,7 +98,7 @@ export const TagTable = (props: {
                   )
                 })
               }
-            </>
+            </div>
           )
         })
       }

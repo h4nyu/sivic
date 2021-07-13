@@ -17,10 +17,8 @@ export type FileStore = {
 
 export const FileStore = (args: {
   api: RootApi;
-  loading: <T>(fn: () => Promise<T>) => Promise<T>;
-  toast: ToastStore;
 }): FileStore => {
-  const { api, loading, toast } = args;
+  const { api } = args;
   const fetch = async (payload: FindPayload) => {
     const file = await api.file.find(payload)
     if(file instanceof Error) { return }
@@ -40,4 +38,3 @@ export const FileStore = (args: {
   return self
 }
 export default FileStore
-

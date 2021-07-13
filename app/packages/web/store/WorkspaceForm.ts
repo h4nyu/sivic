@@ -15,6 +15,7 @@ import { ImageForm } from "@sivic/web/store/ImageForm"
 import { ImageStore } from "@sivic/web/store/ImageStore"
 import { BoxStore } from "@sivic/web/store/BoxStore"
 import { Tag } from "@sivic/core/tag"
+import FileStore from "@sivic/web/store/FileStore"
 
 
 export type WorkspaceFrom = {
@@ -36,13 +37,25 @@ export const WorkspaceFrom = (args: {
   toast: ToastStore;
   imageForm: ImageForm;
   imageStore: ImageStore;
+  fileStore?: FileStore;
   boxStore:BoxStore;
   onInit?: (workspace:Workspace) => void;
   onCreate?:() => void;
   onSave?: (workspace:Workspace) => void;
   onDelete?: (id:string) => void;
 }): WorkspaceFrom => {
-  const { api, loading, toast, onInit, onSave, onDelete, imageForm, imageStore, boxStore, onCreate } = args;
+  const { api, 
+    loading, 
+    toast, 
+    onInit, 
+    onSave, 
+    onDelete, 
+    imageForm, 
+    imageStore, 
+    boxStore, 
+    onCreate,
+    fileStore,
+  } = args;
   const reset = () => {
     self.id = ""
     self.name = ""
@@ -64,6 +77,7 @@ export const WorkspaceFrom = (args: {
       const imageIds = imageStore.images.filter(x => x.parentId === undefined).toList()
       for (const image of imageIds){
         await boxStore.fetch(image.id)
+        await fileStore?.fetch({id: image.fileId})
       }
       onInit && onInit(row)
     })

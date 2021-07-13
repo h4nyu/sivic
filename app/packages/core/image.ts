@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { Lock, Store, ErrorKind } from "@sivic/core"
-import { Workspace } from "@sivic/core/workspace"
-import { Service as WorkspaceService } from "@sivic/core/workspace"
+import { Service as FileService } from "@sivic/core/file"
+import { File } from "@sivic/core/file"
 
 export const ImageTag = {
   Source: "Source",
@@ -17,7 +17,6 @@ export type Image = {
   workspaceId?: string,
   parentId?: string
   tagId?: string,
-  data?:string,
   fileId?: string,
   createdAt: Date,
 }
@@ -26,14 +25,12 @@ export const Image = (args?:{
   name?: string,
   workspaceId?:string,
   parentId?: string,
-  data?: string,
   tagId?:string,
   fileId?: string,
   createdAt?: Date,
 }):Image => {
   const id = args?.id || uuid()
   const name = args?.name || ""
-  const data = args?.data
   const workspaceId = args?.workspaceId
   const parentId = args?.parentId
   const tagId = args?.tagId
@@ -42,7 +39,6 @@ export const Image = (args?:{
   return {
     id,
     name,
-    data,
     workspaceId,
     parentId,
     tagId,
@@ -51,17 +47,6 @@ export const Image = (args?:{
   }
 }
 
-export type FilterPayload = {
-  workspaceId?: string;
-  parentId?: string
-  ids?: string[]
-};
-
-export type CreatePayload = {
-  name: string;
-  workspaceId: string;
-  data: string; //base64
-};
 
 export type UpdatePayload = {
   id: string;
@@ -71,14 +56,6 @@ export type UpdatePayload = {
   tag?: ImageTag;
 };
 
-export type DeletePayload = {
-  id: string;
-};
-
-export type FindPayload = {
-  id: string;
-  hasData?: boolean;
-};
 
 export type DetectBoxPayload = {imageId: string}
 
@@ -99,20 +76,96 @@ const DetectBoxFn = (args:{
 }) => {
   const { store, detectBoxes } = args
   const services = {
-    image: Service(args)
+    image: Service(args),
+    file: FileService(args)
   }
   return async (payload: {imageId:string}) => {
     const image = await services.image.find({id: payload.imageId })
     if(image instanceof Error) { return image }
-    const detectRes = await detectBoxes({data: image.data || ""})
+    const file = await services.file.find({id: image.id})
+    if(file instanceof Error) { return file }
+    const detectRes = await detectBoxes({data: file.data})
     if(detectRes instanceof Error) { return detectRes }
     const [boxes, data] = detectRes
-    image.data = data
-    let updateErr = await store.image.update(image)
-    if(updateErr instanceof Error) { return updateErr }
     return boxes.map( x => {
       return {...x, imageId: image.id}
     })
+  }
+}
+
+export type CreatePayload = {
+  name: string;
+  workspaceId: string;
+  data: string; //base64
+};
+export type CreateFn = (payload: CreatePayload) => Promise<Image | Error>
+export const CreateFn = (props: {
+  store: Store,
+}):CreateFn => {
+  return async (payload: CreatePayload) => {
+    const file = File({
+      data:payload.data,
+    })
+    const fileErr = await props.store.file.insert(file)
+    if(fileErr instanceof Error) { return fileErr }
+    const image = Image({
+      name: payload.name,
+      fileId: file.id,
+      workspaceId: payload.workspaceId,
+    })
+    const imageErr = await props.store.image.insert(image)
+    if(imageErr instanceof Error) { return imageErr}
+    return image
+  }
+}
+
+
+export type FilterPayload = {
+  workspaceId?: string;
+  parentId?: string
+  ids?: string[]
+};
+export type FilterFn = (payload:FilterPayload) => Promise<Image[] | Error>
+export const FilterFn = (props: {
+  store: Store,
+}): FilterFn => {
+  return async (payload: FilterPayload) => {
+    return await props.store.image.filter(payload)
+  }
+}
+
+
+export type FindPayload = {
+  id: string;
+  hasData?: boolean;
+};
+export type FindFn = (payload:FindPayload) => Promise<Image | Error>
+export const FindFn = (props: {
+  store: Store,
+}): FindFn => {
+  return async (payload: FindPayload) => {
+    const image = await props.store.image.find(payload)
+    if(image instanceof Error) { return image }
+    if(image === undefined) { return new Error(ErrorKind.ImageNotFound) }
+    return image
+  }
+}
+
+export type DeletePayload = {
+  id: string;
+};
+export type DeleteFn = (payload:DeletePayload) => Promise<void | Error>
+export const DeleteFn = (props: {
+  store: Store,
+}) => {
+  const find = FindFn(props)
+  return async (payload: DeletePayload) => {
+    const image = await find({id: payload.id})
+    if(image instanceof Error) { return image }
+    let err = await props.store.image.delete({id:payload.id})
+    if(err instanceof Error) { return err }
+    err = await props.store.file.delete({id:image.fileId})
+    if(err instanceof Error) { return err }
   }
 }
 
@@ -126,9 +179,6 @@ export type Service = {
 
 export const Service = (args: { store: Store; lock: Lock }): Service => {
   const { store, lock } = args;
-  const services = {
-    workspace: WorkspaceService(args)
-  }
   const filter = async (payload:FilterPayload) => {
     return await store.image.filter(payload);
   }
@@ -145,12 +195,16 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
 
   const create = async (payload: CreatePayload) => {
     return await lock.auto(async () => {
-      const workspace = await services.workspace.find({id: payload.workspaceId})
-      if(workspace instanceof Error) { return workspace }
-      const row = Image()
-      row.data = payload.data
-      row.name = payload.name
-      row.workspaceId = payload.workspaceId
+      const file = File({
+        data: payload.data,
+      })
+      const fileErr = await store.file.insert(file)
+      if(fileErr instanceof Error) { return fileErr}
+      const row = Image({
+        name: payload.name,
+        workspaceId: payload.workspaceId,
+        fileId: file.id,
+      })
       let err = await store.image.insert(row);
       if (err instanceof Error) { return err; }
       return row.id
@@ -159,8 +213,6 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
 
   const update = async (payload: UpdatePayload) => {
     return await lock.auto(async () => {
-      const workspace = await services.workspace.find({id: payload.workspaceId})
-      if(workspace instanceof Error) { return workspace }
       const row = await find({ id:payload.id, hasData: false });
       if(row instanceof Error) { return row }
       const newRow = {
@@ -180,6 +232,8 @@ export const Service = (args: { store: Store; lock: Lock }): Service => {
       const row = await find({ id });
       if (row instanceof Error) { return row; }
       let err = await store.image.delete({ id });
+      if (err instanceof Error) { return err; }
+      err = await store.file.delete({ id: row.fileId });
       if (err instanceof Error) { return err; }
       return row.id
     });

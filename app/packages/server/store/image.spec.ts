@@ -19,10 +19,7 @@ describe("image", () => {
     })
   })
   beforeAll(async () => {
-    const buf = await fs.promises.readFile("/srv/package.json");
-    const base64Data = buf.toString("base64");
     for(const row of rows){
-      row.data = base64Data
       let err = await store.insert(row)
       if(err instanceof Error) { throw err }
     }

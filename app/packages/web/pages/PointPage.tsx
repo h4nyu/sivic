@@ -62,9 +62,9 @@ const Content = observer(() => {
         }}
       >
         {
-          pointEditor.images &&  
+          pointEditor.files &&  
             <SvgCharPlot 
-              data={pointEditor.images?.get(pointEditor.cursor)?.data} 
+              data={pointEditor.files?.[pointEditor.cursor]?.data} 
               points={pointEditor.points}
               lines={lineEditor.lines}
               selectedId={pointEditor.draggingId}

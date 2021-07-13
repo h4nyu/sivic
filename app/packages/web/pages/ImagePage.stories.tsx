@@ -25,7 +25,7 @@ export default {
   )]
 };
 
-store.imageProcess.image = Image({data: imageData})
+store.imageProcess.image = Image()
 store.editor.boxes = Map([Box({
   x0: 5, 
   y0: 5,

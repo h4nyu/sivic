@@ -44,9 +44,9 @@ const Content = observer(() => {
         }}
       >
         {
-          imageProcess.image &&  
+          imageProcess.file &&  
             <SvgCharPlot 
-              data={imageProcess.image.data} 
+              data={imageProcess.file.data} 
               boxes={editor.boxes}
               mode={editor.mode}
               selectedId={editor.draggingId}
