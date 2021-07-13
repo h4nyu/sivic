@@ -12,11 +12,7 @@ import { Level } from "@sivic/web/store"
 export type FileStore = {
   files: Map<string, File>;
   fetch: (payload:FindPayload) => Promise<void>
-  delete: (payload: {
-    parentId?: string,
-    workspaceId?:string, 
-    ids?:string[]
-  }) => void
+  delete: (payload: { id: string }) => void
 };
 
 export const FileStore = (args: {

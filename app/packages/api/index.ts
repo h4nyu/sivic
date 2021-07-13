@@ -6,6 +6,7 @@ import { PointApi } from "./point";
 import { TransformApi } from "./transform";
 import { LineApi } from "./line"
 import FileApi from "./file"
+import TagApi from "./tag"
 import axios from "axios";
 
 export function toError(err: any): Error {
@@ -28,6 +29,7 @@ export type RootApi = {
   point: PointApi;
   transform: TransformApi;
   file: FileApi;
+  tag: TagApi;
 };
 
 export const RootApi = (): RootApi => {
@@ -41,6 +43,7 @@ export const RootApi = (): RootApi => {
   const point = PointApi({ http, prefix: `${prefix}/point` });
   const transform = TransformApi({ http, prefix: `${prefix}/transform` });
   const file = FileApi({ http, prefix: `${prefix}/file` });
+  const tag = TagApi({ http, prefix: `${prefix}/tag` });
 
   const setUrl = (url: string) => {
     http.defaults.baseURL = url;
@@ -65,5 +68,6 @@ export const RootApi = (): RootApi => {
     point,
     transform,
     file,
+    tag,
   };
 };
